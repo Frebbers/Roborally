@@ -206,8 +206,8 @@ public class GameController {
 
     // TODO Task2
     public void fastForward(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
-        neighbour.setPlayer(player);
+        moveForward(player);
+        moveForward(player);
         //Missing collision control
 
     }

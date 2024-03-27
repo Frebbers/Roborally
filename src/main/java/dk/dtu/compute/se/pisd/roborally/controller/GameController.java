@@ -125,6 +125,7 @@ public class GameController {
     // XXX: implemented in the current version
     public void executeStep() {
         board.setStepMode(true);
+
         continuePrograms();
     }
 
@@ -197,22 +198,60 @@ public class GameController {
 
     // TODO Task2
     public void moveForward(@NotNull Player player) {
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        neighbour.setPlayer(player);
+        //Missing collision control
 
     }
 
     // TODO Task2
     public void fastForward(@NotNull Player player) {
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        neighbour.setPlayer(player);
+        //Missing collision control
 
     }
 
     // TODO Task2
     public void turnRight(@NotNull Player player) {
-
+        var currentHeading = player.getHeading();
+        switch(player.getHeading()) {
+            case NORTH:
+                player.setHeading(Heading.EAST);
+                break;
+            case EAST:
+                player.setHeading(Heading.SOUTH);
+                break;
+                case SOUTH:
+                player.setHeading(Heading.WEST);
+                break;
+                case WEST:
+                player.setHeading(Heading.NORTH);
+                break;
+            default:
+                player.setHeading(currentHeading);
+        }
     }
 
     // TODO Task2
     public void turnLeft(@NotNull Player player) {
-
+        var currentHeading = player.getHeading();
+        switch(currentHeading) {
+            case NORTH:
+                player.setHeading(Heading.WEST);
+                break;
+            case EAST:
+                player.setHeading(Heading.NORTH);
+                break;
+            case SOUTH:
+                player.setHeading(Heading.EAST);
+                break;
+            case WEST:
+                player.setHeading(Heading.SOUTH);
+                break;
+            default:
+                player.setHeading(currentHeading);
+        }
     }
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {

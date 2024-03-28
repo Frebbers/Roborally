@@ -12,9 +12,11 @@ import static org.testng.AssertJUnit.assertNull;
 
 
 public class Task1Test {
-/*
-* @author Frederik Bode Hendrichsen s224804@dtu.dk
+/**
+ * Test for task 1
+    * @author Frederik Bode Hendrichsen s224804@dtu.dk
  */
+@Test
     public void testmoveCurrentPlayerToSpace() {
         // Set up testing environment
         GameController gameController = configureTestenvironment();
@@ -28,7 +30,6 @@ public class Task1Test {
         // Set up testing environment
         Board board = new Board(8, 8);
         Player player = new Player(board, "Black", "Player 1");
-        board.addPlayer(player);
         board.setCurrentPlayer(player);
         return new GameController(board);
     }

@@ -17,6 +17,7 @@ public class Task1Test {
         // Set up testing environment
         Board board = new Board(8, 8);
         Player player = new Player(board, "Black", "Player 1");
+        board.addPlayer(player);
         board.setCurrentPlayer(player);
         GameController gameController = new GameController(board);
 

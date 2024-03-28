@@ -15,17 +15,20 @@ public class Task1Test {
 @Test
     public void testmoveCurrentPlayerToSpace() {
         // Set up testing environment
-        Board board = new Board(8, 8);
-        Player player = new Player(board, "Black", "Player 1");
-        board.addPlayer(player);
-        board.setCurrentPlayer(player);
-        GameController gameController = new GameController(board);
-
+        GameController gameController = configureTestenvironment();
         // Test the moveCurrentPlayerToSpace method
         assertNull(gameController.board.getSpace(0, 0).getPlayer());
         gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
         assertNotNull(gameController.board.getSpace(0, 0).getPlayer());
     }
 
+    private GameController configureTestenvironment() {
+        // Set up testing environment
+        Board board = new Board(8, 8);
+        Player player = new Player(board, "Black", "Player 1");
+        board.addPlayer(player);
+        board.setCurrentPlayer(player);
+        return new GameController(board);
+    }
 
 }

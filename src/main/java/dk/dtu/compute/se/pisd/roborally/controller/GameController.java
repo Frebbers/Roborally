@@ -196,19 +196,26 @@ public class GameController {
         }
     }
 
-    // TODO Task2
-    public void moveForward(@NotNull Player player) {
+    //Private method added for reuseability in moveForward and fastForward
+    private void movePlayerForward(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
         neighbour.setPlayer(player);
-        //Missing collision control
+        //Collision logic to be added...
+
+    }
+
+    // TODO Task2
+    public void moveForward(@NotNull Player player) {
+        movePlayerForward(player);
+        //Collision logic to be added...
 
     }
 
     // TODO Task2
     public void fastForward(@NotNull Player player) {
-        moveForward(player);
-        moveForward(player);
-        //Missing collision control
+        movePlayerForward(player);
+        movePlayerForward(player);
+        //Collision logic to be added...
 
     }
 

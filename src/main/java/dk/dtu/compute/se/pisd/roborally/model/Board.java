@@ -124,7 +124,8 @@ public class Board extends Subject {
     }
 
     public void setCurrentPlayer(Player player) {
-        if (player != this.current && players.contains(player)) {
+        if (!players.contains(player)) this.addPlayer(player);
+        if (player != this.current) {
             this.current = player;
             notifyChange();
         }

@@ -40,19 +40,32 @@ public class GameController {
 
     /**
      * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted!
-     *
+     * happening on the board. This method should eventually be deleted
+     * @author s224308, s213364
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO Task1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free())
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if the player is moved
+        // Get the current player
+        Player currentPlayer = board.getCurrentPlayer();
 
+        // Check if the space is free
+        if (space.getPlayer() == null) {
+            // Move the current player to the new space
+            currentPlayer.setSpace(space);
+
+            // Find the index of the current player
+            int currentPlayerIndex = board.getPlayerNumber(currentPlayer);
+
+            // Determine the next player's index
+            int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
+
+            // Set the next player as the current player
+            Player nextPlayer = board.getPlayer(nextPlayerIndex);
+            board.setCurrentPlayer(nextPlayer);
+
+            // Increment the move counter on the board
+            board.incrementMoveCount();
+        }
     }
 
     // XXX: implemented in the current version

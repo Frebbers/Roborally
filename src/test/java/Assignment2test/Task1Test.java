@@ -25,7 +25,25 @@ public class Task1Test {
         gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
         assertNotNull(gameController.board.getSpace(0, 0).getPlayer());
     }
+@Test
+    public void testMoveCounter() {
+        // Set up testing environment
+        GameController gameController = configureTestenvironment();
+        // Test the moveCurrentPlayerToSpace method
+        assertEquals(0, gameController.board.getMoveCount());
+        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
+        assertEquals(1, gameController.board.getMoveCount());
+    }
 
+    @Test
+    public void testGetStatusMessage() {
+        // Set up testing environment
+        GameController gameController = configureTestenvironment();
+        // Test the getStatusMessage method
+        assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 0", gameController.board.getStatusMessage());
+        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
+        assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 1", gameController.board.getStatusMessage());
+    }
     private GameController configureTestenvironment() {
         // Set up testing environment
         Board board = new Board(8, 8);

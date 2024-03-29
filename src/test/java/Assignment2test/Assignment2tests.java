@@ -3,6 +3,7 @@ package Assignment2test;
 
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 
 
-public class Task1Test {
+public class Assignment2tests {
 /**
  * Test for task 1
     * @author Frederik Bode Hendrichsen s224804@dtu.dk
@@ -43,6 +44,19 @@ public class Task1Test {
         assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 0", gameController.board.getStatusMessage());
         gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
         assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 1", gameController.board.getStatusMessage());
+    }
+@Test
+    public void testExecuteCommand() {
+        // Set up testing environment
+        GameController gameController = configureTestenvironment();
+        Player player = new Player(gameController.board, "Black","Player 1");
+        gameController.board.setCurrentPlayer(player);
+        // Test the executeCommand method
+        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
+        assertNull(gameController.board.getSpace(0, 1).getPlayer());
+        gameController.executeCommand(player, Command.FORWARD);
+        assertNotNull(gameController.board.getSpace(0, 1).getPlayer());
+        assertNull(gameController.board.getSpace(0, 0).getPlayer());
     }
     private GameController configureTestenvironment() {
         // Set up testing environment

@@ -22,7 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
+ * Enum for cardinal direction a board element is facing.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -31,10 +31,24 @@ public enum Heading {
 
     SOUTH, WEST, NORTH, EAST;
 
+    /**
+     * Go to next enum element, effectively turning the board
+     * element clockwise.
+     * 
+     * @return the cardinal direction one step clockwise from
+     * the previous.
+     */
     public Heading next() {
         return values()[(this.ordinal() + 1) % values().length];
     }
 
+    /**
+     * Go to previous enum element, effectively turning the board
+     * element counter-clockwise.
+     * 
+     * @return the cardinal direction one step counter-clockwise from
+     * the previous.
+     */
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
     }

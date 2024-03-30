@@ -32,7 +32,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * ...
+ * Class for handling the javaFX initialization of the RoboRally game.
+ * Controls the game through an AppController object.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -47,11 +48,19 @@ public class RoboRally extends Application {
 
     // private AppController appController;
 
+    /**
+     * Call init() of the Application class
+     */
     @Override
     public void init() throws Exception {
         super.init();
     }
 
+    /**
+     * Initialize javafx stages and scenes
+     * 
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
@@ -78,6 +87,11 @@ public class RoboRally extends Application {
         stage.show();
     }
 
+    /**
+     * Create a BoardView with the given gameController
+     * 
+     * @param gameController
+     */
     public void createBoardView(GameController gameController) {
         // if present, remove old BoardView
         boardRoot.getChildren().clear();
@@ -91,6 +105,9 @@ public class RoboRally extends Application {
         stage.sizeToScene();
     }
 
+    /**
+     * Call the stop() method of the Application class
+     */
     @Override
     public void stop() throws Exception {
         super.stop();
@@ -101,6 +118,11 @@ public class RoboRally extends Application {
         //     so that the AppController can take care of that.
     }
 
+    /**
+     * Call the javafx method launch() with the given arguments. This automatically calls RoboRally.start().
+     * 
+     * @param args arguments passed to launch()
+     */
     public static void main(String[] args) {
         launch(args);
     }

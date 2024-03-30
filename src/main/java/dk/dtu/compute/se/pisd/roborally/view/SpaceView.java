@@ -34,7 +34,7 @@ import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Handles the drawing of a space on a board and its contents.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -47,6 +47,13 @@ public class SpaceView extends StackPane implements ViewObserver {
     public final Space space;
 
 
+    /**
+     * Create the view of a certain space. The space is colored
+     * such that every other space on a board is white, and
+     * every other space is black.
+     * 
+     * @param space
+     */
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
@@ -72,6 +79,9 @@ public class SpaceView extends StackPane implements ViewObserver {
         update(space);
     }
 
+    /**
+     * Draw a player (if there is one) as a triangle on this space.
+     */
     private void updatePlayer() {
         this.getChildren().clear();
 
@@ -91,6 +101,9 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+    /**
+     * Update space view as to include a recent change in state.
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {

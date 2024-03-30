@@ -30,7 +30,9 @@ import java.util.List;
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
 /**
- * ...
+ * For making board objects with spaces and whatever is inside them.
+ * Also keeps game info such as the current player, game phase, steps
+ * and move counter.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -59,6 +61,13 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    /**
+     * Initialize a Board object with certain dimensions of empty spaces as well as a name.
+     * 
+     * @param width
+     * @param height
+     * @param boardName name of board
+     */
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = width;
@@ -73,14 +82,30 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
+    /**
+     * Initialize a Board object with certain dimensions of empty spaces amd a default name.
+     * 
+     * @param width
+     * @param height
+     */
     public Board(int width, int height) {
         this(width, height, "defaultboard");
     }
 
+    /**
+     * Return this Board's gameId.
+     * 
+     * @return gameId
+     */
     public Integer getGameId() {
         return gameId;
     }
 
+    /**
+     * Attempts to set the gameId. Throws an exception if the game already has an ID.
+     * 
+     * @param gameId new gameId
+     */
     public void setGameId(int gameId) {
         if (this.gameId == null) {
             this.gameId = gameId;
@@ -91,6 +116,13 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the Space object of the given coordinates.
+     * 
+     * @param x
+     * @param y
+     * @return Space object of the given coordinates
+     */
     public Space getSpace(int x, int y) {
         if (x >= 0 && x < width &&
                 y >= 0 && y < height) {
@@ -100,10 +132,20 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the number of players.
+     * 
+     * @return number of players
+     */
     public int getPlayersNumber() {
         return players.size();
     }
 
+    /**
+     * Add the given player to the Board's list of players, if they are not currently in it.
+     * 
+     * @param player to be added to the list
+     */
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
@@ -111,6 +153,12 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the Player object based on their index in the Board's Player list.
+     * 
+     * @param i index of the Player in the list
+     * @return Player object of the player
+     */
     public Player getPlayer(int i) {
         if (i >= 0 && i < players.size()) {
             return players.get(i);
@@ -118,9 +166,21 @@ public class Board extends Subject {
             return null;
         }
     }
+
+    /**
+     * Return current player.
+     * 
+     * @return Player object of current player
+     */
     public Player getCurrentPlayer() {
         return current;
     }
+
+    /**
+     * Set current player to the given Player if they are in the list of players.
+     * 
+     * @param player 
+     */
     public void setCurrentPlayer(Player player) {
         if (!players.contains(player)) this.addPlayer(player);
         if (player != this.current) {
@@ -129,10 +189,20 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the board's current phase.
+     * 
+     * @return current phase of the board
+     */
     public Phase getPhase() {
         return phase;
     }
 
+    /**
+     * Set the phase of the board.
+     * 
+     * @param phase the phase to become active
+     */
     public void setPhase(Phase phase) {
         if (phase != this.phase) {
             this.phase = phase;
@@ -140,10 +210,20 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the step of the board.
+     * 
+     * @return the current step of the board
+     */
     public int getStep() {
         return step;
     }
 
+    /**
+     * Set the step of the board.
+     * 
+     * @param step the step to be set
+     */
     public void setStep(int step) {
         if (step != this.step) {
             this.step = step;
@@ -151,10 +231,20 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Check whether the board is in step mode.
+     * 
+     * @return true if the board is in step mode, false otherwise
+     */
     public boolean isStepMode() {
         return stepMode;
     }
 
+    /**
+     * Set step mode on or off.
+     * 
+     * @param stepMode true if step mode is to be on, false otherwise
+     */
     public void setStepMode(boolean stepMode) {
         if (stepMode != this.stepMode) {
             this.stepMode = stepMode;
@@ -162,6 +252,12 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Return the index of a player in the board's player list.
+     * 
+     * @param player the player to return the index of
+     * @return the index of the player in the board's player list
+     */
     public int getPlayerNumber(@NotNull Player player) {
         if (player.board == this) {
             return players.indexOf(player);
@@ -217,6 +313,12 @@ public class Board extends Subject {
         return moveCounter;
     }
 
+    /**
+     * Return a string describing the current status of the game with the phase,
+     * current player, current step and the move count.
+     * 
+     * @return the status message
+     */
     public String getStatusMessage() {
         // This is actually a view aspect, but for making the first task easy for
         // the students, this method gives a string representation of the current

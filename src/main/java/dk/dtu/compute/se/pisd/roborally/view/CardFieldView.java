@@ -38,7 +38,7 @@ import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Handles the drawing of card fields.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -67,6 +67,12 @@ public class CardFieldView extends GridPane implements ViewObserver {
 
     private GameController gameController;
 
+    /**
+     * Create a card field view tied to a certain game controller and command card field.
+     * 
+     * @param gameController
+     * @param field
+     */
     public CardFieldView(@NotNull GameController gameController, @NotNull CommandCardField field) {
         this.gameController = gameController;
         this.field = field;
@@ -140,6 +146,9 @@ public class CardFieldView extends GridPane implements ViewObserver {
         return null;
     }
 
+    /**
+     * Update card field view as to include a recent change in state.
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == field && subject != null) {
@@ -154,6 +163,11 @@ public class CardFieldView extends GridPane implements ViewObserver {
 
     private class OnDragDetectedHandler implements EventHandler<MouseEvent> {
 
+        /**
+         * Handle the dragging of the mouse to pick up cards.
+         * 
+         * @param event MouseEvent object
+         */
         @Override
         public void handle(MouseEvent event) {
             Object t = event.getTarget();
@@ -251,6 +265,11 @@ public class CardFieldView extends GridPane implements ViewObserver {
 
     private class OnDragDroppedHandler implements EventHandler<DragEvent> {
 
+        /**
+         * Handle the dropping of a drag as to move a card into the dropped field.
+         * 
+         * @param event DragEvent object
+         */
         @Override
         public void handle(DragEvent event) {
             Object t = event.getTarget();

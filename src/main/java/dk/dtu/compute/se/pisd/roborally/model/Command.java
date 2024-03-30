@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ...
+ * Enum of the different commands there may be on a command card.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *

@@ -64,4 +64,10 @@ public class MyStepdefs {
     public void theTurnCounterShouldBeAt(int count) {
         assert gameController.board.getMoveCount() == count;
     }
+
+    @Then("the robot should be facing {string}")
+    public void theRobotShouldBeFacing(String h) {
+        Heading heading = Heading.fromString(h);
+        assert gameController.board.getCurrentPlayer().getHeading().equals(heading);
+    }
 }

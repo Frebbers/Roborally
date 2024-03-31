@@ -12,3 +12,6 @@ Feature: Apply programming to move the robot
     And the turn counter should be at (1)
 
     Scenario: Robot turns around
+    Given the robot is facing "South"
+      When the robot has programmed a "Turn Right" card
+      Then the robot should be facing "West"

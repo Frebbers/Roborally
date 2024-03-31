@@ -58,7 +58,7 @@ public class Assignment2tests {
         assertNotNull(gameController.board.getSpace(0, 1).getPlayer());
         assertNull(gameController.board.getSpace(0, 0).getPlayer());
     }
-    private GameController configureTestenvironment() {
+    public static GameController configureTestenvironment() {
         // Set up testing environment
         Board board = new Board(8, 8);
         Player player = new Player(board, "Black", "Player 1");

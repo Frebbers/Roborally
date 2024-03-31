@@ -234,14 +234,14 @@ public class GameController {
 
     }
 
-    // TODO Task2
+    // Task2
     public void moveForward(@NotNull Player player) {
         movePlayerForward(player);
         //Collision logic to be added...
 
     }
 
-    // TODO Task2
+    // Task2
     public void fastForward(@NotNull Player player) {
         movePlayerForward(player);
         movePlayerForward(player);
@@ -249,7 +249,7 @@ public class GameController {
 
     }
 
-    // TODO Task2
+    // Task2
     public void turnRight(@NotNull Player player) {
         var currentHeading = player.getHeading();
         switch(player.getHeading()) {
@@ -270,7 +270,7 @@ public class GameController {
         }
     }
 
-    // TODO Task2
+    // Task2
     public void turnLeft(@NotNull Player player) {
         var currentHeading = player.getHeading();
         switch(currentHeading) {

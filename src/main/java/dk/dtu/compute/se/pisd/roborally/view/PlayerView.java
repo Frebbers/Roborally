@@ -33,7 +33,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Handles the drawing of a player mat.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -62,6 +62,12 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private GameController gameController;
 
+    /**
+     * Create a player view belonging to a certain player.
+     * 
+     * @param gameController
+     * @param player the player whose player view this is
+     */
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
@@ -132,6 +138,11 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 
+    /**
+     * Update player view as to include a recent change in state.
+     * 
+     * @param subject
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {

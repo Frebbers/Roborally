@@ -25,7 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Class for controlling game phases and moving robots and cards.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -34,6 +34,11 @@ public class GameController {
 
     final public Board board;
 
+    /**
+     * Initialize a GameController object with a certain Board.
+     * 
+     * @param board
+     */
     public GameController(@NotNull Board board) {
         this.board = board;
     }
@@ -68,6 +73,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Set the board's phase to PROGRAMMING. Empty all players' registers and give them eight random command cards.
+     */
     // XXX: implemented in the current version
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
@@ -98,6 +106,9 @@ public class GameController {
         return new CommandCard(commands[random]);
     }
 
+    /**
+     * Hide all registers but register 0, and set the board's phase to ACTIVATION. Reset current player and step to 0.
+     */
     // XXX: implemented in the current version
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
@@ -129,12 +140,18 @@ public class GameController {
         }
     }
 
+    /**
+     * Set stepMode to false and call continuePrograms().
+     */
     // XXX: implemented in the current version
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
+    /**
+     * Set stepMode to true and call continuePrograms().
+     */
     // XXX: implemented in the current version
     public void executeStep() {
         board.setStepMode(true);
@@ -274,6 +291,14 @@ public class GameController {
         }
     }
 
+    /**
+     * Attempt to move a card from one field to another.
+     * This is only done if the target card field is empty.
+     * 
+     * @param source card field of the card being moved
+     * @param target card field of the destination
+     * @return true if the card was succesfully moved, false otherwise
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();

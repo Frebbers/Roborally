@@ -27,7 +27,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
 /**
- * ...
+ * Handles the menu bar at the top of the game window for
+ * controlling the functions of an app controller.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -48,6 +49,11 @@ public class RoboRallyMenuBar extends MenuBar {
 
     private MenuItem exitApp;
 
+    /**
+     * Create a menu bar tied to a certain app controller.
+     * 
+     * @param appController
+     */
     public RoboRallyMenuBar(AppController appController) {
         this.appController = appController;
 
@@ -79,6 +85,9 @@ public class RoboRallyMenuBar extends MenuBar {
         update();
     }
 
+    /**
+     * Update menu bar as to include a recent change in state.
+     */
     public void update() {
         if (appController.isGameRunning()) {
             newGame.setVisible(false);

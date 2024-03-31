@@ -24,7 +24,10 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 /**
- * ...
+ * A player's command card field in which a command card
+ * may reside. Can be set to be visible or invisible,
+ * based on whether the card content should be hidden
+ * currently.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -37,16 +40,33 @@ public class CommandCardField extends Subject {
 
     private boolean visible;
 
+    /**
+     * Create a command card field belonging to a certain
+     * player. Field is by default empty and visible.
+     * 
+     * @param player
+     */
     public CommandCardField(Player player) {
         this.player = player;
         this. card = null;
         this.visible = true;
     }
 
+    /**
+     * Return the command card object which is in
+     * this field.
+     * 
+     * @return command card in this field
+     */
     public CommandCard getCard() {
         return card;
     }
 
+    /**
+     * Place a card in this field.
+     * 
+     * @param card card to be placed in field
+     */
     public void setCard(CommandCard card) {
         if (card != this.card) {
             this.card = card;
@@ -54,10 +74,22 @@ public class CommandCardField extends Subject {
         }
     }
 
+    /**
+     * Check whether the card field is currently
+     * set to be visible.
+     * 
+     * @return true if field is visible, false otherwise
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     * Set the visibility of this field.
+     * 
+     * @param visible true if the field is to be visible,
+     * false otherwise
+     */
     public void setVisible(boolean visible) {
         if (visible != this.visible) {
             this.visible = visible;

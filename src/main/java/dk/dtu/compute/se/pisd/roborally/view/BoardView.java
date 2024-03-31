@@ -35,7 +35,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Handles the drawing of the game board.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -53,6 +53,11 @@ public class BoardView extends VBox implements ViewObserver {
 
     private SpaceEventHandler spaceEventHandler;
 
+    /**
+     * Create a board view tied to a certain game controller.
+     * 
+     * @param gameController
+     */
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
@@ -82,6 +87,11 @@ public class BoardView extends VBox implements ViewObserver {
         update(board);
     }
 
+    /**
+     * Update board view as to include a recent change in state.
+     * 
+     * @param subject 
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {
@@ -96,10 +106,20 @@ public class BoardView extends VBox implements ViewObserver {
 
         final public GameController gameController;
 
+        /**
+         * Create a space event handler for handling mouse clicks on the game board.
+         * 
+         * @param gameController
+         */
         public SpaceEventHandler(@NotNull GameController gameController) {
             this.gameController = gameController;
         }
 
+        /**
+         * Move current player to the space that has been clicked.
+         * 
+         * @param event MouseEvent object
+         */
         @Override
         public void handle(MouseEvent event) {
             Object source = event.getSource();

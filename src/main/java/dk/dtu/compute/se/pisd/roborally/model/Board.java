@@ -306,6 +306,15 @@ public class Board extends Subject {
     }
 
     /**
+     * @author s224804
+     * @param moveCount the amount of moves to set the move count to
+     */
+
+    public void setMoveCount(int moveCount) {
+        this.moveCounter = moveCount;
+    }
+
+    /**
      * @author s224308, s213364
      * @return int the amount of moves that have been made on the board
      */

@@ -45,5 +45,14 @@ public enum Command {
     Command(String displayName) {
         this.displayName = displayName;
     }
+    public static Command fromString(String input) throws IllegalArgumentException{
+        return switch (input) {
+            case "Fwd", "Forward", "forward", "fwd" -> Command.FORWARD;
+            case "Turn Right", "turn right" -> Command.RIGHT;
+            case "Turn Left","turn left" -> Command.LEFT;
+            case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
+            default -> throw new IllegalArgumentException("Invalid command");
+        };
+    }
 
 }

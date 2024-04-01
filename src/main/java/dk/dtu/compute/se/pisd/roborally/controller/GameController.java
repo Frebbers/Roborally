@@ -227,6 +227,10 @@ public class GameController {
     }
 
     //Private method added for reuseability in moveForward and fastForward
+    /**
+     * @author Adrian and Mathias
+     * @param player
+     */
     private void movePlayerForward(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
         neighbour.setPlayer(player);
@@ -235,6 +239,10 @@ public class GameController {
     }
 
     // Task2
+    /**
+     * @author Adrian and Mathias
+     * @param player
+     */
     public void moveForward(@NotNull Player player) {
         movePlayerForward(player);
         //Collision logic to be added...
@@ -242,6 +250,10 @@ public class GameController {
     }
 
     // Task2
+    /**
+     * @author Adrian and Mathias
+     * @param player
+     */
     public void fastForward(@NotNull Player player) {
         movePlayerForward(player);
         movePlayerForward(player);
@@ -250,45 +262,23 @@ public class GameController {
     }
 
     // Task2
+    /**
+     * @author Adrian and Mathias
+     * @param player
+     */
     public void turnRight(@NotNull Player player) {
         var currentHeading = player.getHeading();
-        switch(player.getHeading()) {
-            case NORTH:
-                player.setHeading(Heading.EAST);
-                break;
-            case EAST:
-                player.setHeading(Heading.SOUTH);
-                break;
-                case SOUTH:
-                player.setHeading(Heading.WEST);
-                break;
-                case WEST:
-                player.setHeading(Heading.NORTH);
-                break;
-            default:
-                player.setHeading(currentHeading);
-        }
+        player.setHeading(currentHeading.next());
     }
 
     // Task2
+    /**
+     * @author Adrian and Mathias
+     * @param player
+     */
     public void turnLeft(@NotNull Player player) {
         var currentHeading = player.getHeading();
-        switch(currentHeading) {
-            case NORTH:
-                player.setHeading(Heading.WEST);
-                break;
-            case EAST:
-                player.setHeading(Heading.NORTH);
-                break;
-            case SOUTH:
-                player.setHeading(Heading.EAST);
-                break;
-            case WEST:
-                player.setHeading(Heading.SOUTH);
-                break;
-            default:
-                player.setHeading(currentHeading);
-        }
+        player.setHeading(currentHeading.prev());
     }
 
     /**

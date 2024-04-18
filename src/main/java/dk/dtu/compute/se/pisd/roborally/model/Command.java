@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ...
+ * Enum of the different commands there may be on a command card.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -57,6 +57,15 @@ public enum Command {
 
     public List<Command> getOptions() {
         return options;
+    }
+    public static Command fromString(String input) throws IllegalArgumentException{
+        return switch (input) {
+            case "Fwd", "Forward", "forward", "fwd" -> Command.FORWARD;
+            case "Turn Right", "turn right" -> Command.RIGHT;
+            case "Turn Left","turn left" -> Command.LEFT;
+            case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
+            default -> throw new IllegalArgumentException("Invalid command");
+        };
     }
 
 }

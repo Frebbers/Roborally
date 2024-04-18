@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
- * ...
+ * For player objects, keeping track of their name, color, position and heading on a board, as well as their command cards.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -48,6 +48,13 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    /**
+     * Create a player object with a name and a color, on a board.
+     * 
+     * @param board the board the player is on
+     * @param color the color of the player's robot
+     * @param name the name of the player
+     */
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
         this.name = name;
@@ -66,10 +73,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Return name of player.
+     * 
+     * @return name of player
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of this player as a non-null string.
+     * 
+     * @param name new name of player
+     */
     public void setName(String name) {
         if (name != null && !name.equals(this.name)) {
             this.name = name;
@@ -80,10 +97,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Return color of player.
+     * 
+     * @return color of player as a string
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * Set color of player.
+     * 
+     * @param color new color of player
+     */
     public void setColor(String color) {
         this.color = color;
         notifyChange();
@@ -92,10 +119,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Return space where the player's robot is located.
+     * 
+     * @return space of the player's robot.
+     */
     public Space getSpace() {
         return space;
     }
 
+    /**
+     * Set the space of this player.
+     * 
+     * @param space new space of player
+     */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space != oldSpace &&
@@ -111,10 +148,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Return the direction the player's robot is heading.
+     * 
+     * @return heading of player's robot
+     */
     public Heading getHeading() {
         return heading;
     }
 
+    /**
+     * Set direction for the player's robot to be heading.
+     * 
+     * @param heading new heading of the player's robot
+     */
     public void setHeading(@NotNull Heading heading) {
         if (heading != this.heading) {
             this.heading = heading;
@@ -125,12 +172,25 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Return the command card field at the given index of the player's register.
+     * 
+     * @param i index of the register
+     * 
+     * @return command card field at the given index of the register
+     */
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
 
+    /**
+     * Return the command card field at the given index of the player's cards.
+     * 
+     * @param i index of the cards
+     * 
+     * @return command card field at the given index of the cards
+     */
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
-
 }

@@ -22,7 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
+ * Enum for cardinal direction a board element is facing.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -31,11 +31,41 @@ public enum Heading {
 
     SOUTH, WEST, NORTH, EAST;
 
+    /**
+     * Go to next enum element, effectively turning the board
+     * element clockwise.
+     * 
+     * @return the cardinal direction one step clockwise from
+     * the previous.
+     */
     public Heading next() {
         return values()[(this.ordinal() + 1) % values().length];
     }
 
+    /**
+     * Go to previous enum element, effectively turning the board
+     * element counter-clockwise.
+     * 
+     * @return the cardinal direction one step counter-clockwise from
+     * the previous.
+     */
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
+    }
+    /**
+     * Converts a string to a Heading enum.
+     * @author s224804
+     * @param input the string to be converted
+     * @return the Heading enum corresponding to the input string
+     * @throws IllegalArgumentException if the input string is not a valid heading
+     */
+    public static Heading fromString(String input) throws IllegalArgumentException{
+        return switch (input) {
+            case "north", "North" -> Heading.NORTH;
+            case "south", "South" -> Heading.SOUTH;
+            case "east", "East" -> Heading.EAST;
+            case "west", "West" -> Heading.WEST;
+            default -> throw new IllegalArgumentException("Invalid heading");
+        };
     }
 }

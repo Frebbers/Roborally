@@ -32,6 +32,11 @@ package dk.dtu.compute.se.pisd.roborally;
  */
 public class StartRoboRally {
 
+    /**
+     * Call the main method of the RoboRally class with the given arguments.
+     * 
+     * @param args arguments passed to the RoboRally main method
+     */
     public static void main(String[] args) {
         RoboRally.main(args);
     }

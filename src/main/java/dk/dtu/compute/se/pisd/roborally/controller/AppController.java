@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ...
+ * Controls the outermost functions of the game such as creating a new game, saving, loading, and stopping the game.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -55,10 +55,19 @@ public class AppController implements Observer {
 
     private GameController gameController;
 
+    /**
+     * Create an AppController object tied to the given RoboRally object.
+     * 
+     * @param roboRally
+     */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
     }
 
+    /**
+     * Ask the user for a number of players, and initializes an 8x8 board with the given amount of players.
+     * The programming phase is then initialized.
+     */
     public void newGame() {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
@@ -93,10 +102,17 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * NOT IMPLEMENTED
+     * Save the current game state to be loaded later.
+     */
     public void saveGame() {
         // XXX needs to be implemented eventually
     }
 
+    /** NOT IMPLEMENTED
+     * Load a previously saved game state.
+     */
     public void loadGame() {
         // XXX needs to be implemented eventually
         // for now, we just create a new game
@@ -127,6 +143,12 @@ public class AppController implements Observer {
         return false;
     }
 
+    /**
+     * Ask the user for confirmation to exit the game. Upon no response
+     * or a negative response, return with no action. Upon a positive
+     * response, stopGame() is called. If the game is successfully stopped,
+     * close the game using Platform.exit().
+     */
     public void exit() {
         if (gameController != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -146,11 +168,21 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Check whether this object's gameController is not null.
+     * 
+     * @return true if gameController is not null, false otherwise.
+     */
     public boolean isGameRunning() {
         return gameController != null;
     }
 
 
+    /**
+     * NOT IMPLEMENTED
+     * 
+     * @param subject
+     */
     @Override
     public void update(Subject subject) {
         // XXX do nothing for now

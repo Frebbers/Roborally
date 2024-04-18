@@ -26,13 +26,19 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import javafx.application.Platform;
 
 /**
- * ...
+ * Specific type of observer which differentiates between
+ * updating the view and updating in the FX application thread.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
 public interface ViewObserver extends Observer {
 
+    /**
+     * Update view as to include a recent change in state.
+     * 
+     * @param subject
+     */
     void updateView(Subject subject);
 
     @Override

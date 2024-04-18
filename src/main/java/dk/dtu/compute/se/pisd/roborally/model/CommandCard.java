@@ -25,7 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * For making command card objects with a certain command.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -34,13 +34,21 @@ public class CommandCard extends Subject {
 
     final public Command command;
 
+    /**
+     * Create a command card object with a certain command.
+     * 
+     * @param command command which is on the card
+     */
     public CommandCard(@NotNull Command command) {
         this.command = command;
     }
 
+    /**
+     * Return the name of the command on the command card.
+     * 
+     * @return name of the command
+     */
     public String getName() {
         return command.displayName;
     }
-
-
 }

@@ -110,10 +110,11 @@ public class GameController {
      * Hide all registers but register 0, and set the board's phase to ACTIVATION. Reset current player and step to 0.
      */
     // XXX: implemented in the current version
-    public void finishProgrammingPhase() {
+    public void finishProgrammingPhase() { // This happens before the activation phase
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
+        // board.determinePlayerOrder()
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
@@ -160,7 +161,7 @@ public class GameController {
 
     // XXX: implemented in the current version
     private void continuePrograms() {
-        do {
+        do { // This happens each player turn
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
@@ -179,8 +180,9 @@ public class GameController {
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
+                } else { // This is what happens at the end of each register
                     step++;
+                    // board.determinePlayerOrder()
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);

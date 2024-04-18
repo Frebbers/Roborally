@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -47,6 +48,11 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
+    /**
+     * THIS is the shit. In the best way possible, this players list needs to be updated at the
+     * start of each register, based on the players' locations relative to the priority antenna.
+     * The surrounding chronology happens in {@link GameController#executeNextStep()}.
+     */
     private final List<Player> players = new ArrayList<>();
 
     private Player current;

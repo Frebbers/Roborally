@@ -369,5 +369,11 @@ public class Board extends Subject {
         //      be used to extend the status message
     }
 
+    /**
+     * Updates the order of players in the {@link #players} list by comparing
+     * their taxi cab distance to the priority antenna.
+     */
+    public void updatePlayerOrder() {
 
+    }
 }

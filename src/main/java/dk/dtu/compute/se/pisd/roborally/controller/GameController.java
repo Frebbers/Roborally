@@ -114,7 +114,7 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        // board.determinePlayerOrder()
+        board.updatePlayerOrder();
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
@@ -182,7 +182,7 @@ public class GameController {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else { // This is what happens at the end of each register
                     step++;
-                    // board.determinePlayerOrder()
+                    board.updatePlayerOrder();
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);

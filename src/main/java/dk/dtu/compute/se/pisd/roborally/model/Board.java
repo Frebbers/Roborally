@@ -41,8 +41,6 @@ public class Board extends Subject {
 
     public final int height;
 
-    public final String boardName;
-
     private Integer gameId;
 
     private final Space[][] spaces;
@@ -57,8 +55,7 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    public Board(int width, int height, @NotNull String boardName) {
-        this.boardName = boardName;
+    public Board(int width, int height) {
         this.width = width;
         this.height = height;
         spaces = new Space[width][height];
@@ -69,10 +66,6 @@ public class Board extends Subject {
             }
         }
         this.stepMode = false;
-    }
-
-    public Board(int width, int height) {
-        this(width, height, "defaultboard");
     }
 
     public Integer getGameId() {
@@ -180,6 +173,17 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        if (space.getWalls().contains(heading)) {
+            return null;
+        }
+        // TODO needs to be implemented based on the actual spaces
+        //      and obstacles and walls placed there. For now it,
+        //      just calculates the next space in the respective
+        //      direction in a cyclic way.
+
+        // XXX an other option (not for now) would be that null represents a hole
+        //     or the edge of the board in which the players can fall
+
         int x = space.x;
         int y = space.y;
         switch (heading) {
@@ -196,29 +200,18 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-
-        return getSpace(x, y);
+        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
+        Space result = getSpace(x, y);
+        if (result != null) {
+            if (result.getWalls().contains(reverse)) {
+                return null;
+            }
+        }
+        return result;
     }
 
     public String getStatusMessage() {
-        // This is actually a view aspect, but for making the first task easy for
-        // the students, this method gives a string representation of the current
-        // status of the game (specifically, it shows the phase, the player and the step)
 
-        // TODO Task1: this string could eventually be refined
-        //      The status line should show more information based on
-        //      situation; for now, introduce a counter to the Board,
-        //      which is counted up every time a player makes a move; the
-        //      status line should show the current player and the number
-        //      of the current move!
-        return "Phase: " + getPhase().name() +
-                ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
-
-        // TODO Task1: add a counter along with a getter and a setter, so the
-        //      state of the board (game) contains the number of moves, which then can
-        //      be used to extend the status message 
+        return "";
     }
-
-
 }

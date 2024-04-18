@@ -19,25 +19,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.designpatterns.observer;
+package dk.dtu.compute.se.pisd.roborally.controller;
+
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
- * This is the observer of the observer design pattern roughly following
- * the definition of the GoF.
- * 
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public interface Observer {
-	
-	/**
-	 * The observer's update method, which is called, when the subject
-	 * changes. The subject is provided as a parameter in order to
-	 * use the same observer object as an observer for many different
-	 * subjects.
-	 * 
-	 * @param subject the subject which changed
-	 */
-	void update(Subject subject);
+public abstract class FieldAction {
 
+    public abstract boolean doAction(GameController gameController, Space space);
+    
 }

@@ -1,4 +1,4 @@
-package Assignment2test;
+package dk.dtu.compute.se.pisd.roborally.controller;
 
 
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
@@ -7,9 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class Assignment2tests {

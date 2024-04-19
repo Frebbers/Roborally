@@ -1,4 +1,3 @@
-import Assignment2test.Assignment2tests;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
@@ -8,7 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static Assignment2test.Assignment2tests.configureTestenvironment;
+import static dk.dtu.compute.se.pisd.roborally.controller.Assignment2tests.configureTestenvironment;
 
 public class MyStepdefs {
     private GameController gameController;

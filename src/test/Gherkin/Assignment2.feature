@@ -1,3 +1,4 @@
+@test
 Feature: Apply programming to move the robot
 
   Background: The game is initialized

@@ -85,9 +85,9 @@ public class GameControllerTest {
             // Set up testing environment
             GameController gameController = configureTestenvironment();
             // Test the getStatusMessage method
-            assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0", gameController.board.getStatusMessage());
+            assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 0", gameController.board.getStatusMessage());
             gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
-            assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 1", gameController.board.getStatusMessage());
+            assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 1", gameController.board.getStatusMessage());
         }
         @Test
         public void testExecuteCommand() {

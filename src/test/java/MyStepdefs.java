@@ -7,7 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static dk.dtu.compute.se.pisd.roborally.controller.Assignment2tests.configureTestenvironment;
+import static dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest.configureTestenvironment;
+
 
 public class MyStepdefs {
     private GameController gameController;

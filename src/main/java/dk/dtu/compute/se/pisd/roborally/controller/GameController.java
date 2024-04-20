@@ -182,7 +182,7 @@ public class GameController {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else { // This is what happens at the end of each register
                     step++;
-                    board.updatePlayerOrder();
+                    board.updatePlayerOrder(); // Consider changing this as to change as little as possible from starting code
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);

@@ -18,7 +18,7 @@ public class JsonReader {
     }
 
     private String getBoardPath() {
-        final String boardDirectory = "src/main/java/dk/dtu/compute/se/pisd/roborally/json/boards/board";
+        final String boardDirectory = "src/main/resources/boards/board";
         String jsonBoardPath = boardDirectory + boardNumber + ".json";
         System.out.println(jsonBoardPath);
         return jsonBoardPath;
@@ -33,9 +33,9 @@ public class JsonReader {
             JsonParser parser = new JsonParser();
 
             JsonObject o = parser.parse(jsonBoardContent).getAsJsonObject();
-            int height = o.get("Height").getAsInt();
-            int width = o.get("Width").getAsInt();
-            JsonArray walls = o.getAsJsonArray("Walls");
+            int height = o.get("height").getAsInt();
+            int width = o.get("width").getAsInt();
+            JsonArray walls = o.getAsJsonArray("walls");
 
             System.out.println("Height and Width from json: " + height + " and " + width + " and Walls: " + walls);
 

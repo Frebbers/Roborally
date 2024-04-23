@@ -5,14 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2766ae4-dc00-42b7-9993-e72fc3e794c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/SaveGameState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/AppController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/json/boards/Documentation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/Documentation.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/json/boards/board1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/board1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/json/boards/board2.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/board2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/json/boards/board3.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/board4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/json/gameState/Documentation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gameState/Documentation.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/JsonReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/JsonReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/defaultboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/board3.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/RoboRally.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/RoboRally.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/AppController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/AppController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Command.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/JsonReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/JsonReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Space.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Space.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +38,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="MapLoader" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -60,7 +76,7 @@
     &quot;JUnit.JsonReaderTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;MapLoader&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/freda/Documents/GitHub/Roborally&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -71,7 +87,12 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.JsonReaderTest">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/boards" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.StartRoboRally">
     <configuration name="JsonReader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.roborally.model.JsonReader" />
       <module name="roborally" />
@@ -115,9 +136,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.JsonReaderTest" />
         <item itemvalue="Application.StartRoboRally" />
+        <item itemvalue="JUnit.JsonReaderTest" />
         <item itemvalue="Application.JsonReader" />
+        <item itemvalue="Application.StartRoboRally" />
+        <item itemvalue="JUnit.JsonReaderTest" />
       </list>
     </recent_temporary>
   </component>
@@ -145,7 +168,7 @@
       <workItem from="1713616770034" duration="17041000" />
       <workItem from="1713790968258" duration="19270000" />
       <workItem from="1713876772665" duration="3865000" />
-      <workItem from="1713886186274" duration="173000" />
+      <workItem from="1713886186274" duration="2792000" />
     </task>
     <servers />
   </component>

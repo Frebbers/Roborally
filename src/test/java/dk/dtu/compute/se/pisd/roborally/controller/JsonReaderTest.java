@@ -34,4 +34,9 @@ public class JsonReaderTest {
         assertEquals(12, board.getWidth());
         //assertEquals(null, board.getWalls());
     }
+    @Test
+    public void testDefaultBoard() {
+        String jsonBoardPath = "src/main/resources/boards/board3.json";
+
+    }
 }

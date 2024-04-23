@@ -64,8 +64,8 @@ public class Board extends Subject {
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
      * 
-     * @param width
-     * @param height
+     * @param width   width of the board
+     * @param height   height of the board
      * @param boardName name of board
      */
     public Board(int width, int height, @NotNull String boardName) {
@@ -83,13 +83,13 @@ public class Board extends Subject {
     }
 
     /**
-     * Initialize a Board object with certain dimensions of empty spaces amd a default name.
-     * 
+     * Initialize a Board object with certain dimensions of empty spaces and a default name.
+     *
      * @param width
      * @param height
      */
     public Board(int width, int height) {
-        this(width, height, "defaultboard");
+        this(width, height, "defaultBoard");
     }
 
     /**
@@ -337,5 +337,12 @@ public class Board extends Subject {
                 ", Player = " + getCurrentPlayer().getName() +
                 ", Step: " + getStep() +
                 ", Move: " + getMoveCount();
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    public int getWidth() {
+        return width;
     }
 }

@@ -39,6 +39,7 @@ public class JsonReader {
 
             System.out.println("Height and Width from json: " + height + " and " + width + " and Walls: " + walls);
 
+
             return new Board(width, height, "Empty 8x8 board..");
 
         } catch (IOException e) {

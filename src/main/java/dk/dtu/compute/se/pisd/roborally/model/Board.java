@@ -48,6 +48,7 @@ public class Board extends Subject {
     private Integer gameId;
 
     private final Space[][] spaces;
+    private Checkpoint[] checkpoints;
 
     private final List<Player> players = new ArrayList<>();
 
@@ -72,6 +73,7 @@ public class Board extends Subject {
         this.boardName = boardName;
         this.width = width;
         this.height = height;
+        //this.checkpoints = checkpoints;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -371,6 +373,10 @@ public class Board extends Subject {
     }
     public int getWidth() {
         return width;
+    }
+
+    public Checkpoint[] getCheckpoints() {
+        return checkpoints;
     }
     /*
     public short getWalls() {

@@ -36,6 +36,7 @@ import java.util.List;
 public class Space extends Subject {
 
     private Player player;
+    private Checkpoint checkpoint;
 
     private List<Heading> walls = new ArrayList<>();
     private List<FieldAction> actions = new ArrayList<>();
@@ -85,9 +86,31 @@ public class Space extends Subject {
             }
             if (player != null) {
                 player.setSpace(this);
+
+                if(checkpoint != null){
+                    player.setCheckpoint(checkpoint);
+                }
             }
             notifyChange();
         }
+    }
+
+    /**
+     * Return checkpoint object which is on this space.
+     *
+     * @return Checkpoint on this space
+     */
+    public Checkpoint getCheckpoint() {
+        return checkpoint;
+    }
+
+    /**
+     * Set a checkpoint object to be on this space.
+     *
+     * @param checkpoint checkpoint to be on this space
+     */
+    public void setCheckpoint(Checkpoint checkpoint) {
+        this.checkpoint = checkpoint;
     }
 
     public List<Heading> getWalls() {

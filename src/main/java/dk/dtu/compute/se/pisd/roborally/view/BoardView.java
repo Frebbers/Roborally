@@ -23,10 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -82,6 +79,12 @@ public class BoardView extends VBox implements ViewObserver {
                 spaceView.setOnMouseClicked(spaceEventHandler);
             }
         }
+
+        // For now, create a Checkpoint for test
+        Space space = board.getSpace(2,6);
+        Checkpoint checkpoint = new Checkpoint(space, 0);
+        CheckpointView checkpointView = new CheckpointView(checkpoint);
+        mainBoardPane.add(checkpointView, checkpoint.getSpace().x, checkpoint.getSpace().y);
 
         board.attach(this);
         update(board);

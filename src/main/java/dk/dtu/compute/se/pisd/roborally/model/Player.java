@@ -47,6 +47,7 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
+    private Checkpoint[] checkpoints;
 
     /**
      * Create a player object with a name and a color, on a board.
@@ -61,6 +62,7 @@ public class Player extends Subject {
         this.color = color;
 
         this.space = null;
+        this.checkpoints = board.getCheckpoints();
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -71,6 +73,8 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
         }
+
+        checkpoints = new Checkpoint[0];
     }
 
     /**
@@ -192,5 +196,43 @@ public class Player extends Subject {
      */
     public CommandCardField getCardField(int i) {
         return cards[i];
+    }
+
+    /**
+     * Returns the checkpoint at a specified index.
+     *
+     * @param index the index of the checkpoint
+     * @return the checkpoint at the specified index
+     */
+    public Checkpoint getCheckpoint(int index) {
+        if (index >= 0 && index < checkpoints.length) {
+            return checkpoints[index];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Sets a checkpoint at a specified index.
+     *
+     * @param checkpoint the checkpoint to set
+     */
+    public void setCheckpoint(Checkpoint checkpoint) {
+        int id = checkpoint.getCheckpointId();
+        if (id >= 0 && id < checkpoints.length) {
+            checkpoints[id] = checkpoint;
+            notifyChange();
+
+            System.out.println("Checkpoint: " + id + " has been reached!");
+        }
+    }
+
+    /**
+     * Returns all checkpoints associated with the player.
+     *
+     * @return an array of all checkpoints
+     */
+    public Checkpoint[] getCheckpoints() {
+        return checkpoints;
     }
 }

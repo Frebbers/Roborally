@@ -43,6 +43,8 @@ public class Board extends Subject {
 
     public final int height;
 
+    public final String boardName;
+
     private Integer gameId;
 
     private final Space[][] spaces;
@@ -58,12 +60,12 @@ public class Board extends Subject {
     private int moveCounter = 0;
 
     private boolean stepMode;
-    public final String boardName;
+
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
-     *
-     * @param width
-     * @param height
+     * 
+     * @param width   width of the board
+     * @param height   height of the board
      * @param boardName name of board
      */
     public Board(int width, int height, @NotNull String boardName) {
@@ -81,13 +83,13 @@ public class Board extends Subject {
     }
 
     /**
-     * Initialize a Board object with certain dimensions of empty spaces amd a default name.
+     * Initialize a Board object with certain dimensions of empty spaces and a default name.
      *
      * @param width
      * @param height
      */
     public Board(int width, int height) {
-        this(width, height, "defaultboard");
+        this(width, height, "defaultBoard");
     }
 
     /**
@@ -364,5 +366,16 @@ public class Board extends Subject {
         //      be used to extend the status message
     }
 
+    public int getHeight() {
+        return height;
+    }
+    public int getWidth() {
+        return width;
+    }
+    /*
+    public short getWalls() {
+        return walls;
+    }
+    */
 
 }

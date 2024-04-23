@@ -310,4 +310,8 @@ public class GameController {
         assert false;
     }
 
+    public SaveGameState saveGameState() {
+       return null;
+    }
+
 }

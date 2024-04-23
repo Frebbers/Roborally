@@ -65,7 +65,7 @@ public class AppController implements Observer {
     }
 
     /**
-     * Ask the user for a number of players, and initializes an 8x8 board with the given amount of players.
+     * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
     public void newGame() {
@@ -106,11 +106,6 @@ public class AppController implements Observer {
                 }
             }
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            //Board board = new Board(8,8);
-
-
             // XXX: the line below is commented out in the current version
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.startProgrammingPhase();
@@ -120,8 +115,7 @@ public class AppController implements Observer {
     }
     private Board loadJsonBoardFromNumber(int boardNumber) {
         JsonReader jsonReader = new JsonReader(boardNumber);
-        Board board = jsonReader.readBoardJson();
-        return board;
+        return jsonReader.readBoardJson();
     }
 
     /**

@@ -79,7 +79,7 @@ public class GameController {
     // XXX: implemented in the current version
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.setCurrentPlayer();
         board.setStep(0);
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -110,12 +110,12 @@ public class GameController {
      * Hide all registers but register 0, and set the board's phase to ACTIVATION. Reset current player and step to 0.
      */
     // XXX: implemented in the current version
-    public void finishProgrammingPhase() { // This happens before the activation phase
+    public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
         board.updatePlayerOrder();
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.setCurrentPlayer();
         board.setStep(0);
     }
 
@@ -161,7 +161,7 @@ public class GameController {
 
     // XXX: implemented in the current version
     private void continuePrograms() {
-        do { // This happens each player turn
+        do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
@@ -177,16 +177,15 @@ public class GameController {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
                 }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else { // This is what happens at the end of each register
+                if (!board.getPriorityAntenna().noPlayersLeft()) {
+                    board.setCurrentPlayer();
+                } else { // This is what happens at the end of each full register (or "step")
                     step++;
-                    board.updatePlayerOrder(); // Consider changing this as to change as little as possible from starting code
+                    board.getPriorityAntenna().resetPlayersLeft();
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
+                        board.setCurrentPlayer();
                     } else {
                         startProgrammingPhase();
                     }

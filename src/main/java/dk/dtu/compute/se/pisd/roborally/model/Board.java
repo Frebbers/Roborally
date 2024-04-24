@@ -51,11 +51,6 @@ public class Board extends Subject {
     private final Space[][] spaces;
     private Checkpoint[] checkpoints;
 
-    /**
-     * THIS is the shit. In the best way possible, this players list needs to be updated at the
-     * start of each register, based on the players' locations relative to the priority antenna.
-     * The surrounding chronology happens in {@link GameController#executeNextStep()}.
-     */
     private final List<Player> players = new ArrayList<>();
 
     private Player current;
@@ -67,6 +62,8 @@ public class Board extends Subject {
     private int moveCounter = 0;
 
     private boolean stepMode;
+
+    PriorityAntenna priorityAntenna = new PriorityAntenna();
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
@@ -157,6 +154,7 @@ public class Board extends Subject {
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
+            priorityAntenna.addPlayer(player);
             notifyChange();
         }
     }
@@ -195,6 +193,17 @@ public class Board extends Subject {
             this.current = player;
             notifyChange();
         }
+    }
+
+    /**
+     * Set current player. Which player is set is determined by the {@link #priorityAntenna}
+     */
+    public void setCurrentPlayer() {
+        this.current = priorityAntenna.popNextPlayer();
+    }
+
+    public PriorityAntenna getPriorityAntenna() {
+        return priorityAntenna;
     }
 
     /**
@@ -395,6 +404,4 @@ public class Board extends Subject {
         return walls;
     }
     */
-
-    }
 }

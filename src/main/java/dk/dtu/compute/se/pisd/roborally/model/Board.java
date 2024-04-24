@@ -44,9 +44,12 @@ public class Board extends Subject {
 
     public final int height;
 
+    public final String boardName;
+
     private Integer gameId;
 
     private final Space[][] spaces;
+    private Checkpoint[] checkpoints;
 
     /**
      * THIS is the shit. In the best way possible, this players list needs to be updated at the
@@ -64,18 +67,19 @@ public class Board extends Subject {
     private int moveCounter = 0;
 
     private boolean stepMode;
-    public final String boardName;
+
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
-     *
-     * @param width
-     * @param height
+     * 
+     * @param width   width of the board
+     * @param height   height of the board
      * @param boardName name of board
      */
-    public Board(int width, int height, @NotNull String boardName) {
+    public Board(int width, int height, @NotNull String boardName, Checkpoint[] checkpoints) {
         this.boardName = boardName;
         this.width = width;
         this.height = height;
+        this.checkpoints = checkpoints;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -87,13 +91,13 @@ public class Board extends Subject {
     }
 
     /**
-     * Initialize a Board object with certain dimensions of empty spaces amd a default name.
+     * Initialize a Board object with certain dimensions of empty spaces and a default name.
      *
      * @param width
      * @param height
      */
-    public Board(int width, int height) {
-        this(width, height, "defaultboard");
+    public Board(int width, int height, Checkpoint[] checkpoints) {
+        this(width, height, "defaultBoard", checkpoints);
     }
 
     /**
@@ -362,7 +366,8 @@ public class Board extends Subject {
         //      of the current move!
         return "Phase: " + getPhase().name() +
                 ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
+                ", Step: " + getStep() +
+                ", Move: " + getMoveCount();
 
         // TODO Task1: add a counter along with a getter and a setter, so the
         //      state of the board (game) contains the number of moves, which then can
@@ -373,7 +378,23 @@ public class Board extends Subject {
      * Updates the order of players in the {@link #players} list by comparing
      * their taxi cab distance to the priority antenna.
      */
-    public void updatePlayerOrder() {
+    public void updatePlayerOrder() {}
+
+    public int getHeight() {
+        return height;
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public Checkpoint[] getCheckpoints() {
+        return checkpoints;
+    }
+    /*
+    public short getWalls() {
+        return walls;
+    }
+    */
 
     }
 }

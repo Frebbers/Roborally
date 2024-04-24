@@ -285,7 +285,7 @@ public class GameController {
     /**
      * Attempt to move a card from one field to another.
      * This is only done if the target card field is empty.
-     *
+     * 
      * @param source card field of the card being moved
      * @param target card field of the destination
      * @return true if the card was succesfully moved, false otherwise
@@ -309,6 +309,10 @@ public class GameController {
     public void notImplemented() {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
+    }
+
+    public SaveGameState saveGameState() {
+       return null;
     }
 
 

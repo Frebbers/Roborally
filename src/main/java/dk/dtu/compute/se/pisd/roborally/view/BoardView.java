@@ -80,14 +80,13 @@ public class BoardView extends VBox implements ViewObserver {
             }
         }
 
-        // For now, create a Checkpoint and Conveyorbelt(fwd) for test
-        Space space = board.getSpace(2,6);
-        Checkpoint checkpoint = new Checkpoint(space, 0);
-        ConveyorBelt belt = new ConveyorBelt(space);
-        ConveyorBeltView beltView = new ConveyorBeltView(belt, space);
-        CheckpointView checkpointView = new CheckpointView(checkpoint);
-        mainBoardPane.add(checkpointView, checkpoint.getSpace().x, checkpoint.getSpace().y);
-        mainBoardPane.add(beltView, belt.getSpace().x + 2, belt.getSpace().y + 2);
+        for(Checkpoint checkpoint : board.getCheckpoints()){
+            Space space = board.getSpace(checkpoint.x, checkpoint.y);
+            space.setCheckpoint(checkpoint);
+            CheckpointView checkpointView = new CheckpointView(checkpoint);
+            mainBoardPane.add(checkpointView, space.x, space.y);
+        }
+
         board.attach(this);
         update(board);
     }

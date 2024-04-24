@@ -10,20 +10,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Checkpoint extends Subject {
 
-    private final Space space;
+    public int x;
+    public int y;
     private final int checkpointId;
 
     /**
      * Constructs a new checkpoint on the specified space with an identifier.
      *
      * @param checkpointId the unique identifier for the checkpoint
-     * @param space the initial space for the checkpoint
+     * @param x the initial x-coordinate for the checkpoint
      */
-    public Checkpoint(@NotNull Space space, int checkpointId) {
-        this.space = space;
+    public Checkpoint(int x, int y, int checkpointId) {
+        this.x = x;
+        this.y = y;
         this.checkpointId = checkpointId;
-
-        space.setCheckpoint(this);
     }
 
     /**
@@ -33,14 +33,5 @@ public class Checkpoint extends Subject {
      */
     public int getCheckpointId() {
         return checkpointId;
-    }
-
-    /**
-     * Returns the space where this checkpoint is located.
-     *
-     * @return the space of this checkpoint
-     */
-    public Space getSpace() {
-        return space;
     }
 }

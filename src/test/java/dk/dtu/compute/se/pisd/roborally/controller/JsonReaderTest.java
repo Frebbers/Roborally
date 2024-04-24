@@ -36,7 +36,7 @@ public class JsonReaderTest {
     }
     @Test
     public void testDefaultBoard() {
-        String jsonBoardPath = "src/main/resources/boards/board3.json";
+        String jsonBoardPath = "src/main/resources/boards/board1.json";
 
     }
 }

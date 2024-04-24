@@ -74,7 +74,7 @@ public class Player extends Subject {
             cards[i] = new CommandCardField(this);
         }
 
-        checkpoints = new Checkpoint[0];
+        checkpoints = new Checkpoint[board.getCheckpoints().length];
     }
 
     /**

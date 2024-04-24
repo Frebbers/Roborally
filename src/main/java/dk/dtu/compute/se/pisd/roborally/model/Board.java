@@ -63,7 +63,7 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    PriorityAntenna priorityAntenna = new PriorityAntenna();
+    private PriorityAntenna priorityAntenna = new PriorityAntenna();
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.

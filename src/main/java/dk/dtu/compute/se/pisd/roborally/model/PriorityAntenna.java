@@ -8,11 +8,15 @@ import java.util.List;
 public class PriorityAntenna {
     List<Player> players;
     List<Player> playersLeft;
-    Space antennaSpace;
+    Space space;
 
     public void addPlayer(Player player) {
         players.add(player);
         resetPlayersLeft();
+    }
+
+    public void setSpace(Space space) {
+        this.space = space;
     }
 
     public void resetPlayersLeft() {
@@ -42,8 +46,8 @@ public class PriorityAntenna {
     private int calcPlayerDistance(Player player) {
         int px = player.getSpace().x;
         int py = player.getSpace().y;
-        int ax = antennaSpace.x;
-        int ay = antennaSpace.y;
+        int ax = space.x;
+        int ay = space.y;
 
         return Math.abs(px - ax) + Math.abs(py - ay);
     }

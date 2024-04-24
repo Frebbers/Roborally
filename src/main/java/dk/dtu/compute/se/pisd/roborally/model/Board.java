@@ -22,7 +22,6 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    private PriorityAntenna priorityAntenna = new PriorityAntenna();
+    private final PriorityAntenna priorityAntenna = new PriorityAntenna(this);
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
@@ -107,7 +106,7 @@ public class Board extends Subject {
     }
 
     /**
-     * Attempts to set the gameId. Throws an exception if the game already has an ID.
+     * Attempt to set the gameId. Throws an exception if the game already has an ID.
      *
      * @param gameId new gameId
      */
@@ -147,14 +146,22 @@ public class Board extends Subject {
     }
 
     /**
+     * Return list of players.
+     * @return list of players
+     */
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    /**
      * Add the given player to the Board's list of players, if they are not currently in it.
      *
-     * @param player to be added to the list
+     * @param player Player to be added to the list
      */
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
-            priorityAntenna.addPlayer(player);
+            priorityAntenna.resetPlayersLeft();
             notifyChange();
         }
     }
@@ -196,12 +203,22 @@ public class Board extends Subject {
     }
 
     /**
-     * Set current player. Which player is set is determined by the {@link #priorityAntenna}
+     * Set current player. Which player is set is determined by the {@link #priorityAntenna}.
+     *
+     * @author s214972@dtu.dk
      */
     public void setCurrentPlayer() {
         this.current = priorityAntenna.popNextPlayer();
+        notifyChange();
     }
 
+    /**
+     * Returns this board's {@link #priorityAntenna}
+     *
+     * @return This board's Priority Antenna
+     *
+     * @author s214972@dtu.dk
+     */
     public PriorityAntenna getPriorityAntenna() {
         return priorityAntenna;
     }

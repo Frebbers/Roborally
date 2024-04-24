@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConveyorBelt extends Subject {
 
-    private final Space space;
-    private ConveyorBeltController beltCtrl;
+    public int x;
+    public int y;
+    public String direction;
 
-    public ConveyorBelt(@NotNull Space space) {
-        this.space = space;
-
-        space.setConveyorBelt(this);
+    public ConveyorBelt(int x, int y, String direction) {
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
     }
 
-    public Space getSpace() {
-        return space;
-    }
+
+
 }

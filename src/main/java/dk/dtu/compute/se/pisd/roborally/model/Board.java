@@ -49,7 +49,7 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
     private Checkpoint[] checkpoints;
-
+    private ArrayList<ConveyorBelt> belts = new ArrayList<>();
     private final List<Player> players = new ArrayList<>();
 
     private Player current;
@@ -69,11 +69,12 @@ public class Board extends Subject {
      * @param height   height of the board
      * @param boardName name of board
      */
-    public Board(int width, int height, @NotNull String boardName, Checkpoint[] checkpoints) {
+    public Board(int width, int height, @NotNull String boardName, Checkpoint[] checkpoints, ArrayList<ConveyorBelt> belts) {
         this.boardName = boardName;
         this.width = width;
         this.height = height;
         this.checkpoints = checkpoints;
+        this.belts = belts;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -90,8 +91,8 @@ public class Board extends Subject {
      * @param width
      * @param height
      */
-    public Board(int width, int height, Checkpoint[] checkpoints) {
-        this(width, height, "defaultBoard", checkpoints);
+    public Board(int width, int height, Checkpoint[] checkpoints, ArrayList<ConveyorBelt> belts) {
+        this(width, height, "defaultBoard", checkpoints, belts);
     }
 
     /**
@@ -378,6 +379,8 @@ public class Board extends Subject {
     public Checkpoint[] getCheckpoints() {
         return checkpoints;
     }
+
+    public ArrayList<ConveyorBelt> getBelts() { return belts; }
     /*
     public short getWalls() {
         return walls;

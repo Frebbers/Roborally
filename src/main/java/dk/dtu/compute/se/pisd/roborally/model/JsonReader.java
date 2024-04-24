@@ -9,6 +9,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -67,6 +68,9 @@ public class JsonReader {
             // Create a list of checkpoints
             ArrayList<Checkpoint> checkpoints = new ArrayList<Checkpoint>();
 
+            //Create a list of coveyorbelt cords
+            ArrayList<ConveyorBelt> belts = new ArrayList<>();
+
             //System.out.println("Board Width: " + width + ", Height: " + height);
 
             for (JsonElement spaceElement : spaces) {
@@ -81,6 +85,9 @@ public class JsonReader {
                             int x = belt.get("x").getAsInt() - 1;
                             int y = belt.get("y").getAsInt() - 1;
                             String heading = belt.get("heading").getAsString();
+
+                            ConveyorBelt conveyorBelt = new ConveyorBelt(x,y,heading);
+                            belts.add(conveyorBelt);
                             //System.out.println("Conveyor Belt at (" + x + ", " + y + ") heading " + heading);
                         }
                     }
@@ -114,7 +121,7 @@ public class JsonReader {
                 }
             }
 
-            return new Board(width, height, "Empty 8x8 board..", checkpoints.toArray(new Checkpoint[0]));
+            return new Board(width, height, "Empty 8x8 board..", checkpoints.toArray(new Checkpoint[0]), belts);
 
         } catch (Exception e) {
             e.printStackTrace();

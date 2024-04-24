@@ -4,6 +4,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBeltController;
 import org.jetbrains.annotations.NotNull;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.fromString;
+
 public class ConveyorBelt extends Subject {
 
     public int x;
@@ -15,6 +17,10 @@ public class ConveyorBelt extends Subject {
         this.y = y;
         this.direction = direction;
     }
+
+    public int getX() { return this.x; }
+    public int getY() { return this.y; }
+    public Heading getDirection() { return fromString(this.direction); }
 
 
 

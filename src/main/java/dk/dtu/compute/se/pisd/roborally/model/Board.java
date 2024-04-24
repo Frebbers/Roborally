@@ -375,6 +375,7 @@ public class Board extends Subject {
     public int getWidth() {
         return width;
     }
+    public List<Player> getPlayers() { return players; }
 
     public Checkpoint[] getCheckpoints() {
         return checkpoints;

@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    public ConveyorBeltController beltCtrl;
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -41,6 +42,7 @@ public class GameController {
      */
     public GameController(@NotNull Board board) {
         this.board = board;
+        this.beltCtrl = new ConveyorBeltController();
     }
 
     /**
@@ -186,6 +188,8 @@ public class GameController {
                         board.setStep(step);
                         board.setCurrentPlayer(board.getPlayer(0));
                     } else {
+                        //TO-DO after players have had their turn logic
+                        executeFieldActions();
                         startProgrammingPhase();
                     }
                 }
@@ -197,6 +201,25 @@ public class GameController {
             // this should not happen
             assert false;
         }
+    }
+
+    public void executeFieldActions() {
+        var players = board.getPlayers();
+        var belts = board.getBelts();
+
+        for (Player player : players) {
+            var playerPos = player.getSpace();
+            for (ConveyorBelt belt : belts) {
+                if (playerPos.y == belt.y && playerPos.x == belt.x) {
+                    movePlayerOnConveyorBelt(player, belt);
+                }
+            }
+        }
+    }
+
+    private void movePlayerOnConveyorBelt(Player player, ConveyorBelt belt) {
+        var neighbour = board.getNeighbour(player.getSpace(), belt.getDirection());
+        neighbour.setPlayer(player);
     }
 
     // XXX: implemented in the current version
@@ -313,7 +336,14 @@ public class GameController {
        return null;
     }
 
-
+    /**
+     * This method returns the ConveyorBeltController.
+     *
+     * @return the ConveyorBeltController instance
+     */
+    public ConveyorBeltController getBeltCtrl() {
+        return beltCtrl;
+    }
 
     class ImpossibleMoveException extends Exception {
 

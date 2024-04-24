@@ -73,6 +73,7 @@ public class Board extends Subject {
         this.boardName = boardName;
         this.width = width;
         this.height = height;
+        boolean executeOnce = true;
         //this.checkpoints = checkpoints;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {

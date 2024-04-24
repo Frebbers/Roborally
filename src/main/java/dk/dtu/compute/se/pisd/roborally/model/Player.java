@@ -227,6 +227,8 @@ public class Player extends Subject {
         }
     }
 
+
+
     /**
      * Returns all checkpoints associated with the player.
      *

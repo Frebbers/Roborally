@@ -80,11 +80,12 @@ public class BoardView extends VBox implements ViewObserver {
             }
         }
 
-        // For now, create a Checkpoint for test
-        Space space = board.getSpace(2,6);
-        Checkpoint checkpoint = new Checkpoint(space, 0);
-        CheckpointView checkpointView = new CheckpointView(checkpoint);
-        mainBoardPane.add(checkpointView, checkpoint.getSpace().x, checkpoint.getSpace().y);
+        for(Checkpoint checkpoint : board.getCheckpoints()){
+            Space space = board.getSpace(checkpoint.x, checkpoint.y);
+            space.setCheckpoint(checkpoint);
+            CheckpointView checkpointView = new CheckpointView(checkpoint);
+            mainBoardPane.add(checkpointView, space.x, space.y);
+        }
 
         board.attach(this);
         update(board);

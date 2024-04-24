@@ -1,4 +1,61 @@
 {
+  "height": 8,
   "width": 8,
-  "height": 8
+  "spaces": [{
+    "conveyorBelts": [
+      {
+        "actions": {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt"
+        }
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "heading": "north"
+      },
+      {
+        "x": 7,
+        "u": 7,
+        "heading": "south"
+      }
+    ]
+  },
+    {
+      "walls": [
+        {
+          "x": 3,
+          "y": 3,
+          "heading": "north"
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "heading": "north"
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "heading": "west"
+        }
+      ]
+    },
+    {
+      "Antennas": [
+      ]
+    },
+    {
+      "CheckPoints": [
+        {
+          "x": 6,
+          "y": 3,
+          "id": "1"
+        },
+        {
+          "x": 8,
+          "y": 5,
+          "id": "2"
+        }
+      ]
+    }
+  ]
 }

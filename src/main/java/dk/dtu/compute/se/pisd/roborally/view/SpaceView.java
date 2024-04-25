@@ -91,6 +91,22 @@ public class SpaceView extends StackPane implements ViewObserver {
             // Set the image of the player
             Image image = new Image("/images/r" + (player.getId() + 1) + ".png");
             playerImage.setImage(image);
+
+            switch(player.getHeading()) {
+                case NORTH:
+                    playerImage.setRotate(180);
+                case EAST:
+                    playerImage.setRotate(270);
+                    break;
+                case SOUTH:
+                    playerImage.setRotate(0);
+                    break;
+                case WEST:
+                    playerImage.setRotate(90);
+                    break;
+                default:
+                    // code block
+            }
         }
     }
 

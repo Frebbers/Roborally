@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    public ConveyorBeltController beltCtrl;
+    public BoardController boardController;
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -41,6 +43,9 @@ public class GameController {
      */
     public GameController(@NotNull Board board) {
         this.board = board;
+        this.boardController = new BoardController(this);
+        this.beltCtrl = new ConveyorBeltController();
+
     }
 
     /**
@@ -186,6 +191,10 @@ public class GameController {
                         board.setStep(step);
                         board.setCurrentPlayer(board.getPlayer(0));
                     } else {
+                        //TO-DO after players have had their turn logic
+                        for (Player player : board.getPlayers()) {
+                            executeFieldActions(player.getSpace());
+                        }
                         startProgrammingPhase();
                     }
                 }
@@ -197,6 +206,32 @@ public class GameController {
             // this should not happen
             assert false;
         }
+    }
+
+    public void executeFieldActions(Space space) {
+
+        space.getActions().forEach(action -> action.doAction(this, space));
+        //beltCtrl.doAction(this,space);
+
+
+        /*var players = board.getPlayers();
+        var belts = board.getBelts();
+
+        for (Player player : players) {
+            var playerPos = player.getSpace();
+            for (ConveyorBelt belt : belts) {
+                if (playerPos.y == belt.y && playerPos.x == belt.x) {
+                    movePlayerOnConveyorBelt(player, belt);
+                }
+            }
+        }
+
+         */
+    }
+
+    private void movePlayerOnConveyorBelt(Player player, ConveyorBelt belt) {
+        var neighbour = board.getNeighbour(player.getSpace(), belt.getDirection());
+        neighbour.setPlayer(player);
     }
 
     // XXX: implemented in the current version
@@ -226,25 +261,15 @@ public class GameController {
     }
 
     //Private method added for reuseability in moveForward and fastForward
-    /**
-     * @author Adrian and Mathias
-     * @param player
-     */
-    private void movePlayerForward(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
-        neighbour.setPlayer(player);
-        //Collision logic to be added...
-
-    }
 
     // Task2
     /**
-     * @author Adrian and Mathias
+     * @author Adrian, Mathias and Frederik
      * @param player
      */
     public void moveForward(@NotNull Player player) {
-        movePlayerForward(player);
-        //Collision logic to be added...
+        Space neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
 
     }
 
@@ -254,8 +279,8 @@ public class GameController {
      * @param player
      */
     public void fastForward(@NotNull Player player) {
-        movePlayerForward(player);
-        movePlayerForward(player);
+        moveForward(player);
+        moveForward(player);
         //Collision logic to be added...
 
     }
@@ -313,7 +338,14 @@ public class GameController {
        return null;
     }
 
-
+    /**
+     * This method returns the ConveyorBeltController.
+     *
+     * @return the ConveyorBeltController instance
+     */
+    public ConveyorBeltController getBeltCtrl() {
+        return beltCtrl;
+    }
 
     class ImpossibleMoveException extends Exception {
 
@@ -328,5 +360,6 @@ public class GameController {
             this.heading = heading;
         }
     }
+
 
 }

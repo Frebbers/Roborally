@@ -21,8 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,20 +32,36 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConveyorBeltController extends FieldAction {
 
-    private Heading heading;
 
-    public Heading getHeading() {
-        return heading;
-    }
-
-    public void setHeading(Heading heading) {
-        this.heading = heading;
-    }
-
+    /**
+     * Perform the action related to the conveyor belt on the given space
+     *
+     * @param gameController the game controller
+     * @param space          the space with the conveyor belt
+     * @return true if the action was successfully performed, false otherwise
+     * @author s224804 Frederik Bode Hendrichsen
+     */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO needs to be implemented
-        return false;
-    }
+        // Perform the action related to the conveyor belt on the given space
+        // For example, you might move the player on the conveyor belt space
 
+        // You can access the board from the game controller
+        Board board = gameController.board;
+
+        // You might also need to access the player on the space
+        Player player = space.getPlayer();
+
+        // Attempt to the player in the direction of the conveyor belt
+        if (player != null || space.getBelt() != null) {
+            if (gameController.boardController.handleMovement
+                    (space, board.getNeighbour(space, space.getBelt().heading), space.getBelt().heading)) {
+                return true;
+            }
+
+        }
+        //No player on the conveyor belt
+        return false;
+
+    }
 }

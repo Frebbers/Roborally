@@ -80,6 +80,11 @@ public class Board extends Subject {
             for(int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
+                for (ConveyorBelt belt : belts){
+                    if (belt.x == x && belt.y == y){
+                        space.setConveyorBelt(belt);
+                    }
+                }
             }
         }
         this.stepMode = false;
@@ -375,6 +380,7 @@ public class Board extends Subject {
     public int getWidth() {
         return width;
     }
+    public List<Player> getPlayers() { return players; }
 
     public Checkpoint[] getCheckpoints() {
         return checkpoints;

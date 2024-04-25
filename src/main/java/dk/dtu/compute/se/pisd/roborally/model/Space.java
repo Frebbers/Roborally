@@ -37,8 +37,8 @@ public class Space extends Subject {
 
     private Player player;
     private Checkpoint checkpoint;
-    private ConveyorBelt belt;
 
+    ConveyorBelt belt;
     private List<Heading> walls = new ArrayList<>();
     private List<FieldAction> actions = new ArrayList<>();
 
@@ -117,6 +117,8 @@ public class Space extends Subject {
 
     public void setConveyorBelt(ConveyorBelt belt) {
         this.belt = belt;
+        var ctrl = belt.getBeltCtrl();
+        this.actions.add(ctrl);
     }
 
     public List<Heading> getWalls() {
@@ -125,6 +127,10 @@ public class Space extends Subject {
 
     public List<FieldAction> getActions() {
         return actions;
+    }
+
+    public ConveyorBelt getBelt() {
+        return belt;
     }
 
     void playerChanged() {

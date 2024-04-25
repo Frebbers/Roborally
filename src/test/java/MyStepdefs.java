@@ -7,7 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest.configureTestenvironment;
+import static dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest.configureTestEnvironment;
 
 
 public class MyStepdefs {
@@ -33,7 +33,7 @@ public class MyStepdefs {
 
     @Given("the game is initialized")
     public void theGameIsInitialized() {
-        gameController = configureTestenvironment();
+        gameController = configureTestEnvironment();
     }
     @And("the robot is at position \\({int}, {int})")
     public void theRobotIsAtPosition(int x, int y) {

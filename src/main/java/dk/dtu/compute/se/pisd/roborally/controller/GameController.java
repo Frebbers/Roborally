@@ -34,7 +34,7 @@ public class GameController {
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
-    public BoardController boardController;
+    public BoardController boardController= new BoardController(this);
 
     /**
      * Initialize a GameController object with a certain Board.

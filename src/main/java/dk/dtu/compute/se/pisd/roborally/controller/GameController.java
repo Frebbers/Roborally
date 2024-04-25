@@ -34,6 +34,7 @@ public class GameController {
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
+    public BoardController boardController;
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -189,7 +190,9 @@ public class GameController {
                         board.setCurrentPlayer(board.getPlayer(0));
                     } else {
                         //TO-DO after players have had their turn logic
-                        executeFieldActions();
+                        for (Player player : board.getPlayers()) {
+                            executeFieldActions(player.getSpace());
+                        }
                         startProgrammingPhase();
                     }
                 }
@@ -254,25 +257,15 @@ public class GameController {
     }
 
     //Private method added for reuseability in moveForward and fastForward
-    /**
-     * @author Adrian and Mathias
-     * @param player
-     */
-    private void movePlayerForward(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
-        neighbour.setPlayer(player);
-        //Collision logic to be added...
-
-    }
 
     // Task2
     /**
-     * @author Adrian and Mathias
+     * @author Adrian, Mathias and Frederik
      * @param player
      */
     public void moveForward(@NotNull Player player) {
-        movePlayerForward(player);
-        //Collision logic to be added...
+        Space neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
 
     }
 
@@ -282,8 +275,8 @@ public class GameController {
      * @param player
      */
     public void fastForward(@NotNull Player player) {
-        movePlayerForward(player);
-        movePlayerForward(player);
+        moveForward(player);
+        moveForward(player);
         //Collision logic to be added...
 
     }
@@ -363,5 +356,6 @@ public class GameController {
             this.heading = heading;
         }
     }
+
 
 }

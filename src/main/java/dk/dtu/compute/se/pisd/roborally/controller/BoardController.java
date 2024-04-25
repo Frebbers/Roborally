@@ -27,20 +27,28 @@ public class BoardController {
      * @param destination
      * @param heading
      * @author s224804, Frederik Bode Hendrichsen
+     * @return true if the movement was successful, false otherwise
      */
-    public void handleMovement(Space origin, Space destination, Heading heading){
+    public boolean handleMovement(Space origin, Space destination, Heading heading){
+        //check if the destination is null or if the origin has a wall in the direction of the heading
+        if(destination == null || origin.getWalls().contains(heading)){return false;}
+        //check if the destination has a player
         Player target = destination.getPlayer();
         Player pusher = origin.getPlayer();
         if(target == null){
             destination.setPlayer(pusher);
             origin.setPlayer(null);
+            return true;
         }
         else if (pusher != null){
             //collision
-            handleMovement(destination, board.getNeighbour(destination,heading), heading);
-            destination.setPlayer(pusher);
-            origin.setPlayer(null);
+             if (handleMovement(destination, board.getNeighbour(destination,heading), heading)) {
+                 destination.setPlayer(pusher);
+                 origin.setPlayer(null);
+                 return true;
+             }
         }
+        return false;
     }
 
 }

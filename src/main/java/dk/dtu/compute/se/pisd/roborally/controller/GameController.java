@@ -213,6 +213,7 @@ public class GameController {
         space.getActions().forEach(action -> action.doAction(this, space));
         //beltCtrl.doAction(this,space);
 
+
         /*var players = board.getPlayers();
         var belts = board.getBelts();
 

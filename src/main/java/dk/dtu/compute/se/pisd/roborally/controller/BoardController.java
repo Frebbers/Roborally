@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 
 /**
  * ...
@@ -30,8 +27,14 @@ public class BoardController {
      * @return true if the movement was successful, false otherwise
      */
     public boolean handleMovement(Space origin, Space destination, Heading heading){
-        //check if the destination is null or if the origin has a wall in the direction of the heading
-        if(destination == null || origin.getWalls().contains(heading)){return false;}
+        //check if the destination is null
+        if(destination == null){return false;}
+
+        // Check if any wall on the origin or destination is blocking this heading
+        if (isBlockedByWall(origin, heading) || isBlockedByWall(destination, heading)) {
+            return false;
+        }
+
         //check if the destination has a player
         Player target = destination.getPlayer();
         Player pusher = origin.getPlayer();
@@ -49,6 +52,16 @@ public class BoardController {
              }
         }
         return false;
+    }
+
+    // Helper method to check if a space is blocked by any wall with a different heading
+    private boolean isBlockedByWall(Space space, Heading heading) {
+        for (Wall wall : space.getWalls()) {
+            if (wall.getHeading() != heading) {
+                return true; // Blockage found
+            }
+        }
+        return false; // No blockage
     }
 
 }

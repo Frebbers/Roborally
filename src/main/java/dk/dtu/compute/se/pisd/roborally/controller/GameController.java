@@ -165,7 +165,7 @@ public class GameController {
                         for (Player player : board.getPlayers()) {
                             executeFieldActions(player.getSpace());
                         }
-                        board.incrementMoveCount();
+                        onActivationPhaseEnd();
                         startProgrammingPhase();
                     }
                 }
@@ -176,6 +176,20 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    /**
+     * Function to call when at the end of the activation phase.
+     * Here it checks increases the move counter, and checks for any win conditions.
+     */
+    private void onActivationPhaseEnd(){
+        board.incrementMoveCount();
+
+        for(Player player : board.getPlayers()){
+            if(player.getCheckpoints().size() == board.getData().checkpoints.size()){
+                System.out.println(player.getName() + " has won!");
+            }
         }
     }
 

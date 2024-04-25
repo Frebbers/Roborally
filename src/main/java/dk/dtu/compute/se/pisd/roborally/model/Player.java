@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
@@ -51,7 +52,7 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
-    private List<Checkpoint> checkpoints;
+    private List<Checkpoint> checkpoints = new ArrayList<>();
 
     /**
      * Create a player object with a name and a color, on a board.
@@ -67,7 +68,6 @@ public class Player extends Subject {
         this.color = color;
 
         this.space = null;
-        this.checkpoints = board.getData().checkpoints;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -221,16 +221,11 @@ public class Player extends Subject {
      * @param checkpoint the checkpoint to set
      */
     public void setCheckpoint(Checkpoint checkpoint) {
-        int id = checkpoint.getCheckpointId();
-        if (id >= 0 && id < checkpoints.size()) {
-            checkpoints.set(id, checkpoint);
-            notifyChange();
+        if(checkpoints.contains(checkpoint)) return;
 
-            System.out.println("Checkpoint: " + id + " has been reached!");
-        }
+        checkpoints.add(checkpoint);
+        notifyChange();
     }
-
-
 
     /**
      * Returns all checkpoints associated with the player.

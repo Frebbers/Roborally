@@ -82,9 +82,7 @@ public class Board extends Subject {
                 spaces[x][y] = space;
                 for (ConveyorBelt belt : belts){
                     if (belt.x == x && belt.y == y){
-                        System.out.println("Belt successfully created" + belt.heading.toString());
                         space.setConveyorBelt(belt);
-
                     }
                 }
             }

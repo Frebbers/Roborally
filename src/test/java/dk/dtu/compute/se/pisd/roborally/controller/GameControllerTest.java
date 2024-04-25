@@ -1,5 +1,4 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
-
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -15,9 +14,9 @@ public class GameControllerTest {
 
     private GameController gameController;
 
-    @BeforeEach
+   @BeforeEach
     void setUp() {
-        Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
+        Board board = new Board(TEST_WIDTH, TEST_HEIGHT, "Testboard",null);
         gameController = new GameController(board);
         for (int i = 0; i < 6; i++) {
             Player player = new Player(board, null,"Player " + i);
@@ -64,7 +63,7 @@ public class GameControllerTest {
         @Test
         public void testmoveCurrentPlayerToSpace() {
             // Set up testing environment
-            GameController gameController = configureTestenvironment();
+            GameController gameController = configureTestEnvironment();
             // Test the moveCurrentPlayerToSpace method
             assertNull(gameController.board.getSpace(0, 0).getPlayer());
             gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
@@ -73,7 +72,7 @@ public class GameControllerTest {
         @Test
         public void testMoveCounter() {
             // Set up testing environment
-            GameController gameController = configureTestenvironment();
+            GameController gameController = configureTestEnvironment();
             // Test the moveCurrentPlayerToSpace method
             assertEquals(0, gameController.board.getMoveCount());
             gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
@@ -83,7 +82,7 @@ public class GameControllerTest {
         @Test
         public void testGetStatusMessage() {
             // Set up testing environment
-            GameController gameController = configureTestenvironment();
+            GameController gameController = configureTestEnvironment();
             // Test the getStatusMessage method
             assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 0", gameController.board.getStatusMessage());
             gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
@@ -92,7 +91,7 @@ public class GameControllerTest {
         @Test
         public void testExecuteCommand() {
             // Set up testing environment
-            GameController gameController = configureTestenvironment();
+            GameController gameController = configureTestEnvironment();
             Player player = new Player(gameController.board, "Black","Player 1");
             gameController.board.setCurrentPlayer(player);
             // Test the executeCommand method
@@ -102,9 +101,9 @@ public class GameControllerTest {
             assertNotNull(gameController.board.getSpace(0, 1).getPlayer());
             assertNull(gameController.board.getSpace(0, 0).getPlayer());
         }
-        public static GameController configureTestenvironment() {
+        public static GameController configureTestEnvironment() {
             // Set up testing environment
-            Board board = new Board(8, 8);
+            Board board = new Board(8, 8, "Testboard",null);
             Player player = new Player(board, "Black", "Player 1");
             board.setCurrentPlayer(player);
             return new GameController(board);

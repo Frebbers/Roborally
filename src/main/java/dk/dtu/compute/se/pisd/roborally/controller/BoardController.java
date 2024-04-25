@@ -53,15 +53,22 @@ public class BoardController {
         }
         return false;
     }
-
-    // Helper method to check if a space is blocked by any wall with a different heading
+    /**
+     *     // Helper method to check if a space is blocked by any wall with a different heading
+     * @param space the space to check, if it has a wall that blocks
+     * @param heading the heading
+     * @author s213364
+     * @return true if the blockage was found, false otherwise
+     */
     private boolean isBlockedByWall(Space space, Heading heading) {
         for (Wall wall : space.getWalls()) {
             if (wall.getHeading() != heading) {
-                return true; // Blockage found
+                // Blockage found
+                return true;
             }
         }
-        return false; // No blockage
+        // No blockage
+        return false;
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class BoardTest {
 
     @Test
-    void setCurrentPlayer() {
+    void setCurrentPlayer() { // This doesn't work
         // Initialize board
         Board board = new Board(8, 8, new Checkpoint[3]);
 

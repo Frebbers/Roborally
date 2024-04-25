@@ -21,10 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,15 +32,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConveyorBeltController extends FieldAction {
 
-    private Heading heading;
-
-    public Heading getHeading() {
-        return heading;
-    }
-
-    public void setHeading(Heading heading) {
-        this.heading = heading;
-    }
 
     /**
      * Perform the action related to the conveyor belt on the given space
@@ -65,9 +53,9 @@ public class ConveyorBeltController extends FieldAction {
         Player player = space.getPlayer();
 
         // Attempt to the player in the direction of the conveyor belt
-        if (player != null) {
+        if (player != null || space.getBelt() != null) {
             if (gameController.boardController.handleMovement
-                    (space, board.getNeighbour(space, this.heading), this.heading)) {
+                    (space, board.getNeighbour(space, space.getBelt().heading), space.getBelt().heading)) {
                 return true;
             }
 

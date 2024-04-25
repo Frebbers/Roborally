@@ -29,7 +29,7 @@ public class ConveyorBeltView extends StackPane implements ViewObserver {
 
         this.imageView.setFitWidth(SPACE_WIDTH);
         this.imageView.setFitHeight(SPACE_HEIGHT);
-        switch(fromString(belt.direction)) {
+        switch(belt.heading) {
             case NORTH:
                 break;
             case EAST:

@@ -34,7 +34,7 @@ public class GameController {
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
-    public BoardController boardController= new BoardController(this);
+    public BoardController boardController;
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -43,7 +43,9 @@ public class GameController {
      */
     public GameController(@NotNull Board board) {
         this.board = board;
+        this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
+
     }
 
     /**
@@ -209,6 +211,7 @@ public class GameController {
     public void executeFieldActions(Space space) {
 
         space.getActions().forEach(action -> action.doAction(this, space));
+        //beltCtrl.doAction(this,space);
 
         /*var players = board.getPlayers();
         var belts = board.getBelts();

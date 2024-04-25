@@ -80,6 +80,13 @@ public class Board extends Subject {
             for(int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
+                for (ConveyorBelt belt : belts){
+                    if (belt.x == x && belt.y == y){
+                        System.out.println("Belt successfully created" + belt.heading.toString());
+                        space.setConveyorBelt(belt);
+
+                    }
+                }
             }
         }
         this.stepMode = false;

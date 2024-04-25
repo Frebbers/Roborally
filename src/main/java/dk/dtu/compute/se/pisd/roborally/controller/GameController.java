@@ -203,8 +203,11 @@ public class GameController {
         }
     }
 
-    public void executeFieldActions() {
-        var players = board.getPlayers();
+    public void executeFieldActions(Space space) {
+
+        space.getActions().forEach(action -> action.doAction(this, space));
+
+        /*var players = board.getPlayers();
         var belts = board.getBelts();
 
         for (Player player : players) {
@@ -215,6 +218,8 @@ public class GameController {
                 }
             }
         }
+
+         */
     }
 
     private void movePlayerOnConveyorBelt(Player player, ConveyorBelt belt) {

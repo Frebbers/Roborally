@@ -49,36 +49,6 @@ public class GameController {
     }
 
     /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted
-     * @author s224308, s213364
-     * @param space the space to which the current player should move
-     */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // Get the current player
-        Player currentPlayer = board.getCurrentPlayer();
-
-        // Check if the space is free
-        if (space.getPlayer() == null) {
-            // Move the current player to the new space
-            currentPlayer.setSpace(space);
-
-            // Find the index of the current player
-            int currentPlayerIndex = board.getPlayerNumber(currentPlayer);
-
-            // Determine the next player's index
-            int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
-
-            // Set the next player as the current player
-            Player nextPlayer = board.getPlayer(nextPlayerIndex);
-            board.setCurrentPlayer(nextPlayer);
-
-            // Increment the move counter on the board
-            board.incrementMoveCount();
-        }
-    }
-
-    /**
      * Set the board's phase to PROGRAMMING. Empty all players' registers and give them eight random command cards.
      */
     // XXX: implemented in the current version
@@ -195,6 +165,7 @@ public class GameController {
                         for (Player player : board.getPlayers()) {
                             executeFieldActions(player.getSpace());
                         }
+                        board.incrementMoveCount();
                         startProgrammingPhase();
                     }
                 }

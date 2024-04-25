@@ -1,61 +1,71 @@
 {
+  "name": "Board 1",
   "height": 8,
   "width": 8,
   "spaces": [{
-    "conveyorBelts": [
+    "conveyorBelts":
       {
-        "actions": {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt"
-        }
-      },
-      {
-        "x": 3,
-        "y": 3,
-        "heading": "north"
-      },
-      {
-        "x": 7,
-        "y": 7,
-        "heading": "south"
+        "instances": [
+          {
+            "x": 2,
+            "y": 7,
+            "heading": "north"
+          },
+          {
+            "x": 5,
+            "y": 3,
+            "heading": "south"
+          }
+        ]
       }
-    ]
   },
     {
-      "walls": [
+      "walls":
         {
-          "x": 3,
-          "y": 3,
-          "heading": "north"
-        },
-        {
-          "x": 3,
-          "y": 4,
-          "heading": "north"
-        },
-        {
-          "x": 6,
-          "y": 6,
-          "heading": "west"
+          "actions": {},
+          "instances": [
+            {
+              "x": 3,
+              "y": 3,
+              "heading": "north",
+              "offset": "west"
+            },
+            {
+              "x": 3,
+              "y": 4,
+              "heading": "north",
+              "offset": "west"
+            },
+            {
+              "x": 6,
+              "y": 6,
+              "heading": "west",
+              "offset": "south"
+            }
+          ]
         }
+    },
+    {
+      "antennas": [
       ]
     },
     {
-      "Antennas": [
-      ]
-    },
-    {
-      "CheckPoints": [
+      "checkpoints":
         {
-          "x": 6,
-          "y": 3,
-          "id": "1"
-        },
-        {
-          "x": 8,
-          "y": 5,
-          "id": "2"
+          "actions": {},
+          "instances": [
+            {
+              "x": 6,
+              "y": 3,
+              "id": "1"
+            },
+            {
+              "x": 8,
+              "y": 5,
+              "id": "2"
+            }
+          ]
         }
-      ]
     }
   ]
 }

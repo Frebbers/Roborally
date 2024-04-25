@@ -22,8 +22,10 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -80,13 +82,20 @@ public class BoardView extends VBox implements ViewObserver {
             }
         }
 
-        for(Checkpoint checkpoint : board.getCheckpoints()){
+        for (Wall wall : board.getData().walls) {
+            Space space = board.getSpace(wall.x, wall.y);
+            space.setWall(wall);
+            WallView wallView = new WallView(wall);
+            mainBoardPane.add(wallView, space.x, space.y);
+        }
+
+        for(Checkpoint checkpoint : board.getData().checkpoints){
             Space space = board.getSpace(checkpoint.x, checkpoint.y);
             space.setCheckpoint(checkpoint);
             CheckpointView checkpointView = new CheckpointView(checkpoint);
             mainBoardPane.add(checkpointView, space.x, space.y);
         }
-        for(ConveyorBelt belt : board.getBelts()){
+        for(ConveyorBelt belt : board.getData().conveyorBelts){
             Space space = board.getSpace(belt.x, belt.y);
             space.setConveyorBelt(belt);
             ConveyorBeltView beltView = new ConveyorBeltView(belt);
@@ -95,6 +104,15 @@ public class BoardView extends VBox implements ViewObserver {
 
         board.attach(this);
         update(board);
+    }
+
+    public SpaceView getSpaceView(int x, int y) {
+        if (x >= 0 && x < board.width &&
+                y >= 0 && y < board.height) {
+            return spaces[x][y];
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -92,11 +92,12 @@ public class AppController implements Observer {
                 if (gameController!= null && !stopGame()) {
                     return;
                 }
-                Board board = loadJsonBoardFromNumber(boardNumber);
-                if (board == null) {
-                    //handle board error here
-                    return;
-                }
+                // Load the board data
+                BoardData data = loadJsonBoardFromNumber(boardNumber);
+
+                // Create a board from the data
+                Board board = new Board(data);
+
                 gameController = new GameController(board);
 
                 for (int i = 0; i < playerCount; i++) {
@@ -113,7 +114,7 @@ public class AppController implements Observer {
             roboRally.createBoardView(gameController);
         }
     }
-    private Board loadJsonBoardFromNumber(int boardNumber) {
+    private BoardData loadJsonBoardFromNumber(int boardNumber) {
         JsonReader jsonReader = new JsonReader(boardNumber);
         return jsonReader.readBoardJson();
     }

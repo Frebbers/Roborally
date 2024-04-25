@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -48,8 +49,7 @@ public class Board extends Subject {
     private Integer gameId;
 
     private final Space[][] spaces;
-    private Checkpoint[] checkpoints;
-    private ArrayList<ConveyorBelt> belts = new ArrayList<>();
+    private final BoardData data;
     private final List<Player> players = new ArrayList<>();
 
     private Player current;
@@ -64,40 +64,23 @@ public class Board extends Subject {
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
-     * 
-     * @param width   width of the board
-     * @param height   height of the board
-     * @param boardName name of board
+     *
+     * @param data data of the board
      */
-    public Board(int width, int height, @NotNull String boardName, Checkpoint[] checkpoints, ArrayList<ConveyorBelt> belts) {
-        this.boardName = boardName;
-        this.width = width;
-        this.height = height;
-        this.checkpoints = checkpoints;
-        this.belts = belts;
+    public Board(BoardData data) {
+        this.boardName = data.name;
+        this.width = data.width;
+        this.height = data.height;
+        this.data = data;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
+                Space space = new Space(x, y);
                 spaces[x][y] = space;
-                for (ConveyorBelt belt : belts){
-                    if (belt.x == x && belt.y == y){
-                        space.setConveyorBelt(belt);
-                    }
-                }
+                space.setBoard(this);
             }
         }
         this.stepMode = false;
-    }
-
-    /**
-     * Initialize a Board object with certain dimensions of empty spaces and a default name.
-     *
-     * @param width
-     * @param height
-     */
-    public Board(int width, int height, Checkpoint[] checkpoints, ArrayList<ConveyorBelt> belts) {
-        this(width, height, "defaultBoard", checkpoints, belts);
     }
 
     /**
@@ -382,15 +365,7 @@ public class Board extends Subject {
     }
     public List<Player> getPlayers() { return players; }
 
-    public Checkpoint[] getCheckpoints() {
-        return checkpoints;
+    public BoardData getData() {
+        return data;
     }
-
-    public ArrayList<ConveyorBelt> getBelts() { return belts; }
-    /*
-    public short getWalls() {
-        return walls;
-    }
-    */
-
 }

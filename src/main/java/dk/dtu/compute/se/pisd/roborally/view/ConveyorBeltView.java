@@ -25,7 +25,7 @@ public class ConveyorBeltView extends StackPane implements ViewObserver {
      */
     public ConveyorBeltView(ConveyorBelt belt) {
         this.belt = belt;
-        this.imageView = new ImageView(new Image("/images/blue.png")); // Load image from resources
+        this.imageView = new ImageView(new Image("/images/blue.png"));
 
         this.imageView.setFitWidth(SPACE_WIDTH);
         this.imageView.setFitHeight(SPACE_HEIGHT);

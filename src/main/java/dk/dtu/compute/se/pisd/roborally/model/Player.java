@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
@@ -47,7 +49,7 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
-    private Checkpoint[] checkpoints;
+    private List<Checkpoint> checkpoints;
 
     /**
      * Create a player object with a name and a color, on a board.
@@ -62,7 +64,7 @@ public class Player extends Subject {
         this.color = color;
 
         this.space = null;
-        this.checkpoints = board.getCheckpoints();
+        this.checkpoints = board.getData().checkpoints;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -73,8 +75,6 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
         }
-
-        checkpoints = new Checkpoint[board.getCheckpoints().length];
     }
 
     /**
@@ -205,8 +205,8 @@ public class Player extends Subject {
      * @return the checkpoint at the specified index
      */
     public Checkpoint getCheckpoint(int index) {
-        if (index >= 0 && index < checkpoints.length) {
-            return checkpoints[index];
+        if (index >= 0 && index < checkpoints.size()) {
+            return checkpoints.get(index);
         } else {
             return null;
         }
@@ -219,8 +219,8 @@ public class Player extends Subject {
      */
     public void setCheckpoint(Checkpoint checkpoint) {
         int id = checkpoint.getCheckpointId();
-        if (id >= 0 && id < checkpoints.length) {
-            checkpoints[id] = checkpoint;
+        if (id >= 0 && id < checkpoints.size()) {
+            checkpoints.set(id, checkpoint);
             notifyChange();
 
             System.out.println("Checkpoint: " + id + " has been reached!");
@@ -234,7 +234,7 @@ public class Player extends Subject {
      *
      * @return an array of all checkpoints
      */
-    public Checkpoint[] getCheckpoints() {
+    public List<Checkpoint> getCheckpoints() {
         return checkpoints;
     }
 }

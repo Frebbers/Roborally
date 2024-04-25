@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 
 import java.util.ArrayList;
@@ -39,10 +40,10 @@ public class Space extends Subject {
     private Checkpoint checkpoint;
 
     ConveyorBelt belt;
-    private List<Heading> walls = new ArrayList<>();
+    private List<Wall> walls = new ArrayList<>();
     private List<FieldAction> actions = new ArrayList<>();
 
-    public final Board board;
+    public Board board;
 
     public final int x;
     public final int y;
@@ -51,12 +52,10 @@ public class Space extends Subject {
     /**
      * Create a space object in a certain position on a board.
      *
-     * @param board the board the space is on
      * @param x the x-coordinate of the space on the board
      * @param y the y-coordinate of the space on the board
      */
-    public Space(Board board, int x, int y) {
-        this.board = board;
+    public Space(int x, int y) {
         this.x = x;
         this.y = y;
         player = null;
@@ -115,13 +114,23 @@ public class Space extends Subject {
         this.checkpoint = checkpoint;
     }
 
+    public void setBoard(Board board){
+        this.board = board;
+    }
+
     public void setConveyorBelt(ConveyorBelt belt) {
         this.belt = belt;
         var ctrl = belt.getBeltCtrl();
         this.actions.add(ctrl);
     }
 
-    public List<Heading> getWalls() {
+    public void setWall(Wall wall){
+        if(!walls.contains(wall)){
+            walls.add(wall);
+        }
+    }
+
+    public List<Wall> getWalls() {
         return walls;
     }
 

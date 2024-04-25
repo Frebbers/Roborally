@@ -46,7 +46,6 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     public final Space space;
 
-
     /**
      * Create the view of a certain space. The space is colored
      * such that every other space on a board is white, and

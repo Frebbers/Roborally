@@ -39,17 +39,17 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  *
  */
 public class Board extends Subject {
+    private final BoardData data;
+    public final String boardName;
 
     public final int width;
 
     public final int height;
 
-    public final String boardName;
-
     private Integer gameId;
 
     private final Space[][] spaces;
-    private final BoardData data;
+
     private final List<Player> players = new ArrayList<>();
 
     private Player current;

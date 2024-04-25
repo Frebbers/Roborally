@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.JsonReader;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,11 +14,11 @@ public class JsonReaderTest {
         JsonReader jsonReader = new JsonReader(boardNumber);
 
         // When
-        Board board = jsonReader.readBoardJson();
+        BoardData board = jsonReader.readBoardJson();
 
         // Then
-        assertEquals(8, board.getHeight());
-        assertEquals(8, board.getWidth());
+        assertEquals(8, board.width);
+        assertEquals(8, board.height);
     }
     @Test
     public void testReadBoard2Json() {
@@ -26,11 +27,11 @@ public class JsonReaderTest {
         JsonReader jsonReader = new JsonReader(boardNumber);
 
         // When
-        Board board = jsonReader.readBoardJson();
+        BoardData board = jsonReader.readBoardJson();
 
         // Then
-        assertEquals(12, board.getHeight());
-        assertEquals(12, board.getWidth());
+        assertEquals(12, board.height);
+        assertEquals(12, board.width);
         //assertEquals(null, board.getWalls());
     }
     @Test

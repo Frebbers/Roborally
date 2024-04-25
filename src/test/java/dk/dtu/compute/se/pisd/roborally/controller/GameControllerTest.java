@@ -16,10 +16,11 @@ public class GameControllerTest {
 
    @BeforeEach
     void setUp() {
-        Board board = new Board(TEST_WIDTH, TEST_HEIGHT, "Testboard",null);
+       BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null, null, null);
+        Board board = new Board(data);
         gameController = new GameController(board);
         for (int i = 0; i < 6; i++) {
-            Player player = new Player(board, null,"Player " + i);
+            Player player = new Player(board, "Player " + i, i, null);
             board.addPlayer(player);
             player.setSpace(board.getSpace(i, i));
             player.setHeading(Heading.values()[i % Heading.values().length]);
@@ -92,7 +93,7 @@ public class GameControllerTest {
         public void testExecuteCommand() {
             // Set up testing environment
             GameController gameController = configureTestEnvironment();
-            Player player = new Player(gameController.board, "Black","Player 1");
+            Player player = new Player(gameController.board, "Player 1" , 1, "Black");
             gameController.board.setCurrentPlayer(player);
             // Test the executeCommand method
             gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(0, 0));
@@ -103,8 +104,9 @@ public class GameControllerTest {
         }
         public static GameController configureTestEnvironment() {
             // Set up testing environment
-            Board board = new Board(8, 8, "Testboard",null);
-            Player player = new Player(board, "Black", "Player 1");
+            BoardData data = new BoardData("Testboard", 8, 8, null, null, null);
+            Board board = new Board(data);
+            Player player = new Player(board, "Player 1" , 1, "Black");
             board.setCurrentPlayer(player);
             return new GameController(board);
         }

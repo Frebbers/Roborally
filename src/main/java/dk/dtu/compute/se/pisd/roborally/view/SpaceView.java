@@ -27,6 +27,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -45,6 +47,9 @@ public class SpaceView extends StackPane implements ViewObserver {
     final public static int SPACE_WIDTH = 60; // 75;
 
     public final Space space;
+    private ImageView backgroundImage;
+    private ImageView playerImage;
+
 
     /**
      * Create the view of a certain space. The space is colored
@@ -56,24 +61,18 @@ public class SpaceView extends StackPane implements ViewObserver {
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
-        // XXX the following styling should better be done with styles
-        this.setPrefWidth(SPACE_WIDTH);
-        this.setMinWidth(SPACE_WIDTH);
-        this.setMaxWidth(SPACE_WIDTH);
+        backgroundImage = new ImageView(new Image("/images/empty.png"));
+        backgroundImage.setFitWidth(SPACE_WIDTH);
+        backgroundImage.setFitHeight(SPACE_HEIGHT);
 
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
-        this.setMaxHeight(SPACE_HEIGHT);
+        playerImage = new ImageView();
+        playerImage.setFitWidth(SPACE_WIDTH);
+        playerImage.setFitHeight(SPACE_HEIGHT);
 
-        if ((space.x + space.y) % 2 == 0) {
-            this.setStyle("-fx-background-color: white;");
-        } else {
-            this.setStyle("-fx-background-color: black;");
-        }
+        // Add the image view as the first child of the stack pane
+        this.getChildren().addAll(backgroundImage, playerImage);
 
-        // updatePlayer();
-
-        // This space view should listen to changes of the space
+        // Register as an observer to the checkpoint
         space.attach(this);
         update(space);
     }
@@ -82,21 +81,16 @@ public class SpaceView extends StackPane implements ViewObserver {
      * Draw a player (if there is one) as a triangle on this space.
      */
     private void updatePlayer() {
-        this.getChildren().clear();
+        // Clear the player
+        playerImage.setImage(null);
 
+        // Get the new player if there is one
         Player player = space.getPlayer();
-        if (player != null) {
-            Polygon arrow = new Polygon(0.0, 0.0,
-                    10.0, 20.0,
-                    20.0, 0.0 );
-            try {
-                arrow.setFill(Color.valueOf(player.getColor()));
-            } catch (Exception e) {
-                arrow.setFill(Color.MEDIUMPURPLE);
-            }
 
-            arrow.setRotate((90*player.getHeading().ordinal())%360);
-            this.getChildren().add(arrow);
+        if (player != null) {
+            // Set the image of the player
+            Image image = new Image("/images/r" + (player.getId() + 1) + ".png");
+            playerImage.setImage(image);
         }
     }
 

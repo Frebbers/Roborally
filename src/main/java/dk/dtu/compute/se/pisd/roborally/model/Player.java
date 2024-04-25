@@ -42,7 +42,9 @@ public class Player extends Subject {
     final public Board board;
 
     private String name;
+    private int id;
     private String color;
+
 
     private Space space;
     private Heading heading = SOUTH;
@@ -58,9 +60,10 @@ public class Player extends Subject {
      * @param color the color of the player's robot
      * @param name the name of the player
      */
-    public Player(@NotNull Board board, String color, @NotNull String name) {
+    public Player(@NotNull Board board, @NotNull String name, int id, String color) {
         this.board = board;
         this.name = name;
+        this.id = id;
         this.color = color;
 
         this.space = null;
@@ -236,5 +239,13 @@ public class Player extends Subject {
      */
     public List<Checkpoint> getCheckpoints() {
         return checkpoints;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

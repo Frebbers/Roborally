@@ -4,27 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2766ae4-dc00-42b7-9993-e72fc3e794c6" name="Changes" comment="Setup Checkpoint and Checkpoint view. Added Checkpoint logic on the player, and the space, so that if a space has a checkpoint and a player lands on it, then it will &quot;reward&quot; them with a checkpoint. However this does not work yet, as the Board.checkpoints &lt;= 0, since the JSON Reader does not correctly load in the Checkpoints as an Array which can tell the Board of its checkpoints.">
+    <list default="true" id="c2766ae4-dc00-42b7-9993-e72fc3e794c6" name="Changes" comment="Lord help me">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/AppController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Checkpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Checkpoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/JsonReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/JsonReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/view/BoardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/view/BoardView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/board1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/board1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/board2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/board3.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/boardExampleOld.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/board4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/JsonReaderTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/boards/defaultboard.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/AppController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/AppController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Board.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/JsonReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/JsonReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Space.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Space.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/view/BoardView$SpaceEventHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/view/BoardView$SpaceEventHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/view/BoardView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/view/BoardView.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +53,7 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2e2PtKKPYsVFPAFAkqQEG76Vkuy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -178,6 +161,23 @@
       <workItem from="1713886186274" duration="2792000" />
       <workItem from="1713955244546" duration="4264000" />
     </task>
+    <task id="LOCAL-00001" summary="Cleaned up tests">
+      <option name="closed" value="true" />
+      <created>1714037814684</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714037814684</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Lord help me">
+      <option name="closed" value="true" />
+      <created>1714038120486</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1714038120486</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,6 +193,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Cleaned up tests" />
+    <MESSAGE value="Lord help me" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lord help me" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

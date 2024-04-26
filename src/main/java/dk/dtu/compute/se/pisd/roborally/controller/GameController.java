@@ -54,7 +54,8 @@ public class GameController {
     // XXX: implemented in the current version
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.updatePlayerTurnOrder();
+        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -89,7 +90,7 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
     }
 
@@ -153,13 +154,14 @@ public class GameController {
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
+                    board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber));
+                } else { // This happens after every player has activated their nth register
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
+                        board.updatePlayerTurnOrder();
+                        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
                     } else {
                         //TO-DO after players have had their turn logic
                         for (Player player : board.getPlayers()) {

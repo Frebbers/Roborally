@@ -62,6 +62,8 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    private final PriorityAntenna priorityAntenna = new PriorityAntenna(this);
+
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
      *
@@ -81,6 +83,9 @@ public class Board extends Subject {
             }
         }
         this.stepMode = false;
+
+        // temp
+        this.priorityAntenna.setSpace(spaces[1][1]);
     }
 
     /**
@@ -140,6 +145,7 @@ public class Board extends Subject {
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
+            priorityAntenna.updatePlayers();
             notifyChange();
         }
     }
@@ -156,6 +162,14 @@ public class Board extends Subject {
         } else {
             return null;
         }
+    }
+
+    public Player getPlayerByTurnOrder(int i) {
+        return priorityAntenna.getPlayer(i);
+    }
+
+    public void updatePlayerTurnOrder() {
+        priorityAntenna.orderPlayers();
     }
 
     /**

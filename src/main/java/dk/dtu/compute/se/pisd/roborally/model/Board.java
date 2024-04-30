@@ -164,14 +164,29 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Call  {@link PriorityAntenna#getPlayer(int)}
+     *
+     * @author s214972@dtu.dk
+     */
     public Player getPlayerByTurnOrder(int i) {
         return priorityAntenna.getPlayer(i);
     }
 
+    /**
+     * Call {@link PriorityAntenna#getPlayerNumber(Player)}
+     *
+     * @author s214972@dtu.dk
+     */
     public int getPlayerNumberByTurnOrder(Player player) {
         return priorityAntenna.getPlayerNumber(player);
     }
 
+    /**
+     * Call {@link PriorityAntenna#orderPlayers()}
+     *
+     * @author s214972@dtu.dk
+     */
     public void updatePlayerTurnOrder() {
         priorityAntenna.orderPlayers();
     }

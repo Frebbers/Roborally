@@ -27,8 +27,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.scene.control.TabPane;
 
-import java.util.Comparator;
-
 /**
  * Handles the views of several players on a particular board.
  *
@@ -70,7 +68,7 @@ public class PlayersView extends TabPane implements ViewObserver {
      *     this method will need to be rewritten.
      * </p>
      * <p>
-     *     This may be rewritten to utilize {@link java.util.List#sort(Comparator)}
+     *     This may be rewritten to utilize {@link java.util.List#sort(java.util.Comparator)}
      * </p>
      *
      * @author s214972@dtu.dk

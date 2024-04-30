@@ -22,6 +22,8 @@ import java.util.List;
  *     Also has {@link #getPlayer(int)} and {@link #getPlayerNumber(Player)}
  *     for other classes to get information about the player order.
  * </p>
+ *
+ * @author s214872@dtu.dk
  */
 public class PriorityAntenna {
     List<Player> playerOrder = new ArrayList<Player>();
@@ -30,22 +32,60 @@ public class PriorityAntenna {
 
     Space space;
 
+    /**
+     * Constructor initializing a priority antenna on a given board.
+     *
+     * @param board Board on which the priority antenna is
+     *
+     * @author s214872@dtu.dk
+     */
     public PriorityAntenna(Board board) {
         this.board = board;
     }
 
+    /**
+     * Set the space the antenna is on.
+     *
+     * @param space Space on which the antenna is
+     *
+     * @author s214872@dtu.dk
+     */
     public void setSpace(Space space) {
         this.space = space;
     }
 
+    /**
+     * Return the player in the given position in the turn order.
+     *
+     * @param i the index in the turn order of the player to be returned
+     *
+     * @return Player in the ith position in the turn order
+     *
+     * @author s214872@dtu.dk
+     */
     public Player getPlayer(int i) {
         return playerOrder.get(i);
     }
 
+    /**
+     * Return the index of the given player in the turn order.
+     *
+     * @param player Player to return the index of in the turn order
+     *
+     * @return the index of the given player in the turn order
+     *
+     * @author s214872@dtu.dk
+     */
     public int getPlayerNumber(Player player) {
         return playerOrder.indexOf(player);
     }
 
+    /**
+     * Updates the contents of the priority antennas player list
+     * to match that of the board.
+     *
+     * @author s214872@dtu.dk
+     */
     public void updatePlayers() {
         playerOrder = board.getPlayers();
     }
@@ -53,7 +93,6 @@ public class PriorityAntenna {
     /**
      * Update {@link #playerOrder} such that the players are ordered based on who is
      * closest to this priority antenna.
-     *
      * <p>
      *     Ties are broken by setting closest the player that was also closest previous
      *     to this sorting.
@@ -104,6 +143,18 @@ public class PriorityAntenna {
 
     }
 
+    /**
+     * Calculate the "taxi cab distance" between the given player and the
+     * priority antenna. As in, total number of tiles horizontally and
+     * vertically to go from one to the other.
+     *
+     * @param player Player for which to calculate the distance
+     *               between it and the antenna
+     *
+     * @return Distance as an integer between the player and antenna
+     *
+     * @author s214872@dtu.dk
+     */
     private int distanceToPlayer(@NotNull Player player) {
         int px = player.getSpace().x;
         int py = player.getSpace().y;

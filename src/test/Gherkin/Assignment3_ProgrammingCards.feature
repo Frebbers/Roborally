@@ -2,17 +2,30 @@ Feature: Implementing all the programming cards in the game.
 
   Background: The game is initialized
 
-    Scenario 1 : I get and use a permanent upgrade card. (Virus module).
-      Given There are upgrade spaces on the player mat, to equip your permanent upgrade(s).
-      And I draw an upgrade card.
-      And the card is a Permanant upgrade from the deck of upgrade cards.
-      When I equip the upgrade it works from the next instance it can be activated.
-      Then The upgrade is in effect.
+    Scenario 1 : I get and program the card move back
+      Given the robot is facing "South"
+      And the robot should be at position (0, 1)
+      And the turn counter should be at (0)
+      When the robot has programmed a "Move Back" card
+      Then the robot should be at position (0, 0)
+      And the turn counter should be at (1)
 
-  Scenario 2 : I get and use a temporary upgrade card (HACK)
-    Given The card has been purchased already, and is ready to be used mid round
-    When The card is used it goes out of play, sent to the discrd pile.
-    And there might be a special programming card assigned to the affected player.
-    Then the action desitred action is performed at any time on YOUR turn.
 
-  Scenario 3 :
+  Scenario 2 : I get and program the card U-Turn
+    Given the robot is facing "North"
+    And the robot should be at position (0, 0)
+    And the turn counter should be at (0)
+    When the robot has programmed a "U-Turn" card
+    Then the robot should be facing "South"
+    And the turn counter should be at (1)
+    
+    
+  Scenario 3 : Left Or Right
+    Given the robot should be facing "East"
+    And the robot is at position (2, 2)
+    And the turn counter should be at (1)
+    When the robot has programmed a "Left or Right" card
+    And A player interaction phase should be active.
+    Then the robot should be facing "North" or "South"
+
+  Scenario 4 : Again

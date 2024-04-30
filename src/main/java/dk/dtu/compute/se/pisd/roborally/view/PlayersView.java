@@ -73,7 +73,7 @@ public class PlayersView extends TabPane implements ViewObserver {
      *
      * @author s214972@dtu.dk
      */
-    public void updatePlayersViewOrder() {
+    private void updatePlayersViewOrder() {
         // clear tabs to re-add in the correct order
         this.getTabs().clear();
         // iterate through players in the turn order
@@ -90,6 +90,8 @@ public class PlayersView extends TabPane implements ViewObserver {
             }
         }
     }
+
+
 
     /**
      * Update board view as to include a recent change in state.

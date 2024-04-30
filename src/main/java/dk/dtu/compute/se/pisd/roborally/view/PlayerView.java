@@ -138,6 +138,13 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 
+    /**
+     * Return player this view belongs to.
+     *
+     * @return Player which this view belongs to
+     *
+     * @author s214972@dtu.dk
+     */
     public Player getPlayer() {
         return player;
     }

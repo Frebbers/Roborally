@@ -130,6 +130,7 @@ public class Board extends Subject {
         }
     }
 
+
     /**
      * Return the number of players.
      *

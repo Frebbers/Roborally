@@ -39,6 +39,9 @@ public enum Command {
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
     FAST_FORWARD("Fast Fwd"),
+    U_TURN("U-Turn"),
+    AGAIN("Again"),
+    BACK("Move Back"),
 
     OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
@@ -64,6 +67,9 @@ public enum Command {
             case "Turn Right", "turn right" -> Command.RIGHT;
             case "Turn Left","turn left" -> Command.LEFT;
             case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
+            case "Move Back, Back" -> Command.BACK;
+            case "U-turn, u-turn, Turn Around, Turn around"->Command.U_TURN;
+            case "Repeat, Again, again, repeat"->Command.AGAIN;
             default -> throw new IllegalArgumentException("Invalid command");
         };
     }

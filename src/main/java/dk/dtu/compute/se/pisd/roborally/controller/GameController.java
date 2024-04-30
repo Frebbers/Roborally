@@ -219,6 +219,15 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case BACK:
+                    this.moveBack(player);
+                    break;
+                case U_TURN:
+                    this.turnAround(player);
+                    break;
+                case AGAIN:
+                    this.repeatPrevRegister(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -235,6 +244,9 @@ public class GameController {
         neighbour.setPlayer(player);
         //Collision logic to be added...
 
+    }
+    private void movePlayerBackwards(@NotNull Player player) {
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
     }
 
     // Task2
@@ -278,6 +290,27 @@ public class GameController {
     public void turnLeft(@NotNull Player player) {
         var currentHeading = player.getHeading();
         player.setHeading(currentHeading.prev());
+    }
+
+    public void moveBack(@NotNull Player player) {
+        var currentHeading = player.getHeading();
+        movePlayerBackwards(player);
+    }
+
+    public void repeatPrevRegister(@NotNull Player player) {
+        var last_register = player.getPreviousRegisterUsed();
+        executeCommand(player, last_register);
+    }
+
+    /**
+     * @author Adrian
+     * @param player
+     */
+
+    public void turnAround(@NotNull Player player) {
+        var currentHeading = player.getHeading();
+        player.setHeading(currentHeading.next());
+        player.setHeading(currentHeading.next());
     }
 
     /**

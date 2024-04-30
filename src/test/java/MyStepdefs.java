@@ -70,4 +70,9 @@ public class MyStepdefs {
         Heading heading = Heading.fromString(h);
         assert gameController.board.getCurrentPlayer().getHeading().equals(heading);
     }
+
+    @And("A player interaction phase should be active.")
+    public void aPlayerInteractionPhaseShouldBeActive() {
+
+    }
 }

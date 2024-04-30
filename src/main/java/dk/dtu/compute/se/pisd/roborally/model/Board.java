@@ -194,8 +194,8 @@ public class Board extends Subject {
         if (!players.contains(player)) this.addPlayer(player);
         if (player != this.current) {
             this.current = player;
-            notifyChange();
         }
+        notifyChange();
     }
 
     /**

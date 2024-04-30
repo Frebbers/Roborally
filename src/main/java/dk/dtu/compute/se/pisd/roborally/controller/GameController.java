@@ -90,6 +90,7 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
+        board.updatePlayerTurnOrder();
         board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
     }

@@ -1,4 +1,3 @@
-import Assignment2test.Assignment2tests;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
@@ -7,6 +6,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.util.Objects;
 
 import static Assignment2test.Assignment2tests.configureTestenvironment;
 
@@ -73,6 +74,14 @@ public class MyStepdefs {
 
     @And("A player interaction phase should be active.")
     public void aPlayerInteractionPhaseShouldBeActive() {
+        // TODO Adrian, Create a method that checks if player interaction phase is active when a situation of choice arises.
+    }
 
+    @Then("the robot should be facing {string} or {string}")
+    public void theRobotShouldBeFacing1Or2(String arg0, String arg1) {
+        Heading heading1 = Heading.fromString(arg0);
+        Heading heading2 = Heading.fromString(arg1);
+        assert Objects.equals(gameController.board.getCurrentPlayer().getHeading(heading1,heading2));
+        // TODO Adrian, Finish up this test so you can implement the methods already.
     }
 }

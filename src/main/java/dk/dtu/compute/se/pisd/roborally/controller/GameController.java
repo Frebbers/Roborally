@@ -247,6 +247,8 @@ public class GameController {
     }
     private void movePlayerBackwards(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        neighbour.setPlayer(player);
+        //TODO Adrian, Make sure to change the method or create one that takes the space that is opposite the heading.
     }
 
     // Task2

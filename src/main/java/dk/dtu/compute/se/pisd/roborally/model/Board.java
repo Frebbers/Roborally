@@ -168,6 +168,10 @@ public class Board extends Subject {
         return priorityAntenna.getPlayer(i);
     }
 
+    public int getPlayerNumberByTurnOrder(Player player) {
+        return priorityAntenna.getPlayerNumber(player);
+    }
+
     public void updatePlayerTurnOrder() {
         priorityAntenna.orderPlayers();
     }

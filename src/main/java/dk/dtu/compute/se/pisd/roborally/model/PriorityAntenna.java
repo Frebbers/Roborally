@@ -25,6 +25,10 @@ public class PriorityAntenna {
         return playerOrder.get(i);
     }
 
+    public int getPlayerNumber(Player player) {
+        return playerOrder.indexOf(player);
+    }
+
     public void updatePlayers() {
         playerOrder = board.getPlayers();
     }
@@ -47,6 +51,9 @@ public class PriorityAntenna {
     public void orderPlayers() {
         List<Player> sortedPlayers = new ArrayList<>();
 
+        Player closest = null;
+        int closestDist = Integer.MAX_VALUE;
+
         /*
         This loop runs through the list of players and adds the
         player that 1. is the closest to the antenna 2. without
@@ -55,9 +62,16 @@ public class PriorityAntenna {
         same size as the list of players.
          */
         while (sortedPlayers.size() < playerOrder.size()) {
-            Player closest = playerOrder.get(0);
-            int closestDist = distanceToPlayer(closest);
+            // get starting player, as to make sure the closest player does not get added again
+            for (Player player : playerOrder) {
+                if (!sortedPlayers.contains(player)) {
+                    closest = player;
+                    closestDist = distanceToPlayer(closest);
+                    break;
+                }
+            }
 
+            // Now run through players finding the closest.
             for (Player player : playerOrder) {
                 int thisDist = distanceToPlayer(player);
                 if (thisDist < closestDist && !sortedPlayers.contains(player)) {

@@ -143,32 +143,32 @@ public class GameController {
 
     // XXX: implemented in the current version
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
+        Player currentPlayer = board.getCurrentPlayer(); // get board's current player
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
+            int step = board.getStep(); // Get current register number
             if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
+                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
                 if (card != null) {
-                    Command command = card.command;
-                    executeCommand(currentPlayer, command);
+                    Command command = card.command; // get the card's command
+                    executeCommand(currentPlayer, command); // execute the card's command
                 }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber));
-                } else { // This happens after every player has activated their nth register
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.updatePlayerTurnOrder();
-                        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
-                    } else {
+                int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
+                if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
+                    board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
+                } else { // if every player HAS played this register
+                    step++; // iterate register number
+                    if (step < Player.NO_REGISTERS) { // if not all registers are done
+                        makeProgramFieldsVisible(step); // show next register's cards
+                        board.setStep(step); // set next register as current
+                        board.updatePlayerTurnOrder();  // update the priority antenna's player order
+                        board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
+                    } else { // if all registers are done
                         //TO-DO after players have had their turn logic
                         for (Player player : board.getPlayers()) {
-                            executeFieldActions(player.getSpace());
+                            executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
                         }
-                        onActivationPhaseEnd();
-                        startProgrammingPhase();
+                        onActivationPhaseEnd(); // call method for end of phase
+                        startProgrammingPhase(); // call method for start of next phase
                     }
                 }
             } else {

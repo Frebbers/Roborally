@@ -6,6 +6,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * For keeping track of the order of players in the current register.
+ *
+ * <p>
+ *     Has a list which contains the order of player turns this register.
+ *     This is updated through {@link #updatePlayers()} when the register
+ *     is over.
+ * </p>
+ * <p>
+ *     Has a space field for comparing its own position with the players'
+ *     for determining player order.
+ * </p>
+ * <p>
+ *     Also has {@link #getPlayer(int)} and {@link #getPlayerNumber(Player)}
+ *     for other classes to get information about the player order.
+ * </p>
+ */
 public class PriorityAntenna {
     List<Player> playerOrder = new ArrayList<Player>();
 

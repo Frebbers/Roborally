@@ -61,6 +61,7 @@ public enum Command {
     public List<Command> getOptions() {
         return options;
     }
+
     public static Command fromString(String input) throws IllegalArgumentException{
         return switch (input) {
             case "Fwd", "Forward", "forward", "fwd" -> Command.FORWARD;
@@ -70,6 +71,7 @@ public enum Command {
             case "Move Back, Back" -> Command.BACK;
             case "U-turn, u-turn, Turn Around, Turn around"->Command.U_TURN;
             case "Repeat, Again, again, repeat"->Command.AGAIN;
+            case "Left or right, left or right, L or R"-> Command.OPTION_LEFT_RIGHT;
             default -> throw new IllegalArgumentException("Invalid command");
         };
     }

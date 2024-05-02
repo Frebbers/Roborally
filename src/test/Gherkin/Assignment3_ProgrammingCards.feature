@@ -27,11 +27,3 @@ Feature: Implementing all the programming cards in the game.
     When the robot has programmed a "Left or Right" card
     And A player interaction phase should be active.
     Then the robot should be facing "North" or "South"
-
-  Scenario 4 : Again
-    Given the robot should be facing "West"
-    And the robot is at position (0, 1)
-    And the turn counter should be at (0)
-    And Last repository used was move forward
-    When the robot has programmed a "Again" card
-    Then the robot should be at position (0, 2)

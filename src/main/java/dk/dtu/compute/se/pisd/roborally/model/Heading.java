@@ -52,6 +52,15 @@ public enum Heading {
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
     }
+
+    /**
+
+     Get the opposite cardinal direction.
+     @return the cardinal direction opposite to the current one.*/
+    public Heading opposite() {
+        return values()[(this.ordinal() + 2) % values().length];}
+
+
     /**
      * Converts a string to a Heading enum.
      * @author s224804
@@ -67,5 +76,6 @@ public enum Heading {
             case "west", "West" -> Heading.WEST;
             default -> throw new IllegalArgumentException("Invalid heading");
         };
+
     }
 }

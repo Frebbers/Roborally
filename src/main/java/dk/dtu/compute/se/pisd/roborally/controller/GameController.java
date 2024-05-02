@@ -216,6 +216,8 @@ public class GameController {
                 case LEFT:
                     this.turnLeft(player);
                     break;
+                //case OPTION_LEFT_RIGHT:
+                    //this.LeftOrRight(player);
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
@@ -246,7 +248,7 @@ public class GameController {
 
     }
     private void movePlayerBackwards(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
         neighbour.setPlayer(player);
         //TODO Adrian, Make sure to change the method or create one that takes the space that is opposite the heading.
     }
@@ -295,15 +297,22 @@ public class GameController {
     }
 
     public void moveBack(@NotNull Player player) {
-        var currentHeading = player.getHeading();
         movePlayerBackwards(player);
     }
 
     public void repeatPrevRegister(@NotNull Player player) {
-        var last_register = player.getPreviousRegisterUsed();
-        executeCommand(player, last_register);
+        executeCommand(player, player.getPreviousCardField().getCard().command);
     }
 
+    /*public void LeftOrRight(@NotNull Player player) {
+        var currentHeading = player.getHeading();
+        if (player.board.getPhase() == Phase.PLAYER_INTERACTION{
+            switch(currentHeading) {
+                case
+            }
+        }
+
+    }
     /**
      * @author Adrian
      * @param player

@@ -164,4 +164,7 @@ public class PriorityAntenna {
 
         return Math.abs(px - x) + Math.abs(py - y);
     }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
 }

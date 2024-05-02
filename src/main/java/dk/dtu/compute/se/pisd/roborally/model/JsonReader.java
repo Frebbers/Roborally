@@ -65,7 +65,7 @@ public class JsonReader {
                     }
                 }
 
-                // Handling CheckPoints
+                // Handling checkpoints
                 if (space.has("checkpoints")) {
                     JsonObject checkpointsObject = space.getAsJsonObject("checkpoints");
                     JsonArray checkpointA = checkpointsObject.getAsJsonArray("instances");
@@ -97,7 +97,7 @@ public class JsonReader {
                     }
                 }
 
-                // Handling Priority Antennas
+                // Handling priority antennas
                 if (space.has("priorityAntennas")) {
                     JsonObject priorityAntennasObject = space.getAsJsonObject("priorityAntennas");
                     JsonArray priorityAntennasArray = priorityAntennasObject.getAsJsonArray("instances");
@@ -109,6 +109,10 @@ public class JsonReader {
                         // Create a conveyor belt and add it to the conveyor belts
                         PriorityAntenna priorityAntenna = new PriorityAntenna(x, y);
                         priorityAntennas.add(priorityAntenna);
+                        for (Heading heading : Heading.values()) {
+                            Wall wall = new Wall(x, y, heading.name(), heading.next().name());
+                            walls.add(wall);
+                        }
                     }
                 }
             }

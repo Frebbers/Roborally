@@ -125,6 +125,13 @@ public class Space extends Subject {
         this.actions.add(ctrl);
     }
 
+    /**
+     * Set the priority antenna, if one is on this space.
+     *
+     * @param priorityAntenna Priority Antenna on this space
+     *
+     * @author s214972@dtu.dk
+     */
     public void setPriorityAntenna(PriorityAntenna priorityAntenna) {
         this.priorityAntenna = priorityAntenna;
     }

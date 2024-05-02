@@ -165,6 +165,21 @@ public class PriorityAntenna {
         return Math.abs(px - x) + Math.abs(py - y);
     }
 
+    /**
+     * Return x-value of priority antenna space
+     *
+     * @return x-value of priority antenna space
+     *
+     * @author s214972@dtu.dk
+     */
     public int getX() { return x; }
+
+    /**
+     * Return y-value of priority antenna space
+     *
+     * @return y-value of priority antenna space
+     *
+     * @author s214972@dtu.dk
+     */
     public int getY() { return y; }
 }

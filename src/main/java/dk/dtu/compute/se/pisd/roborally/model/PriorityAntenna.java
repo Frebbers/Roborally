@@ -26,32 +26,35 @@ import java.util.List;
  * @author s214872@dtu.dk
  */
 public class PriorityAntenna {
-    List<Player> playerOrder = new ArrayList<Player>();
+    private List<Player> playerOrder = new ArrayList<Player>();
 
-    Board board;
+    private Board board;
 
-    Space space;
+    private final int x;
+    private final int y;
 
     /**
      * Constructor initializing a priority antenna on a given board.
      *
-     * @param board Board on which the priority antenna is
+     * @param x x-coordinate for the antenna
+     * @param y y-coordinate for the antenna
      *
      * @author s214872@dtu.dk
      */
-    public PriorityAntenna(Board board) {
-        this.board = board;
+    public PriorityAntenna(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
-     * Set the space the antenna is on.
+     * Set the board the antenna is on.
      *
-     * @param space Space on which the antenna is
+     * @param board Board on which the antenna is
      *
      * @author s214872@dtu.dk
      */
-    public void setSpace(Space space) {
-        this.space = space;
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     /**
@@ -158,9 +161,7 @@ public class PriorityAntenna {
     private int distanceToPlayer(@NotNull Player player) {
         int px = player.getSpace().x;
         int py = player.getSpace().y;
-        int ax = space.x;
-        int ay = space.y;
 
-        return Math.abs(px - ax) + Math.abs(py - ay);
+        return Math.abs(px - x) + Math.abs(py - y);
     }
 }

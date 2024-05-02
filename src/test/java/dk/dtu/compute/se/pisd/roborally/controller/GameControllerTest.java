@@ -16,7 +16,7 @@ public class GameControllerTest {
 
    @BeforeEach
     void setUp() {
-       BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null, null, null);
+       BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null, null, null, null);
         Board board = new Board(data);
         gameController = new GameController(board);
         for (int i = 0; i < 6; i++) {
@@ -104,7 +104,7 @@ public class GameControllerTest {
         }
         public static GameController configureTestEnvironment() {
             // Set up testing environment
-            BoardData data = new BoardData("Testboard", 8, 8, null, null, null);
+            BoardData data = new BoardData("Testboard", 8, 8, null, null, null, null);
             Board board = new Board(data);
             Player player = new Player(board, "Player 1" , 1, "Black");
             board.setCurrentPlayer(player);

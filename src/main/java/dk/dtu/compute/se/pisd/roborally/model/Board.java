@@ -62,7 +62,7 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    private final PriorityAntenna priorityAntenna = new PriorityAntenna(this);
+    private final PriorityAntenna priorityAntenna;
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
@@ -74,6 +74,8 @@ public class Board extends Subject {
         this.width = data.width;
         this.height = data.height;
         this.data = data;
+        this.priorityAntenna = data.priorityAntennas.get(0); // JsonReader supports several antennas, but the rest of the project does not
+        priorityAntenna.setBoard(this);
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -83,9 +85,6 @@ public class Board extends Subject {
             }
         }
         this.stepMode = false;
-
-        // temp
-        this.priorityAntenna.setSpace(spaces[1][1]);
     }
 
     /**

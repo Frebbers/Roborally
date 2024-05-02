@@ -68,7 +68,7 @@ public enum Command {
             case "Turn Right", "turn right" -> Command.RIGHT;
             case "Turn Left","turn left" -> Command.LEFT;
             case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
-            case "Move Back, Back" -> Command.BACK;
+            case "Move Back, Back, Move back, move back" -> Command.BACK;
             case "U-turn, u-turn, Turn Around, Turn around"->Command.U_TURN;
             case "Repeat, Again, again, repeat"->Command.AGAIN;
             case "Left or right, left or right, L or R"-> Command.OPTION_LEFT_RIGHT;

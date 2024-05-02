@@ -75,7 +75,7 @@ public class MyStepdefs {
 
     @And("A player interaction phase should be active.")
     public void aPlayerInteractionPhaseShouldBeActive() {
-            assert (gameController.board.getPhase().equals(Phase.PLAYER_INTERACTION))
+            assert (gameController.board.getPhase().equals(Phase.PLAYER_INTERACTION));
         // TODO Adrian, Create a method that checks if player interaction phase is active when a situation of choice arises.
     }
 

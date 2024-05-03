@@ -216,19 +216,8 @@ public class GameController {
                 case LEFT:
                     this.turnLeft(player);
                     break;
-                //case OPTION_LEFT_RIGHT:
-                    //this.LeftOrRight(player);
                 case FAST_FORWARD:
                     this.fastForward(player);
-                    break;
-                case BACK:
-                    this.moveBack(player);
-                    break;
-                case U_TURN:
-                    this.turnAround(player);
-                    break;
-                case AGAIN:
-                    this.repeatPrevRegister(player);
                     break;
                 default:
                     // DO NOTHING (for now)
@@ -246,11 +235,6 @@ public class GameController {
         neighbour.setPlayer(player);
         //Collision logic to be added...
 
-    }
-    private void movePlayerBackwards(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
-        neighbour.setPlayer(player);
-        //TODO Adrian, Make sure to change the method or create one that takes the space that is opposite the heading.
     }
 
     // Task2
@@ -294,34 +278,6 @@ public class GameController {
     public void turnLeft(@NotNull Player player) {
         var currentHeading = player.getHeading();
         player.setHeading(currentHeading.prev());
-    }
-
-    public void moveBack(@NotNull Player player) {
-        movePlayerBackwards(player);
-    }
-
-    public void repeatPrevRegister(@NotNull Player player) {
-        executeCommand(player, player.getPreviousCardField().getCard().command);
-    }
-
-    /*public void LeftOrRight(@NotNull Player player) {
-        var currentHeading = player.getHeading();
-        if (player.board.getPhase() == Phase.PLAYER_INTERACTION{
-            switch(currentHeading) {
-                case
-            }
-        }
-
-    }
-    /**
-     * @author Adrian
-     * @param player
-     */
-
-    public void turnAround(@NotNull Player player) {
-        var currentHeading = player.getHeading();
-        player.setHeading(currentHeading.next());
-        player.setHeading(currentHeading.next());
     }
 
     /**

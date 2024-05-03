@@ -1,0 +1,102 @@
+Creating a board as a Json file:
+
+Naming files: "board + unique number + .json"
+
+        ????    Do we count from 0 or 1    ????
+
+Names: "Height" and "Width" are the size of the board (int). (MIN values 5x5)
+
+Objects: (Optional)
+
+     "ConveyorBelts": [{
+        values for one belt:
+        "PointX": int,
+        "PointY": int,
+        "Direction": "enum" (up, down, left, right)
+     }]
+
+    "Walls": [{
+        values for one wall:
+        "PointX": int,
+        "PointY": int,
+        "Direction": "enum" (up, down, left, right)
+    }]
+
+    "Antennas": [{
+        values for one Antenna:
+        "PointX": int,
+        "PointY": int
+    }]
+
+    "CheckPoints": [{
+        values for one CheckPoint:
+        "PointX": int,
+        "PointY": int
+    }]
+
+___________________________
+FILES NEED TO HAVE:
+-   Height: int
+-   Width: int
+__________________________
+PITFALLS:
+-   Placing objects outside board size (greater x/y values than board height / width).
+-   Other values than positive integers.
+-   Placing multiple objects in the same position.
+
+_________________________
+Avoid impossible boards:
+-   Players should be able to move to / from every part of the map
+
+_________________________
+Board / file example: name: "board2.json"
+
+{
+  "Height": 8,
+  "Width": 8,
+
+  "ConveyorBelts": [
+    {
+      "PointX": 3,
+      "PointY": 3,
+      "Direction": "up"
+    },
+    {
+      "PointX": 7,
+      "PointY": 7,
+      "Direction": "down"
+    }
+  ],
+
+  "Walls": [
+    {
+      "PointX": 3,
+      "PointY": 3,
+      "Direction": "up"
+    },
+    {
+      "PointX": 3,
+      "PointY": 4,
+      "Direction": "up"
+    },
+    {
+      "PointX": 6,
+      "PointY": 6,
+      "Direction": "left"
+    }
+  ],
+
+  "Antennas": [
+    {
+      "PointX": 5,
+      "PointY": 5
+    }
+  ],
+
+  "CheckPoints": [
+    {
+      "PointX": 6,
+      "PointY": 3
+    }
+  ]
+}

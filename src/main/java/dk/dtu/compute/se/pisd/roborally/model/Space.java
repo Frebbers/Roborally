@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 
 import java.util.ArrayList;
@@ -36,11 +37,13 @@ import java.util.List;
 public class Space extends Subject {
 
     private Player player;
+    private Checkpoint checkpoint;
 
-    private List<Heading> walls = new ArrayList<>();
+    ConveyorBelt belt;
+    private List<Wall> walls = new ArrayList<>();
     private List<FieldAction> actions = new ArrayList<>();
 
-    public final Board board;
+    public Board board;
 
     public final int x;
     public final int y;
@@ -49,12 +52,10 @@ public class Space extends Subject {
     /**
      * Create a space object in a certain position on a board.
      *
-     * @param board the board the space is on
      * @param x the x-coordinate of the space on the board
      * @param y the y-coordinate of the space on the board
      */
-    public Space(Board board, int x, int y) {
-        this.board = board;
+    public Space(int x, int y) {
         this.x = x;
         this.y = y;
         player = null;
@@ -85,17 +86,60 @@ public class Space extends Subject {
             }
             if (player != null) {
                 player.setSpace(this);
+
+                if(checkpoint != null){
+                    player.setCheckpoint(checkpoint);
+                }
+
             }
             notifyChange();
         }
     }
 
-    public List<Heading> getWalls() {
+    /**
+     * Return checkpoint object which is on this space.
+     *
+     * @return Checkpoint on this space
+     */
+    public Checkpoint getCheckpoint() {
+        return checkpoint;
+    }
+
+    /**
+     * Set a checkpoint object to be on this space.
+     *
+     * @param checkpoint checkpoint to be on this space
+     */
+    public void setCheckpoint(Checkpoint checkpoint) {
+        this.checkpoint = checkpoint;
+    }
+
+    public void setBoard(Board board){
+        this.board = board;
+    }
+
+    public void setConveyorBelt(ConveyorBelt belt) {
+        this.belt = belt;
+        var ctrl = belt.getBeltCtrl();
+        this.actions.add(ctrl);
+    }
+
+    public void setWall(Wall wall){
+        if(!walls.contains(wall)){
+            walls.add(wall);
+        }
+    }
+
+    public List<Wall> getWalls() {
         return walls;
     }
 
     public List<FieldAction> getActions() {
         return actions;
+    }
+
+    public ConveyorBelt getBelt() {
+        return belt;
     }
 
     void playerChanged() {

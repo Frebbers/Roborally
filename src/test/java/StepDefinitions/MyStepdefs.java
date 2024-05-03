@@ -1,4 +1,7 @@
+package StepDefinitions;
+
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
@@ -7,7 +10,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest.configureTestEnvironment;
+
 
 
 public class MyStepdefs {
@@ -33,7 +36,9 @@ public class MyStepdefs {
 
     @Given("the game is initialized")
     public void theGameIsInitialized() {
-        gameController = configureTestEnvironment();
+        GameControllerTest gameControllerTest = new GameControllerTest();
+        gameControllerTest.setUp();
+        this.gameController = gameControllerTest.getGameController();
     }
     @And("the robot is at position \\({int}, {int})")
     public void theRobotIsAtPosition(int x, int y) {

@@ -17,7 +17,7 @@ public class GameControllerTest {
 
     private GameController gameController;
 
-    public GameController getGameController() {return gameController;}
+
 
     @BeforeEach public void setUp() {
        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
@@ -116,5 +116,5 @@ public class GameControllerTest {
             return new GameController(board);
         }
 */
-
+        public GameController getGameController() {return gameController;}
 }

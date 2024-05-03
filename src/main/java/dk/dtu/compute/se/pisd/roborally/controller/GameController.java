@@ -217,10 +217,6 @@ public class GameController {
          */
     }
 
-    private void movePlayerOnConveyorBelt(Player player, ConveyorBelt belt) {
-        var neighbour = board.getNeighbour(player.getSpace(), belt.getDirection());
-        neighbour.setPlayer(player);
-    }
 
     // XXX: implemented in the current version
     public void executeCommand(@NotNull Player player, Command command) {
@@ -269,7 +265,7 @@ public class GameController {
     public void fastForward(@NotNull Player player) {
         moveForward(player);
         moveForward(player);
-        //Collision logic to be added...
+
 
     }
 

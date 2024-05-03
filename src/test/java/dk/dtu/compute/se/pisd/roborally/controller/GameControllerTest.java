@@ -81,7 +81,6 @@ public class GameControllerTest {
             gameController.board.setPhase(Phase.ACTIVATION);
             gameController.board.getCurrentPlayer().getCardField(0).setCard(card);
             gameController.executeStep();
-
             assertEquals(1, gameController.board.getMoveCount());
         }
 

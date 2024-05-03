@@ -101,7 +101,7 @@ public class AppController implements Observer {
                 gameController = new GameController(board);
 
                 for (int i = 0; i < playerCount; i++) {
-                    Player player = new Player(board, "Player " + (i + 1), i, PLAYER_COLORS.get(i));
+                    Player player = new Player(board, "Player " + (i + 1), PLAYER_COLORS.get(i));
                     board.addPlayer(player);
                     player.setSpace(board.getSpace(i % board.width, i));
                 }

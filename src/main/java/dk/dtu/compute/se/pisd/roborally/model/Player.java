@@ -48,6 +48,8 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    private int previousCard;
+
     /**
      * Create a player object with a name and a color, on a board.
      * 
@@ -191,6 +193,12 @@ public class Player extends Subject {
      * @return command card field at the given index of the cards
      */
     public CommandCardField getCardField(int i) {
+        previousCard = i;
         return cards[i];
     }
+
+    public CommandCardField getPreviousCardField(){
+        return cards[previousCard];
+    }
+}
 }

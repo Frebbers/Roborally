@@ -43,6 +43,7 @@ public enum Command {
     AGAIN("Again"),
     BACK("Move Back"),
 
+
     OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
     final public String displayName;
@@ -72,6 +73,7 @@ public enum Command {
             case "U-turn, u-turn, Turn Around, Turn around"->Command.U_TURN;
             case "Repeat, Again, again, repeat"->Command.AGAIN;
             case "Left or right, left or right, L or R"-> Command.OPTION_LEFT_RIGHT;
+
             default -> throw new IllegalArgumentException("Invalid command");
         };
     }

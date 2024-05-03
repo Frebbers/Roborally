@@ -3,6 +3,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -69,5 +70,10 @@ public class MyStepdefs {
     public void theRobotShouldBeFacing(String h) {
         Heading heading = Heading.fromString(h);
         assert gameController.board.getCurrentPlayer().getHeading().equals(heading);
+
+        public void aPlayerInteractionPhaseShouldBeActive() {
+            assert (gameController.board.getPhase().equals(Phase.PLAYER_INTERACTION));
+            // TODO Adrian, Create a method that checks if player interaction phase is active when a situation of choice arises.
+        }
     }
 }

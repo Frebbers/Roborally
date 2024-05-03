@@ -219,6 +219,15 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case BACK:
+                    this.moveBack(player);
+                    break;
+                case U_TURN:
+                    this.turnAround(player);
+                    break;
+                case AGAIN:
+                    this.repeatPrevRegister(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -279,6 +288,33 @@ public class GameController {
         var currentHeading = player.getHeading();
         player.setHeading(currentHeading.prev());
     }
+
+
+    public void moveBack(@NotNull Player player) {
+        var currentHeading = player.getHeading();
+        movePlayerBackwards(player);
+    }
+
+    private void movePlayerBackwards(@NotNull Player player) {
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
+    }
+
+    public void repeatPrevRegister(@NotNull Player player) {
+        var last_register = player.getPreviousRegisterUsed();
+        executeCommand(player);
+    }
+
+    /**
+     * @author Adrian
+     * @param player
+     */
+
+    public void turnAround(@NotNull Player player) {
+        var currentHeading = player.getHeading();
+        player.setHeading(currentHeading.next());
+        player.setHeading(currentHeading.next());
+    }
+
 
     /**
      * Attempt to move a card from one field to another.

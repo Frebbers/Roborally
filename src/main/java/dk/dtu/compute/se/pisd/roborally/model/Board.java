@@ -62,6 +62,8 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    private final PriorityAntenna priorityAntenna;
+
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
      *
@@ -72,6 +74,8 @@ public class Board extends Subject {
         this.width = data.width;
         this.height = data.height;
         this.data = data;
+        this.priorityAntenna = data.priorityAntennas.get(0); // JsonReader supports several antennas, but the rest of the project does not
+        priorityAntenna.setBoard(this);
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -141,6 +145,7 @@ public class Board extends Subject {
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
+            priorityAntenna.updatePlayers();
             notifyChange();
         }
     }
@@ -157,6 +162,33 @@ public class Board extends Subject {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Call  {@link PriorityAntenna#getPlayer(int)}
+     *
+     * @author s214972@dtu.dk
+     */
+    public Player getPlayerByTurnOrder(int i) {
+        return priorityAntenna.getPlayer(i);
+    }
+
+    /**
+     * Call {@link PriorityAntenna#getPlayerNumber(Player)}
+     *
+     * @author s214972@dtu.dk
+     */
+    public int getPlayerNumberByTurnOrder(Player player) {
+        return priorityAntenna.getPlayerNumber(player);
+    }
+
+    /**
+     * Call {@link PriorityAntenna#orderPlayers()}
+     *
+     * @author s214972@dtu.dk
+     */
+    public void updatePlayerTurnOrder() {
+        priorityAntenna.orderPlayers();
     }
 
     /**
@@ -177,8 +209,8 @@ public class Board extends Subject {
         if (!players.contains(player)) this.addPlayer(player);
         if (player != this.current) {
             this.current = player;
-            notifyChange();
         }
+        notifyChange();
     }
 
     /**

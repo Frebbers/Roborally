@@ -139,6 +139,17 @@ public class PlayerView extends Tab implements ViewObserver {
     }
 
     /**
+     * Return player this view belongs to.
+     *
+     * @return Player which this view belongs to
+     *
+     * @author s214972@dtu.dk
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
      * Update player view as to include a recent change in state.
      * 
      * @param subject
@@ -157,7 +168,7 @@ public class PlayerView extends Tab implements ViewObserver {
                         } else if (i == player.board.getStep()) {
                             if (player.board.getCurrentPlayer() == player) {
                                 cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-                            } else if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
+                            } else if (player.board.getPlayerNumberByTurnOrder(player.board.getCurrentPlayer()) > player.board.getPlayerNumberByTurnOrder(player)) {
                                 cardFieldView.setBackground(CardFieldView.BG_DONE);
                             } else {
                                 cardFieldView.setBackground(CardFieldView.BG_DEFAULT);

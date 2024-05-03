@@ -43,6 +43,7 @@ public class JsonReader {
             List<Wall> walls = new ArrayList<>();
             List<Checkpoint> checkpoints = new ArrayList<>();
             List<ConveyorBelt> conveyorBelts = new ArrayList<>();
+            List<PriorityAntenna> priorityAntennas = new ArrayList<>();
 
             for (JsonElement spaceElement : spaces) {
                 JsonObject space = spaceElement.getAsJsonObject();
@@ -64,7 +65,7 @@ public class JsonReader {
                     }
                 }
 
-                // Handling CheckPoints
+                // Handling checkpoints
                 if (space.has("checkpoints")) {
                     JsonObject checkpointsObject = space.getAsJsonObject("checkpoints");
                     JsonArray checkpointA = checkpointsObject.getAsJsonArray("instances");
@@ -95,9 +96,28 @@ public class JsonReader {
                         conveyorBelts.add(conveyorBelt);
                     }
                 }
+
+                // Handling priority antennas
+                if (space.has("priorityAntennas")) {
+                    JsonObject priorityAntennasObject = space.getAsJsonObject("priorityAntennas");
+                    JsonArray priorityAntennasArray = priorityAntennasObject.getAsJsonArray("instances");
+                    for (JsonElement antennaElement : priorityAntennasArray) {
+                        JsonObject antenna = antennaElement.getAsJsonObject();
+                        int x = antenna.get("x").getAsInt() - 1;
+                        int y = antenna.get("y").getAsInt() - 1;
+
+                        // Create a conveyor belt and add it to the conveyor belts
+                        PriorityAntenna priorityAntenna = new PriorityAntenna(x, y);
+                        priorityAntennas.add(priorityAntenna);
+                        for (Heading heading : Heading.values()) {
+                            Wall wall = new Wall(x, y, heading.name(), heading.next().name());
+                            walls.add(wall);
+                        }
+                    }
+                }
             }
 
-            return new BoardData(name, width, height, walls, checkpoints, conveyorBelts);
+            return new BoardData(name, width, height, walls, checkpoints, conveyorBelts, priorityAntennas);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,6 +38,7 @@ public class Space extends Subject {
 
     private Player player;
     private Checkpoint checkpoint;
+    private PriorityAntenna priorityAntenna;
 
     ConveyorBelt belt;
     private List<Wall> walls = new ArrayList<>();
@@ -122,6 +123,17 @@ public class Space extends Subject {
         this.belt = belt;
         var ctrl = belt.getBeltCtrl();
         this.actions.add(ctrl);
+    }
+
+    /**
+     * Set the priority antenna, if one is on this space.
+     *
+     * @param priorityAntenna Priority Antenna on this space
+     *
+     * @author s214972@dtu.dk
+     */
+    public void setPriorityAntenna(PriorityAntenna priorityAntenna) {
+        this.priorityAntenna = priorityAntenna;
     }
 
     public void setWall(Wall wall){

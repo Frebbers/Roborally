@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    public ConveyorBeltController beltCtrl;
+    public BoardController boardController;
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -41,36 +43,9 @@ public class GameController {
      */
     public GameController(@NotNull Board board) {
         this.board = board;
-    }
+        this.boardController = new BoardController(this);
+        this.beltCtrl = new ConveyorBeltController();
 
-    /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted
-     * @author s224308, s213364
-     * @param space the space to which the current player should move
-     */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // Get the current player
-        Player currentPlayer = board.getCurrentPlayer();
-
-        // Check if the space is free
-        if (space.getPlayer() == null) {
-            // Move the current player to the new space
-            currentPlayer.setSpace(space);
-
-            // Find the index of the current player
-            int currentPlayerIndex = board.getPlayerNumber(currentPlayer);
-
-            // Determine the next player's index
-            int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
-
-            // Set the next player as the current player
-            Player nextPlayer = board.getPlayer(nextPlayerIndex);
-            board.setCurrentPlayer(nextPlayer);
-
-            // Increment the move counter on the board
-            board.incrementMoveCount();
-        }
     }
 
     /**
@@ -79,7 +54,8 @@ public class GameController {
     // XXX: implemented in the current version
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.updatePlayerTurnOrder();
+        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -167,26 +143,32 @@ public class GameController {
 
     // XXX: implemented in the current version
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
+        Player currentPlayer = board.getCurrentPlayer(); // get board's current player
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
+            int step = board.getStep(); // Get current register number
             if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
+                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
                 if (card != null) {
-                    Command command = card.command;
-                    executeCommand(currentPlayer, command);
+                    Command command = card.command; // get the card's command
+                    executeCommand(currentPlayer, command); // execute the card's command
                 }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
-                    } else {
-                        startProgrammingPhase();
+                int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
+                if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
+                    board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
+                } else { // if every player HAS played this register
+                    step++; // iterate register number
+                    if (step < Player.NO_REGISTERS) { // if not all registers are done
+                        makeProgramFieldsVisible(step); // show next register's cards
+                        board.setStep(step); // set next register as current
+                        board.updatePlayerTurnOrder();  // update the priority antenna's player order
+                        board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
+                    } else { // if all registers are done
+                        //TO-DO after players have had their turn logic
+                        for (Player player : board.getPlayers()) {
+                            executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
+                        }
+                        onActivationPhaseEnd(); // call method for end of phase
+                        startProgrammingPhase(); // call method for start of next phase
                     }
                 }
             } else {
@@ -198,6 +180,42 @@ public class GameController {
             assert false;
         }
     }
+
+    /**
+     * Function to call when at the end of the activation phase.
+     * Here it checks increases the move counter, and checks for any win conditions.
+     */
+    private void onActivationPhaseEnd(){
+        board.incrementMoveCount();
+
+        for(Player player : board.getPlayers()){
+            if(player.getCheckpoints().size() == board.getData().checkpoints.size()){
+                System.out.println(player.getName() + " has won!");
+            }
+        }
+    }
+
+    public void executeFieldActions(Space space) {
+
+        space.getActions().forEach(action -> action.doAction(this, space));
+        //beltCtrl.doAction(this,space);
+
+
+        /*var players = board.getPlayers();
+        var belts = board.getBelts();
+
+        for (Player player : players) {
+            var playerPos = player.getSpace();
+            for (ConveyorBelt belt : belts) {
+                if (playerPos.y == belt.y && playerPos.x == belt.x) {
+                    movePlayerOnConveyorBelt(player, belt);
+                }
+            }
+        }
+
+         */
+    }
+
 
     // XXX: implemented in the current version
     public void executeCommand(@NotNull Player player, Command command) {
@@ -235,25 +253,15 @@ public class GameController {
     }
 
     //Private method added for reuseability in moveForward and fastForward
-    /**
-     * @author Adrian and Mathias
-     * @param player
-     */
-    private void movePlayerForward(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
-        neighbour.setPlayer(player);
-        //Collision logic to be added...
-
-    }
 
     // Task2
     /**
-     * @author Adrian and Mathias
+     * @author Adrian, Mathias and Frederik
      * @param player
      */
     public void moveForward(@NotNull Player player) {
-        movePlayerForward(player);
-        //Collision logic to be added...
+        Space neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
 
     }
 
@@ -263,9 +271,9 @@ public class GameController {
      * @param player
      */
     public void fastForward(@NotNull Player player) {
-        movePlayerForward(player);
-        movePlayerForward(player);
-        //Collision logic to be added...
+        moveForward(player);
+        moveForward(player);
+
 
     }
 
@@ -319,7 +327,7 @@ public class GameController {
     /**
      * Attempt to move a card from one field to another.
      * This is only done if the target card field is empty.
-     *
+     * 
      * @param source card field of the card being moved
      * @param target card field of the destination
      * @return true if the card was succesfully moved, false otherwise
@@ -345,7 +353,18 @@ public class GameController {
         assert false;
     }
 
+    public SaveGameState saveGameState() {
+       return null;
+    }
 
+    /**
+     * This method returns the ConveyorBeltController.
+     *
+     * @return the ConveyorBeltController instance
+     */
+    public ConveyorBeltController getBeltCtrl() {
+        return beltCtrl;
+    }
 
     class ImpossibleMoveException extends Exception {
 
@@ -360,5 +379,6 @@ public class GameController {
             this.heading = heading;
         }
     }
+
 
 }

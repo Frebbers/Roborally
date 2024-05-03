@@ -88,18 +88,23 @@ public class BoardView extends VBox implements ViewObserver {
             WallView wallView = new WallView(wall);
             mainBoardPane.add(wallView, space.x, space.y);
         }
-
-        for(Checkpoint checkpoint : board.getData().checkpoints){
+        for (Checkpoint checkpoint : board.getData().checkpoints){
             Space space = board.getSpace(checkpoint.x, checkpoint.y);
             space.setCheckpoint(checkpoint);
             CheckpointView checkpointView = new CheckpointView(checkpoint);
             mainBoardPane.add(checkpointView, space.x, space.y);
         }
-        for(ConveyorBelt belt : board.getData().conveyorBelts){
+        for (ConveyorBelt belt : board.getData().conveyorBelts){
             Space space = board.getSpace(belt.x, belt.y);
             space.setConveyorBelt(belt);
             ConveyorBeltView beltView = new ConveyorBeltView(belt);
             mainBoardPane.add(beltView, space.x, space.y);
+        }
+        for (PriorityAntenna priorityAntenna : board.getData().priorityAntennas){
+            Space space = board.getSpace(priorityAntenna.getX(), priorityAntenna.getY());
+            space.setPriorityAntenna(priorityAntenna);
+            PriorityAntennaView priorityAntennaView = new PriorityAntennaView(priorityAntenna);
+            mainBoardPane.add(priorityAntennaView, space.x, space.y);
         }
 
         board.attach(this);

@@ -22,7 +22,7 @@ public class BoardController {
      * Method to handle the movement of a player on the board
      * @param origin there must be a player on this space or nothing will happen
      * @param destination
-     * @param heading
+     * @param heading the direction the player is moving
      * @author s224804, Frederik Bode Hendrichsen
      * @return true if the movement was successful, false otherwise
      */

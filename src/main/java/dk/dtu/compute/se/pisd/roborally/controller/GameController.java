@@ -299,17 +299,12 @@ public class GameController {
 
 
     public void moveBack(@NotNull Player player) {
-        var currentHeading = player.getHeading();
-        movePlayerBackwards(player);
-    }
-
-    private void movePlayerBackwards(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
     }
 
     public void repeatPrevRegister(@NotNull Player player) {
-        var last_register = player.getPreviousRegisterUsed();
-        executeCommand(player);
+        player.getPreviousCardField();
     }
 
     /**
@@ -318,9 +313,7 @@ public class GameController {
      */
 
     public void turnAround(@NotNull Player player) {
-        var currentHeading = player.getHeading();
-        player.setHeading(currentHeading.next());
-        player.setHeading(currentHeading.next());
+        player.setHeading(player.getHeading().opposite());
     }
 
 

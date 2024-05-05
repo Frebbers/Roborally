@@ -1,3 +1,19 @@
+<H1 style="text-align: center;">Danmarks Tekniske Universitet</H1>
+<H3 style="text-align: center;">Advanced Programming Project</H3>
+<br>
+<br>
+<p align="center">
+    <img src="graphics/DTU Logo.png">
+</p>
+<br>
+<H3 style="text-align: center;">Group 7 </H3>
+<H3 style="text-align: center;">Frederik Andersen (s224308), Nicolai D. Madsen (s213364)</H3>
+
+<H2 style="text-align: center;">RoboRally</H2>
+<br>
+<H3 style="text-align: center;">Wednesday 8th of May </H3>
+
+
 ## SpaceView.java <br>
 This class is responsible for displaying two important game elements.
 We modified the constructor of the class to create 2 *Image View* classes for two purposes:

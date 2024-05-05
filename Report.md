@@ -3,7 +3,7 @@
 <br>
 <br>
 <p align="center">
-    <img src="graphics/DTU Logo.png">
+    <img src="graphics/DTU Logo.png" alt="">
 </p>
 <br>
 <H3 style="text-align: center;">Group 7 </H3>
@@ -13,7 +13,15 @@
 <br>
 <H3 style="text-align: center;">Wednesday 8th of May </H3>
 
+# 0. Contributions
+**Nicolai D. Madsen (s213364):**
+1. Continued development for *SpaceView.java*
+2. Implemented the *Wall.java* and *WallView.java*
+3. Implemented the *Checkpoint.java* and *CheckpointView.java*
+4. Implemented the *BoardData.java*
+5. Continued development for *JsonReader.java* which was implemented by Frederik Andersen
 
+# 1. Method implementation
 ## SpaceView.java <br>
 This class is responsible for displaying two important game elements.
 We modified the constructor of the class to create 2 *Image View* classes for two purposes:

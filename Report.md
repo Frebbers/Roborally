@@ -7,19 +7,21 @@
 </p>
 <br>
 <H3 style="text-align: center;">Group 7 </H3>
-<H3 style="text-align: center;">Frederik Andersen (s224308), Nicolai D. Madsen (s213364)</H3>
+<H3 style="text-align: center;">Frederik Andersen (s224308), Nicolai D. Madsen (s213364), Sofus J. Brandt (s214972)</H3>
 
 <H2 style="text-align: center;">RoboRally</H2>
 <br>
 <H3 style="text-align: center;">Wednesday 8th of May </H3>
 
 # 0. Contributions
-**Nicolai D. Madsen (s213364):**
+### Nicolai D. Madsen (s213364)
 1. Continued development for *SpaceView.java*
 2. Implemented the *Wall.java* and *WallView.java*
 3. Implemented the *Checkpoint.java* and *CheckpointView.java*
 4. Implemented the *BoardData.java*
 5. Continued development for *JsonReader.java* which was implemented by Frederik Andersen
+### Sofus J. Brandt (s214972)
+1. Implemented the priority antenna, and with this changed the player selection logic throughout the project.
 
 # 1. Method implementation
 ## SpaceView.java <br>
@@ -70,3 +72,13 @@ We modified the constructor of the class to create 2 *Image View* classes for tw
    It creates a *BoardData* object and stores information from the *JSON* file within it.<br><br>
    **Justification:** This feature gives developers and creators an easy way to create and manage different boards for gameplay.
    This is crucial to improve the overall gameplay experience, as it improves replay value.
+
+## PriorityAntenna.java <br>
+**Purpose:** Keeping track of the player turn order for the current register <br><br>
+**Implementation:** Has methods for ordering and resetting the priority antenna's list of players, separate to the board's, as well as a method to synchronize its list of players with the board's. These methods are generally accessed through the board which the priority antenna belongs to. <br><br>
+**Justification:** This feature adds an additional layer of complexity and objectives to the game, making ot more engaging.
+
+## PriorityAntennaView.java <br>
+**Purpose:** This class was implemented to visually represent the `PriorityAntenna` on the game board. <br><br>
+**Implementation:** Implementation was mostly copied from CheckPointView in the class itself and the usage of the class. <br><br>
+**Justification:** The visual representation of the Priority Antenna is crucial for the player understanding of player order.

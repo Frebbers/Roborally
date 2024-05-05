@@ -24,7 +24,7 @@ public class PriorityAntennaView extends StackPane {
      *
      * @param priorityAntenna Priority Antenna this view will represent
      *
-     *
+     * @author s214972@dtu.dk
      */
     public PriorityAntennaView(PriorityAntenna priorityAntenna) {
         this.priorityAntenna = priorityAntenna;

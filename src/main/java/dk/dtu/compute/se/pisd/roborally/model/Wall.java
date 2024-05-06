@@ -5,7 +5,10 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 /**
  * Wall class for defining boundaries on the board.
  * Implements observer pattern to notify changes in its state.
+ *
+ *  @author Nicolai D. Madsen, s213364@dtu.dk
  */
+
 public class Wall extends Subject {
     private Heading heading;
     private Heading offset;

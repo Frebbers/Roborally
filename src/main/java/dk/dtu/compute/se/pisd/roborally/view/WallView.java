@@ -12,6 +12,8 @@ import javafx.scene.shape.Polygon;
 
 /**
  * View for a checkpoint on the game board.
+ *
+ *  @author Nicolai D. Madsen, s213364@dtu.dk
  */
 public class WallView extends StackPane implements ViewObserver {
     final public static int SPACE_HEIGHT = 60;

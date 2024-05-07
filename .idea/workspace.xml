@@ -5,14 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2766ae4-dc00-42b7-9993-e72fc3e794c6" name="Changes" comment="Incremented the move counter when the activation phase is over. Also removed a dummy operation that should be deleted.">
+      <change afterPath="$PROJECT_DIR$/src/test/expected/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/CheckPointTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/dk/dtu/compute/se/pisd/roborally/controller/util/TestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/boards/board1.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/boards/board1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$ImpossibleMoveException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController$ImpossibleMoveException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/controller/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/roborally/model/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/Report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/view/CheckpointView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/roborally/view/CheckpointView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/boards/Documentation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/boards/Documentation.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,14 +41,12 @@
     &quot;assignee&quot;: &quot;FrederikVA&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="7c5416cb-80af-41d7-bd54-6d6d5a82968e" />
-        <option name="url" value="https://github.com/Frebbers/Roborally.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Frebbers/Roborally.git&quot;,
+    &quot;accountId&quot;: &quot;fc7f34fe-ffd4-4ee5-9d3a-0189b7183f06&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -83,6 +82,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="dk.dtu.compute.se.pisd.roborally.controller" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Nicolai Madsen\OneDrive\DTU Softwareteknologi\2. Semester\Advanced Programming\Application\Roborally\src\main\resources\boards" />
       <recent name="C:\Users\Nicolai Madsen\OneDrive\DTU Softwareteknologi\2. Semester\Advanced Programming\Application\Roborally\src\main\resources" />
@@ -144,7 +146,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-20.0.2-azul-20.0.2-4caba194b151-eb49e076" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +170,7 @@
       <workItem from="1713886186274" duration="2792000" />
       <workItem from="1713955244546" duration="4264000" />
       <workItem from="1714063801013" duration="14910000" />
+      <workItem from="1715082234914" duration="2323000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up tests">
       <option name="closed" value="true" />

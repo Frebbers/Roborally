@@ -2,42 +2,70 @@ Creating a board as a Json file:
 
 Naming files: "board + unique number + .json"
 
-        ????    Do we count from 0 or 1    ????
+Names: "height" and "width" are the size of the board (int). (MIN values 5x5)
+Direction: north: up, south: down, east: left, west: right.
 
-Names: "Height" and "Width" are the size of the board (int). (MIN values 5x5)
+spaces: (Objects are optional)
 
-Objects: (Optional)
+{
+  "spaces": [
+    {
+    "conveyorBelts":
+      {
+        "instances": [
+          {
+            "x": 2, (int)
+            "y": 7, (int)
+            "heading": "north"
+          }
+        ]
+      }
+    },
+    {
+      "walls":
+        {
+          "actions": {},
+          "instances": [
+            {
+              "x": 3, (int)
+              "y": 3, (int)
+              "heading": "north",
+              "offset": "west"
+            }
+          ]
+        }
+    },
+    {
+      "priorityAntennas":
+      {
+        "instances": [
+          {
+            "x": 4, (int)
+            "y": 7 (int)
+          }
+        ]
+      }
+    },
+    {
+      "checkpoints":
+        {
+          "actions": {},
+          "instances": [
+            {
+              "x": 8, (int)
+              "y": 5, (int)
+              "id": "2" (int)
+            }
+          ]
+        }
+    }
+  ]
+}
 
-     "ConveyorBelts": [{
-        values for one belt:
-        "PointX": int,
-        "PointY": int,
-        "Direction": "enum" (up, down, left, right)
-     }]
-
-    "Walls": [{
-        values for one wall:
-        "PointX": int,
-        "PointY": int,
-        "Direction": "enum" (up, down, left, right)
-    }]
-
-    "Antennas": [{
-        values for one Antenna:
-        "PointX": int,
-        "PointY": int
-    }]
-
-    "CheckPoints": [{
-        values for one CheckPoint:
-        "PointX": int,
-        "PointY": int
-    }]
-
-___________________________
+__________________________
 FILES NEED TO HAVE:
--   Height: int
--   Width: int
+-   height: int
+-   width: int
 __________________________
 PITFALLS:
 -   Placing objects outside board size (greater x/y values than board height / width).
@@ -49,54 +77,84 @@ Avoid impossible boards:
 -   Players should be able to move to / from every part of the map
 
 _________________________
-Board / file example: name: "board2.json"
+Board / file example: name: "board1.json"
 
 {
-  "Height": 8,
-  "Width": 8,
-
-  "ConveyorBelts": [
+  "name": "Board 1",
+  "height": 8,
+  "width": 8,
+  "spaces": [
     {
-      "PointX": 3,
-      "PointY": 3,
-      "Direction": "up"
+    "conveyorBelts":
+      {
+        "instances": [
+          {
+            "x": 2,
+            "y": 7,
+            "heading": "north"
+          },
+          {
+            "x": 5,
+            "y": 3,
+            "heading": "south"
+          }
+        ]
+      }
     },
     {
-      "PointX": 7,
-      "PointY": 7,
-      "Direction": "down"
-    }
-  ],
-
-  "Walls": [
-    {
-      "PointX": 3,
-      "PointY": 3,
-      "Direction": "up"
+      "walls":
+        {
+          "actions": {},
+          "instances": [
+            {
+              "x": 3,
+              "y": 3,
+              "heading": "north",
+              "offset": "west"
+            },
+            {
+              "x": 3,
+              "y": 4,
+              "heading": "north",
+              "offset": "west"
+            },
+            {
+              "x": 6,
+              "y": 6,
+              "heading": "west",
+              "offset": "south"
+            }
+          ]
+        }
     },
     {
-      "PointX": 3,
-      "PointY": 4,
-      "Direction": "up"
+      "priorityAntennas":
+      {
+        "instances": [
+          {
+            "x": 4,
+            "y": 7
+          }
+        ]
+      }
     },
     {
-      "PointX": 6,
-      "PointY": 6,
-      "Direction": "left"
-    }
-  ],
-
-  "Antennas": [
-    {
-      "PointX": 5,
-      "PointY": 5
-    }
-  ],
-
-  "CheckPoints": [
-    {
-      "PointX": 6,
-      "PointY": 3
+      "checkpoints":
+        {
+          "actions": {},
+          "instances": [
+            {
+              "x": 6,
+              "y": 3,
+              "id": "1"
+            },
+            {
+              "x": 8,
+              "y": 5,
+              "id": "2"
+            }
+          ]
+        }
     }
   ]
 }

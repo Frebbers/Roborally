@@ -17,7 +17,6 @@ import javafx.scene.shape.Polygon;
 public class PriorityAntennaView extends StackPane {
     final public static int SPACE_HEIGHT = 60;
     final public static int SPACE_WIDTH = 60;
-    private final PriorityAntenna priorityAntenna;
 
     /**
      * Create a view for the given priority antenna.
@@ -27,7 +26,6 @@ public class PriorityAntennaView extends StackPane {
      * @author s214972@dtu.dk
      */
     public PriorityAntennaView(PriorityAntenna priorityAntenna) {
-        this.priorityAntenna = priorityAntenna;
         ImageView imageView = new ImageView(new Image("/images/antenna.png"));
 
         imageView.setFitWidth(SPACE_WIDTH);

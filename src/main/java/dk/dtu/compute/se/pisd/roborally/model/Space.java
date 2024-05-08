@@ -136,6 +136,13 @@ public class Space extends Subject {
         this.priorityAntenna = priorityAntenna;
     }
 
+    /**
+     * Set the space as a wall, if one is on this space.
+     *
+     * @param wall Wall on this space
+     *
+     * @author s214972@dtu.dk
+     */
     public void setWall(Wall wall){
         if(!walls.contains(wall)){
             walls.add(wall);

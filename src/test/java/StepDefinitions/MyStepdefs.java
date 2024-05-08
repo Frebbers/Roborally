@@ -2,16 +2,13 @@ package StepDefinitions;
 
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest;
-import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class MyStepdefs {
@@ -65,7 +62,6 @@ public class MyStepdefs {
         assert gameController.board.getCurrentPlayer().getSpace().y == y;
     }
 
-
     @And("the turn counter should be at \\({int})")
     public void theTurnCounterShouldBeAt(int count) {
         assert gameController.board.getMoveCount() == count;
@@ -75,10 +71,34 @@ public class MyStepdefs {
     public void theRobotShouldBeFacing(String h) {
         Heading heading = Heading.fromString(h);
         assert gameController.board.getCurrentPlayer().getHeading().equals(heading);
+    }
 
-        public void aPlayerInteractionPhaseShouldBeActive() {
-            assert (gameController.board.getPhase().equals(Phase.PLAYER_INTERACTION));
-            // TODO Adrian, Create a method that checks if player interaction phase is active when a situation of choice arises.
-        }
+    @And("A player interaction phase should be active.")
+    public void aPlayerInteractionPhaseShouldBeActive() {
+        assertEquals(gameController.board.getPhase(),(Phase.PLAYER_INTERACTION));
+    }
+
+    @Then("the robot should be facing {string} or {string}")
+    public void theRobotShouldBeFacingOr(String HeadingL, String HeadingR) {
+        Heading heading1 = Heading.fromString(HeadingL);
+        Heading heading2 = Heading.fromString(HeadingR);
+        assert gameController.board.getCurrentPlayer().getHeading().equals(heading1)
+                || gameController.board.getCurrentPlayer().getHeading().equals(heading2);
+
+
+    }
+
+    @And("Last repository used was {string}")
+    public void lastRepositoryUsedWas(String command) {
+        Player player = gameController.board.getCurrentPlayer();
+        CommandCardField commandCardField = player.getCardField(0);
+        CommandCard commandCard = commandCardField.getCard();
+        CommandCardField lastCommandCardField = player.getPreviousCardField();
+        CommandCard prevcommandCard = lastCommandCardField.getCard();
+
+        theRobotHasProgrammedACard(command);
+
+        assert (commandCard.equals(prevcommandCard));
+
     }
 }

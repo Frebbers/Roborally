@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
+
 /**
  * Class for controlling game phases and moving robots and cards.
  *
@@ -234,6 +236,8 @@ public class GameController {
                 case LEFT:
                     this.turnLeft(player);
                     break;
+                case OPTION_LEFT_RIGHT:
+                    board.setPhase(PLAYER_INTERACTION);
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
@@ -373,5 +377,9 @@ public class GameController {
         }
     }
 
-
+    /**
+     * @author Adrian
+     * @param player
+     * This method makes a player move backwards.
+     */
 }

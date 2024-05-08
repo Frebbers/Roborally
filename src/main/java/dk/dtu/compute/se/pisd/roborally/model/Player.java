@@ -50,6 +50,8 @@ public class Player extends Subject {
     private Space space;
     private Heading heading = SOUTH;
 
+    private int previousCard;
+
     private CommandCardField[] program;
     private CommandCardField[] cards;
     private List<Checkpoint> checkpoints = new ArrayList<>();
@@ -198,9 +200,17 @@ public class Player extends Subject {
      * @return command card field at the given index of the cards
      */
     public CommandCardField getCardField(int i) {
+        previousCard = i;
         return cards[i];
     }
 
+    /**
+     *
+     * @return command card field at the previous index of cards
+     */
+        public CommandCardField getPreviousCardField(){
+            return cards[previousCard];
+    }
     /**
      * Returns the checkpoint at a specified index.
      *
@@ -243,4 +253,6 @@ public class Player extends Subject {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

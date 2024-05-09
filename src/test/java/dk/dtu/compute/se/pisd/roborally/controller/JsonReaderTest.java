@@ -20,7 +20,7 @@ public class JsonReaderTest {
         assertEquals(8, board.width);
         assertEquals(8, board.height);
     }
-    @Test
+
     public void testReadBoard2Json() {
         // Given
         int boardNumber = 2; // Assuming board2

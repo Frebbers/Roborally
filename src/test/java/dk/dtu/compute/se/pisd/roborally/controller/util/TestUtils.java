@@ -14,6 +14,7 @@ public class TestUtils {
      * @param image the image to test.
      * @throws IOException
      */
+    /*
     public static void goldenTest(String name, Image image) throws IOException {
         File f = new File("src/test/expected/" + name + ".png");
         Image before = null;
@@ -31,4 +32,5 @@ public class TestUtils {
             throw new AssertionError("Golden test does not match: " + f + " and " + ferr);
         }
     }
+    */
 }

@@ -1,14 +1,16 @@
+@test
 Feature: Implementing all the programming cards in the game.
 
   Background: The game is initialized
+    Given the game is initialized
 
-    Scenario: I get and program the card move back
-      Given the robot is facing "South"
-      And the robot should be at position (0, 1)
-      And the turn counter should be at (0)
-      When the robot has programmed a "Back" card
-      Then the robot should be at position (0, 0)
-      And the turn counter should be at (1)
+  Scenario: I get and program the card move back
+    Given the robot is facing "South"
+    And the robot should be at position (0, 1)
+    And the turn counter should be at (0)
+    When the robot has programmed a "Back" card
+    Then the robot should be at position (0, 0)
+    And the turn counter should be at (1)
 
 
   Scenario: I get and program the card U-Turn
@@ -28,7 +30,8 @@ Feature: Implementing all the programming cards in the game.
     And A player interaction phase should be active.
     Then the robot should be facing "North" or "South"
 
-  Scenario 4 : Again
+
+  Scenario: Again
     Given the robot should be facing "West"
     And the robot is at position (0, 1)
     And the turn counter should be at (0)

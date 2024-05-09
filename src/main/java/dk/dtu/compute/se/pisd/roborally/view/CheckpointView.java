@@ -5,11 +5,11 @@ import dk.dtu.compute.se.pisd.roborally.model.Checkpoint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 
 /**
  * View for a checkpoint on the game board.
+ *
+ *  @author Nicolai D. Madsen, s213364@dtu.dk
  */
 public class CheckpointView extends StackPane implements ViewObserver {
     final public static int SPACE_HEIGHT = 60;

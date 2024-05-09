@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Checkpoint class for marking positions on the board that players' robots need to reach.
  * Implements observer pattern to notify changes in its state.
  *
+ *  @author Nicolai D. Madsen, s213364@dtu.dk
  */
 public class Checkpoint extends Subject {
 

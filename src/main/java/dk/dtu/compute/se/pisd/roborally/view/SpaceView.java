@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Handles the drawing of a space on a board and its contents.
  *
- * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Ekkart Kindler, ekki@dtu.dk and Nicolai D. Madsen, s213364@dtu.dk
  *
  */
 public class SpaceView extends StackPane implements ViewObserver {

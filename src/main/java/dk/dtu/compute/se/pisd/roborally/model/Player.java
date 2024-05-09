@@ -52,7 +52,9 @@ public class Player extends Subject {
 
     private int previousCard;
 
+    //The programming cards added during the programming phase
     private CommandCardField[] program;
+    //The command cards that the player has in their hand
     private CommandCardField[] cards;
     private List<Checkpoint> checkpoints = new ArrayList<>();
 

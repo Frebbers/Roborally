@@ -36,7 +36,7 @@ public enum Phase {
      * @return the phase represented by the string, or null if the string does not represent a phase.
      * @author Frederik Bode Hendrichsen s224804
      */
-    public Phase fromString(String input){
+    public static Phase fromString(String input){
         return switch (input) {
             case "INITIALISATION" -> Phase.INITIALISATION;
             case "PROGRAMMING" -> Phase.PROGRAMMING;

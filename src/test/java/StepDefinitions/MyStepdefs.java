@@ -110,6 +110,6 @@ public class MyStepdefs {
 
     @And("the phase is {string}")
     public void thePhaseIs(String phase) {
-
+        gameController.board.setPhase(Phase.fromString(phase));
     }
 }

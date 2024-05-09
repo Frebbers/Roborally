@@ -8,6 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -50,7 +51,7 @@ public class MyStepdefs {
 
     @When("the robot has programmed a {string} card")
     public void theRobotHasProgrammedACard(String command) {
-        CommandCard commandCard = new CommandCard(Command.fromString(command));
+        CommandCard commandCard = new CommandCard(fromString(command));
         gameController.board.getCurrentPlayer().getCardField(0).setCard(commandCard);
 
     }
@@ -73,9 +74,9 @@ public class MyStepdefs {
         assert gameController.board.getCurrentPlayer().getHeading().equals(heading);
     }
 
-    @And("A player interaction phase should be active.")
+    @And("A player interaction phase should be active")
     public void aPlayerInteractionPhaseShouldBeActive() {
-        assertEquals(gameController.board.getPhase(),(Phase.PLAYER_INTERACTION));
+        assertEquals((Phase.PLAYER_INTERACTION),gameController.board.getPhase());
     }
 
     @Then("the robot should be facing {string} or {string}")
@@ -99,6 +100,16 @@ public class MyStepdefs {
         theRobotHasProgrammedACard(command);
 
         assert (commandCard.equals(prevcommandCard));
+
+    }
+
+    @And("The player presses execute current register")
+    public void thePlayerPressesExecuteCurrentRegister() {
+        gameController.executeStep();
+    }
+
+    @And("the phase is {string}")
+    public void thePhaseIs(String phase) {
 
     }
 }

@@ -93,8 +93,9 @@ public class GameController {
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
+        //board.setCurrentPlayer(board.getPlayer(0));
+        // this line has been commented because it caused problems in the execution of the first register
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
 

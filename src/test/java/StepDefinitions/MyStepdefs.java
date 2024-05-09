@@ -52,7 +52,7 @@ public class MyStepdefs {
     @When("the robot has programmed a {string} card")
     public void theRobotHasProgrammedACard(String command) {
         CommandCard commandCard = new CommandCard(fromString(command));
-        gameController.board.getCurrentPlayer().getCardField(0).setCard(commandCard);
+        gameController.board.getCurrentPlayer().getProgramField(0).setCard(commandCard);
 
     }
 

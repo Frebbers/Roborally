@@ -21,6 +21,9 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -76,6 +79,7 @@ public enum Command {
 
             default -> throw new IllegalArgumentException("Invalid command");
         };
+
     }
 
 }

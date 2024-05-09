@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
 
 /**
@@ -152,6 +154,9 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
                 if (card != null) {
                     Command command = card.command; // get the card's command
+                    if (command.isInteractive()) {
+                        StartPlayerInteractionPhase(command.getOptions());
+                    }
                     executeCommand(currentPlayer, command); // execute the card's command
                 }
                 int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
@@ -236,8 +241,6 @@ public class GameController {
                 case LEFT:
                     this.turnLeft(player);
                     break;
-                case OPTION_LEFT_RIGHT:
-                    board.setPhase(PLAYER_INTERACTION);
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
@@ -280,7 +283,12 @@ public class GameController {
 
 
     }
+    public void StartPlayerInteractionPhase(List<Command> options) {
+        board.setPhase(PLAYER_INTERACTION);
+        System.out.println("The current phase is now interaction");
 
+        //return Command;
+    }
     // Task2
     /**
      * @author Adrian and Mathias
@@ -301,6 +309,11 @@ public class GameController {
         player.setHeading(currentHeading.prev());
     }
 
+    /**
+     * @author Adrian
+     * @param player
+     * This method makes a player move backwards.
+     */
 
     public void moveBack(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
@@ -377,9 +390,4 @@ public class GameController {
         }
     }
 
-    /**
-     * @author Adrian
-     * @param player
-     * This method makes a player move backwards.
-     */
 }

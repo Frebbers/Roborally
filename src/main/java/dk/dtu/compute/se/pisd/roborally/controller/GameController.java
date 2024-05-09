@@ -39,7 +39,7 @@ public class GameController {
     final public Board board;
     public ConveyorBeltController beltCtrl;
     public BoardController boardController;
-
+    private Command nextCommand;
     /**
      * Initialize a GameController object with a certain Board.
      *
@@ -145,7 +145,30 @@ public class GameController {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
+    private void finishNextStep(Player currentPlayer) {
+        int step = board.getStep(); // get current register number
+        int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
+        if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
+            board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
+        }
+        else { // if every player HAS played this register
+            step++; // iterate register number
+            if (step < Player.NO_REGISTERS) { // if not all registers are done
+                makeProgramFieldsVisible(step); // show next register's cards
+                board.setStep(step); // set next register as current
+                board.updatePlayerTurnOrder();  // update the priority antenna's player order
+                board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
+            } else { // if all registers are done
+                //TO-DO after players have had their turn logic
+                for (Player player : board.getPlayers()) {
+                    executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
+                }
+                onActivationPhaseEnd(); // call method for end of phase
+                startProgrammingPhase(); // call method for start of next phase
+            }
+        }
 
+    }
     // XXX: implemented in the current version
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer(); // get board's current player
@@ -154,30 +177,13 @@ public class GameController {
             if (step >= 0 && step < Player.NO_REGISTERS) {
                 CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
                 if (card != null) {
-                    Command command = card.command; // get the card's command
-                    if (command.isInteractive()) {
-                        StartPlayerInteractionPhase(command.getOptions());
+                    nextCommand = card.command; // get the card's command
+                    if (nextCommand.isInteractive()) {
+                        StartPlayerInteractionPhase(nextCommand.getOptions());
                     }
-                    executeCommand(currentPlayer, command); // execute the card's command
-                }
-                int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
-                if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
-                    board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
-                } else { // if every player HAS played this register
-                    step++; // iterate register number
-                    if (step < Player.NO_REGISTERS) { // if not all registers are done
-                        makeProgramFieldsVisible(step); // show next register's cards
-                        board.setStep(step); // set next register as current
-                        board.updatePlayerTurnOrder();  // update the priority antenna's player order
-                        board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
-                    } else { // if all registers are done
-                        //TO-DO after players have had their turn logic
-                        for (Player player : board.getPlayers()) {
-                            executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
-                        }
-                        onActivationPhaseEnd(); // call method for end of phase
-                        startProgrammingPhase(); // call method for start of next phase
-                    }
+                    else {executeCommand(currentPlayer, nextCommand);
+                    finishNextStep(currentPlayer);
+                    } // execute the card's command
                 }
             } else {
                 // this should not happen
@@ -286,9 +292,15 @@ public class GameController {
     }
     public void StartPlayerInteractionPhase(List<Command> options) {
         board.setPhase(PLAYER_INTERACTION);
-        System.out.println("The current phase is now interaction");
 
         //return Command;
+    }
+    public void finishPlayerInteractionPhase(Command command){
+        System.out.println("Executing command for Player:" + board.getCurrentPlayer().getName());
+        executeCommand(board.getCurrentPlayer(),command);
+        board.setPhase(Phase.ACTIVATION);
+        System.out.println("Activation phase continues, Current player is: " + board.getCurrentPlayer().getName());
+        finishNextStep(board.getCurrentPlayer());
     }
     // Task2
     /**
@@ -391,4 +403,7 @@ public class GameController {
         }
     }
 
+    public Command getNextCommand() {
+        return nextCommand;
+    }
 }

@@ -188,4 +188,9 @@ public class MyStepdefs {
     public void thereShouldBeARobotAtPosition(int x, int y) {
         assert gameController.board.getSpace(x, y).getPlayer() != null;
     }
+
+    @And("there is a wall at position \\({int}, {int}), {string}")
+    public void thereIsAWallAtPosition(int x, int y, String heading) {
+        Wall wall = new Wall(x, y, heading, "north");
+    }
 }

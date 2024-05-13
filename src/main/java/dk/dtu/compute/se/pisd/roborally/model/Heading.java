@@ -63,7 +63,7 @@ public enum Heading {
 
     /**
      * Converts a string to a Heading enum.
-     * @author s224804
+     * @author Frederik Bode Hendrichsen s224804
      * @param input the string to be converted
      * @return the Heading enum corresponding to the input string
      * @throws IllegalArgumentException if the input string is not a valid heading

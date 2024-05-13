@@ -5,7 +5,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 /**
  * ...
  *
- * @author s224804, Frederik Bode Hendrichsen
+ * @author Frederik Bode Hendrichsen, s224804
  **/
 public class BoardController {
     GameController gameController;
@@ -23,7 +23,7 @@ public class BoardController {
      * @param origin there must be a player on this space or nothing will happen
      * @param destination
      * @param heading the direction the player is moving
-     * @author s224804, Frederik Bode Hendrichsen
+     * @author Frederik Bode Hendrichsen s224804
      * @return true if the movement was successful, false otherwise
      */
     public boolean handleMovement(Space origin, Space destination, Heading heading){

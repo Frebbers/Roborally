@@ -209,25 +209,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Execute all field actions on a space.
+     * @author Frederik Bode Hendrichsen s224804
+     * @param space the space on which the field actions should be executed
+     */
     public void executeFieldActions(Space space) {
-
         space.getActions().forEach(action -> action.doAction(this, space));
-        //beltCtrl.doAction(this,space);
-
-
-        /*var players = board.getPlayers();
-        var belts = board.getBelts();
-
-        for (Player player : players) {
-            var playerPos = player.getSpace();
-            for (ConveyorBelt belt : belts) {
-                if (playerPos.y == belt.y && playerPos.x == belt.x) {
-                    movePlayerOnConveyorBelt(player, belt);
-                }
-            }
-        }
-
-         */
     }
 
 

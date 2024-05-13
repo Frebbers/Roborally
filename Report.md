@@ -22,6 +22,7 @@
 5. Continued development for *JsonReader.java* which was implemented by Frederik Andersen
 ### Sofus J. Brandt (s214972)
 1. Implemented the priority antenna, and with this changed the player selection logic throughout the project.
+2. Priority Antenna documentation
 ### Frederik Andersen (s224308)
 1. Implemented *JsonReader.java* for board creations. Further developed by Nicolai
 2. Json-board documentation

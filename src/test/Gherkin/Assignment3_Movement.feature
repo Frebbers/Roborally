@@ -1,4 +1,4 @@
-# Created by Freb at 13/05/2024
+@test
 Feature: Movement mechanics
 
   Background: The game is initialized

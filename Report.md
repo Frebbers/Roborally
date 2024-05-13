@@ -29,6 +29,11 @@
 5. Json-board documentation
 6. Implemented 'Board option' chooser under "new game"
 
+### Adrian A. C. Macauley (s225733)
+1.  Implementation of movement with Mathias
+2.  Tests for programming cards
+3.  Primary contributor to Implementation of diverse Programming Cards
+
 # 1. Method implementation
 ## SpaceView.java <br>
 This class is responsible for displaying two important game elements.

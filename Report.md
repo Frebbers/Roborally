@@ -23,11 +23,9 @@
 ### Sofus J. Brandt (s214972)
 1. Implemented the priority antenna, and with this changed the player selection logic throughout the project.
 ### Frederik Andersen (s224308)
-1. Implemented move-count with Nicolai
-2. Implemented *JsonReader.java* for board creations. Further developed by Nicolai
-3. Test for checkpoint, json-reader
-5. Json-board documentation
-6. Implemented 'Board option' chooser under "new game"
+1. Implemented *JsonReader.java* for board creations. Further developed by Nicolai
+2. Json-board documentation
+3. Implemented 'Board option' chooser under "new game"
 
 # 1. Method implementation
 ## SpaceView.java <br>
@@ -78,6 +76,11 @@ We modified the constructor of the class to create 2 *Image View* classes for tw
    It creates a *BoardData* object and stores information from the *JSON* file within it.<br><br>
    **Justification:** This feature gives developers and creators an easy way to create and manage different boards for gameplay.
    This is crucial to improve the overall gameplay experience, as it improves replay value.
+
+## BoardChooser in newGame (AppController.java). <br>
+**Purpose:** Giving players the option between different boards.
+**Implementation:** Players gets a dropdown with the possible boards after choosing number of players for a new game. Our JsonReader takes the chosen number and concat it with the filepath.
+**Justification:** This feature adds longer interest from players, playing the game. It also makes it easy to create specific boards for development purposes. 
 
 ## PriorityAntenna.java <br>
 **Purpose:** Keeping track of the player turn order for the current register <br><br>

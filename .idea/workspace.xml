@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2766ae4-dc00-42b7-9993-e72fc3e794c6" name="Changes" comment="Incremented the move counter when the activation phase is over. Also removed a dummy operation that should be deleted.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/Report.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -163,6 +164,7 @@
       <workItem from="1713955244546" duration="4264000" />
       <workItem from="1714063801013" duration="14910000" />
       <workItem from="1715082234914" duration="3042000" />
+      <workItem from="1715512402090" duration="1738000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up tests">
       <option name="closed" value="true" />

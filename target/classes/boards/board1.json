@@ -2,7 +2,8 @@
   "name": "Board 1",
   "height": 8,
   "width": 8,
-  "spaces": [{
+  "spaces": [
+    {
     "conveyorBelts":
       {
         "instances": [
@@ -18,7 +19,7 @@
           }
         ]
       }
-  },
+    },
     {
       "walls":
         {
@@ -46,8 +47,15 @@
         }
     },
     {
-      "antennas": [
-      ]
+      "priorityAntennas":
+      {
+        "instances": [
+          {
+            "x": 4,
+            "y": 7
+          }
+        ]
+      }
     },
     {
       "checkpoints":

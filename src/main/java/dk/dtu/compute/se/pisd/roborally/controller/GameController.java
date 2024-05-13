@@ -24,6 +24,10 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
+
 /**
  * Class for controlling game phases and moving robots and cards.
  *
@@ -33,44 +37,19 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
-
+    public ConveyorBeltController beltCtrl;
+    public BoardController boardController;
+    private Command nextCommand;
     /**
      * Initialize a GameController object with a certain Board.
-     * 
+     *
      * @param board
      */
     public GameController(@NotNull Board board) {
         this.board = board;
-    }
+        this.boardController = new BoardController(this);
+        this.beltCtrl = new ConveyorBeltController();
 
-    /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted
-     * @author s224308, s213364
-     * @param space the space to which the current player should move
-     */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // Get the current player
-        Player currentPlayer = board.getCurrentPlayer();
-
-        // Check if the space is free
-        if (space.getPlayer() == null) {
-            // Move the current player to the new space
-            currentPlayer.setSpace(space);
-
-            // Find the index of the current player
-            int currentPlayerIndex = board.getPlayerNumber(currentPlayer);
-
-            // Determine the next player's index
-            int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
-
-            // Set the next player as the current player
-            Player nextPlayer = board.getPlayer(nextPlayerIndex);
-            board.setCurrentPlayer(nextPlayer);
-
-            // Increment the move counter on the board
-            board.incrementMoveCount();
-        }
     }
 
     /**
@@ -79,7 +58,8 @@ public class GameController {
     // XXX: implemented in the current version
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.updatePlayerTurnOrder();
+        board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -113,8 +93,9 @@ public class GameController {
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
+        //board.setCurrentPlayer(board.getPlayer(0));
+        // this line has been commented because it caused problems in the execution of the first register
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
 
@@ -155,7 +136,6 @@ public class GameController {
     // XXX: implemented in the current version
     public void executeStep() {
         board.setStepMode(true);
-
         continuePrograms();
     }
 
@@ -165,30 +145,45 @@ public class GameController {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
+    private void finishNextStep(Player currentPlayer) {
+        int step = board.getStep(); // get current register number
+        int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
+        if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
+            board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
+        }
+        else { // if every player HAS played this register
+            step++; // iterate register number
+            if (step < Player.NO_REGISTERS) { // if not all registers are done
+                makeProgramFieldsVisible(step); // show next register's cards
+                board.setStep(step); // set next register as current
+                board.updatePlayerTurnOrder();  // update the priority antenna's player order
+                board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
+            } else { // if all registers are done
+                //TO-DO after players have had their turn logic
+                for (Player player : board.getPlayers()) {
+                    executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
+                }
+                onActivationPhaseEnd(); // call method for end of phase
+                startProgrammingPhase(); // call method for start of next phase
+            }
+        }
 
+    }
     // XXX: implemented in the current version
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
+        Player currentPlayer = board.getCurrentPlayer(); // get board's current player
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
+            int step = board.getStep(); // Get current register number
             if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
+                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
                 if (card != null) {
-                    Command command = card.command;
-                    executeCommand(currentPlayer, command);
-                }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
-                    } else {
-                        startProgrammingPhase();
+                    nextCommand = card.command; // get the card's command
+                    if (nextCommand.isInteractive()) {
+                        StartPlayerInteractionPhase(nextCommand.getOptions());
                     }
+                    else {executeCommand(currentPlayer, nextCommand);
+                    finishNextStep(currentPlayer);
+                    } // execute the card's command
                 }
             } else {
                 // this should not happen
@@ -199,6 +194,30 @@ public class GameController {
             assert false;
         }
     }
+
+    /**
+     * Function to call when at the end of the activation phase.
+     * Here it checks increases the move counter, and checks for any win conditions.
+     */
+    private void onActivationPhaseEnd(){
+        board.incrementMoveCount();
+
+        for(Player player : board.getPlayers()){
+            if(player.getCheckpoints().size() == board.getData().checkpoints.size()){
+                System.out.println(player.getName() + " has won!");
+            }
+        }
+    }
+
+    /**
+     * Execute all field actions on a space.
+     * @author Frederik Bode Hendrichsen s224804
+     * @param space the space on which the field actions should be executed
+     */
+    public void executeFieldActions(Space space) {
+        space.getActions().forEach(action -> action.doAction(this, space));
+    }
+
 
     // XXX: implemented in the current version
     public void executeCommand(@NotNull Player player, Command command) {
@@ -220,6 +239,15 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case BACK:
+                    this.moveBack(player);
+                    break;
+                case U_TURN:
+                    this.turnAround(player);
+                    break;
+                case AGAIN:
+                    this.repeatPrevRegister(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -227,25 +255,15 @@ public class GameController {
     }
 
     //Private method added for reuseability in moveForward and fastForward
-    /**
-     * @author Adrian and Mathias
-     * @param player
-     */
-    private void movePlayerForward(@NotNull Player player) {
-        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
-        neighbour.setPlayer(player);
-        //Collision logic to be added...
-
-    }
 
     // Task2
     /**
-     * @author Adrian and Mathias
+     * @author Adrian, Mathias and Frederik
      * @param player
      */
     public void moveForward(@NotNull Player player) {
-        movePlayerForward(player);
-        //Collision logic to be added...
+        Space neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
 
     }
 
@@ -255,12 +273,23 @@ public class GameController {
      * @param player
      */
     public void fastForward(@NotNull Player player) {
-        movePlayerForward(player);
-        movePlayerForward(player);
-        //Collision logic to be added...
+        moveForward(player);
+        moveForward(player);
+
 
     }
+    public void StartPlayerInteractionPhase(List<Command> options) {
+        board.setPhase(PLAYER_INTERACTION);
 
+        //return Command;
+    }
+    public void finishPlayerInteractionPhase(Command command){
+        System.out.println("Executing command for Player:" + board.getCurrentPlayer().getName());
+        executeCommand(board.getCurrentPlayer(),command);
+        board.setPhase(Phase.ACTIVATION);
+        System.out.println("Activation phase continues, Current player is: " + board.getCurrentPlayer().getName());
+        finishNextStep(board.getCurrentPlayer());
+    }
     // Task2
     /**
      * @author Adrian and Mathias
@@ -280,6 +309,31 @@ public class GameController {
         var currentHeading = player.getHeading();
         player.setHeading(currentHeading.prev());
     }
+
+    /**
+     * @author Adrian
+     * @param player
+     * This method makes a player move backwards.
+     */
+
+    public void moveBack(@NotNull Player player) {
+        var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
+        boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
+    }
+
+    public void repeatPrevRegister(@NotNull Player player) {
+        player.getPreviousCardField();
+    }
+
+    /**
+     * @author Adrian
+     * @param player
+     */
+
+    public void turnAround(@NotNull Player player) {
+        player.setHeading(player.getHeading().opposite());
+    }
+
 
     /**
      * Attempt to move a card from one field to another.
@@ -310,4 +364,34 @@ public class GameController {
         assert false;
     }
 
+    public SaveGameState saveGameState() {
+       return null;
+    }
+
+    /**
+     * This method returns the ConveyorBeltController.
+     *
+     * @return the ConveyorBeltController instance
+     */
+    public ConveyorBeltController getBeltCtrl() {
+        return beltCtrl;
+    }
+
+    class ImpossibleMoveException extends Exception {
+
+        private Player player;
+        private Space space;
+        private Heading heading;
+
+        public ImpossibleMoveException(Player player, Space space, Heading heading) {
+            super("Move impossible");
+            this.player = player;
+            this.space = space;
+            this.heading = heading;
+        }
+    }
+
+    public Command getNextCommand() {
+        return nextCommand;
+    }
 }

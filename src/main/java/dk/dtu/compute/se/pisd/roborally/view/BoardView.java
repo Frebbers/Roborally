@@ -22,11 +22,10 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -83,8 +82,42 @@ public class BoardView extends VBox implements ViewObserver {
             }
         }
 
+        for (Wall wall : board.getData().walls) {
+            Space space = board.getSpace(wall.x, wall.y);
+            space.setWall(wall);
+            WallView wallView = new WallView(wall);
+            mainBoardPane.add(wallView, space.x, space.y);
+        }
+        for (Checkpoint checkpoint : board.getData().checkpoints){
+            Space space = board.getSpace(checkpoint.x, checkpoint.y);
+            space.setCheckpoint(checkpoint);
+            CheckpointView checkpointView = new CheckpointView(checkpoint);
+            mainBoardPane.add(checkpointView, space.x, space.y);
+        }
+        for (ConveyorBelt belt : board.getData().conveyorBelts){
+            Space space = board.getSpace(belt.x, belt.y);
+            space.setConveyorBelt(belt);
+            ConveyorBeltView beltView = new ConveyorBeltView(belt);
+            mainBoardPane.add(beltView, space.x, space.y);
+        }
+        for (PriorityAntenna priorityAntenna : board.getData().priorityAntennas){
+            Space space = board.getSpace(priorityAntenna.getX(), priorityAntenna.getY());
+            space.setPriorityAntenna(priorityAntenna);
+            PriorityAntennaView priorityAntennaView = new PriorityAntennaView(priorityAntenna);
+            mainBoardPane.add(priorityAntennaView, space.x, space.y);
+        }
+
         board.attach(this);
         update(board);
+    }
+
+    public SpaceView getSpaceView(int x, int y) {
+        if (x >= 0 && x < board.width &&
+                y >= 0 && y < board.height) {
+            return spaces[x][y];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -129,12 +162,10 @@ public class BoardView extends VBox implements ViewObserver {
                 Board board = space.board;
 
                 if (board == gameController.board) {
-                    gameController.moveCurrentPlayerToSpace(space);
                     event.consume();
                 }
             }
         }
 
     }
-
 }

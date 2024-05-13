@@ -20,13 +20,11 @@
  *
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
-
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.JsonReader;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import javafx.application.Platform;
@@ -34,6 +32,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -49,7 +48,8 @@ import java.util.Optional;
 public class AppController implements Observer {
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
-    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
+    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey");
+    final private List<Integer> BOARD_NUMBER_OPTIONS = Arrays.asList(1);
 
     final private RoboRally roboRally;
 
@@ -65,41 +65,58 @@ public class AppController implements Observer {
     }
 
     /**
-     * Ask the user for a number of players, and initializes an 8x8 board with the given amount of players.
+     * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
     public void newGame() {
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        dialog.setTitle("Player number");
-        dialog.setHeaderText("Select number of players");
-        Optional<Integer> result = dialog.showAndWait();
+        ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        playerDialog.setTitle("Select number of players and map");
+        playerDialog.setHeaderText("Select number of players");
 
-        if (result.isPresent()) {
-            if (gameController != null) {
-                // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
-                if (!stopGame()) {
+        ChoiceDialog<Integer> boardDialog = new ChoiceDialog<>(BOARD_NUMBER_OPTIONS.get(0), BOARD_NUMBER_OPTIONS);
+        boardDialog.setTitle("Select map");
+        boardDialog.setTitle("Choose board to play");
+
+        Stage boardStage = (Stage) boardDialog.getDialogPane().getScene().getWindow();
+        boardStage.setAlwaysOnTop(true);
+
+        Optional<Integer> playerResult = playerDialog.showAndWait();
+
+        if (playerResult.isPresent()) {
+            Optional<Integer> boardResult = boardDialog.showAndWait();
+
+            if (boardResult.isPresent()) {
+                int playerCount = playerResult.get();
+                int boardNumber = boardResult.get();
+
+                if (gameController!= null && !stopGame()) {
                     return;
+                }
+                // Load the board data
+                BoardData data = loadJsonBoardFromNumber(boardNumber);
+
+                // Create a board from the data
+                Board board = new Board(data);
+
+                gameController = new GameController(board);
+
+                for (int i = 0; i < playerCount; i++) {
+                    Player player = new Player(board, "Player " + (i + 1),i,  PLAYER_COLORS.get(i));
+                    board.addPlayer(player);
+                    player.setSpace(board.getSpace(i % board.width, i));
                 }
             }
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
-            gameController = new GameController(board);
-            int no = result.get();
-            for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
-                board.addPlayer(player);
-                player.setSpace(board.getSpace(i % board.width, i));
-            }
-
-            // XXX: the line below is commented out in the current version
+            // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.startProgrammingPhase();
 
             roboRally.createBoardView(gameController);
         }
+    }
+    private BoardData loadJsonBoardFromNumber(int boardNumber) {
+        JsonReader jsonReader = new JsonReader(boardNumber);
+        return jsonReader.readBoardJson();
     }
 
     /**

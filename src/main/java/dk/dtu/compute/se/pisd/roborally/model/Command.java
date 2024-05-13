@@ -21,6 +21,9 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,21 +41,45 @@ public enum Command {
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
-    FAST_FORWARD("Fast Fwd");
+    FAST_FORWARD("Fast Fwd"),
+    U_TURN("U-Turn"),
+    AGAIN("Again"),
+    BACK("Move Back"),
+
+
+    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
     final public String displayName;
 
-    Command(String displayName) {
+    final private List<Command> options;
+
+    Command(String displayName, Command... options) {
         this.displayName = displayName;
+        this.options = Collections.unmodifiableList(Arrays.asList(options));
     }
+
+    public boolean isInteractive() {
+        return !options.isEmpty();
+    }
+
+    public List<Command> getOptions() {
+        return options;
+    }
+
     public static Command fromString(String input) throws IllegalArgumentException{
         return switch (input) {
             case "Fwd", "Forward", "forward", "fwd" -> Command.FORWARD;
             case "Turn Right", "turn right" -> Command.RIGHT;
             case "Turn Left","turn left" -> Command.LEFT;
             case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
+            case "Move Back", "Back", "Move back", "move back" -> Command.BACK;
+            case "U-turn", "u-turn", "Turn Around", "Turn around"->Command.U_TURN;
+            case "Repeat", "Again", "again", "repeat"->Command.AGAIN;
+            case "Left or right", "left or right", "L or R"-> Command.OPTION_LEFT_RIGHT;
+
             default -> throw new IllegalArgumentException("Invalid command");
         };
+
     }
 
 }

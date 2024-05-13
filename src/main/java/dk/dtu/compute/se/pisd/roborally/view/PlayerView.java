@@ -32,6 +32,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Handles the drawing of a player mat.
  *
@@ -139,6 +141,17 @@ public class PlayerView extends Tab implements ViewObserver {
     }
 
     /**
+     * Return player this view belongs to.
+     *
+     * @return Player which this view belongs to
+     *
+     * @author s214972@dtu.dk
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
      * Update player view as to include a recent change in state.
      * 
      * @param subject
@@ -149,7 +162,7 @@ public class PlayerView extends Tab implements ViewObserver {
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
                 if (cardFieldView != null) {
-                    if (player.board.getPhase() == Phase.PROGRAMMING ) {
+                    if (player.board.getPhase() == Phase.PROGRAMMING) {
                         cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
                     } else {
                         if (i < player.board.getStep()) {
@@ -157,7 +170,7 @@ public class PlayerView extends Tab implements ViewObserver {
                         } else if (i == player.board.getStep()) {
                             if (player.board.getCurrentPlayer() == player) {
                                 cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-                            } else if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
+                            } else if (player.board.getPlayerNumberByTurnOrder(player.board.getCurrentPlayer()) > player.board.getPlayerNumberByTurnOrder(player)) {
                                 cardFieldView.setBackground(CardFieldView.BG_DONE);
                             } else {
                                 cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
@@ -200,8 +213,6 @@ public class PlayerView extends Tab implements ViewObserver {
                         executeButton.setDisable(true);
                         stepButton.setDisable(true);
                 }
-
-
             } else {
                 if (!programPane.getChildren().contains(playerInteractionPanel)) {
                     programPane.getChildren().remove(buttonPanel);
@@ -210,22 +221,14 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // TODO Assignment V3: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
-                    Button optionButton = new Button("Option1");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
-
-                    optionButton = new Button("Option 2");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
+                    for (Command currentCommand : gameController.getNextCommand().getOptions()) {
+                        Button optionButton = new Button(currentCommand.displayName);
+                        optionButton.setOnAction(e -> gameController.finishPlayerInteractionPhase(currentCommand));
+                        optionButton.setDisable(false);
+                        playerInteractionPanel.getChildren().add(optionButton);
+                    }
                 }
             }
         }
     }
-
 }

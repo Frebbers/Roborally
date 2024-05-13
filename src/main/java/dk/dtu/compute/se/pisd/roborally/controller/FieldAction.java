@@ -19,31 +19,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.controller;
+
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
- * Enum for the different phases of the game.
+ * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public enum Phase {
-    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION;
+public abstract class FieldAction {
 
-    /**
-     * Convert a string to a phase.
-     * @param input the string to be converted.
-     * @return the phase represented by the string, or null if the string does not represent a phase.
-     * @author Frederik Bode Hendrichsen s224804
-     */
-    public static Phase fromString(String input){
-        return switch (input) {
-            case "INITIALISATION" -> Phase.INITIALISATION;
-            case "PROGRAMMING" -> Phase.PROGRAMMING;
-            case "ACTIVATION" -> Phase.ACTIVATION;
-            case "PLAYER_INTERACTION" -> Phase.PLAYER_INTERACTION;
-            default -> null;
-        };
-    }
+    public abstract boolean doAction(GameController gameController, Space space);
+    
 }
-

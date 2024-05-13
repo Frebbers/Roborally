@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  *
  */
 public class Board extends Subject {
+    private final BoardData data;
+    public final String boardName;
 
     public final int width;
 
     public final int height;
-
-    public final String boardName;
 
     private Integer gameId;
 
@@ -61,40 +62,34 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    private final PriorityAntenna priorityAntenna;
+
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
-     * 
-     * @param width
-     * @param height
-     * @param boardName name of board
+     *
+     * @param data data of the board
      */
-    public Board(int width, int height, @NotNull String boardName) {
-        this.boardName = boardName;
-        this.width = width;
-        this.height = height;
+    public Board(BoardData data) {
+        this.boardName = data.name;
+        this.width = data.width;
+        this.height = data.height;
+        this.data = data;
+        this.priorityAntenna = data.priorityAntennas.get(0); // JsonReader supports several antennas, but the rest of the project does not
+        priorityAntenna.setBoard(this);
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
+                Space space = new Space(x, y);
                 spaces[x][y] = space;
+                space.setBoard(this);
             }
         }
         this.stepMode = false;
     }
 
     /**
-     * Initialize a Board object with certain dimensions of empty spaces amd a default name.
-     * 
-     * @param width
-     * @param height
-     */
-    public Board(int width, int height) {
-        this(width, height, "defaultboard");
-    }
-
-    /**
      * Return this Board's gameId.
-     * 
+     *
      * @return gameId
      */
     public Integer getGameId() {
@@ -103,7 +98,7 @@ public class Board extends Subject {
 
     /**
      * Attempts to set the gameId. Throws an exception if the game already has an ID.
-     * 
+     *
      * @param gameId new gameId
      */
     public void setGameId(int gameId) {
@@ -118,7 +113,7 @@ public class Board extends Subject {
 
     /**
      * Return the Space object of the given coordinates.
-     * 
+     *
      * @param x
      * @param y
      * @return Space object of the given coordinates
@@ -132,9 +127,10 @@ public class Board extends Subject {
         }
     }
 
+
     /**
      * Return the number of players.
-     * 
+     *
      * @return number of players
      */
     public int getPlayersNumber() {
@@ -143,19 +139,20 @@ public class Board extends Subject {
 
     /**
      * Add the given player to the Board's list of players, if they are not currently in it.
-     * 
+     *
      * @param player to be added to the list
      */
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
+            priorityAntenna.updatePlayers();
             notifyChange();
         }
     }
 
     /**
      * Return the Player object based on their index in the Board's Player list.
-     * 
+     *
      * @param i index of the Player in the list
      * @return Player object of the player
      */
@@ -168,8 +165,35 @@ public class Board extends Subject {
     }
 
     /**
+     * Call  {@link PriorityAntenna#getPlayer(int)}
+     *
+     * @author s214972@dtu.dk
+     */
+    public Player getPlayerByTurnOrder(int i) {
+        return priorityAntenna.getPlayer(i);
+    }
+
+    /**
+     * Call {@link PriorityAntenna#getPlayerNumber(Player)}
+     *
+     * @author s214972@dtu.dk
+     */
+    public int getPlayerNumberByTurnOrder(Player player) {
+        return priorityAntenna.getPlayerNumber(player);
+    }
+
+    /**
+     * Call {@link PriorityAntenna#orderPlayers()}
+     *
+     * @author s214972@dtu.dk
+     */
+    public void updatePlayerTurnOrder() {
+        priorityAntenna.orderPlayers();
+    }
+
+    /**
      * Return current player.
-     * 
+     *
      * @return Player object of current player
      */
     public Player getCurrentPlayer() {
@@ -178,20 +202,20 @@ public class Board extends Subject {
 
     /**
      * Set current player to the given Player if they are in the list of players.
-     * 
-     * @param player 
+     *
+     * @param player
      */
     public void setCurrentPlayer(Player player) {
         if (!players.contains(player)) this.addPlayer(player);
         if (player != this.current) {
             this.current = player;
-            notifyChange();
         }
+        notifyChange();
     }
 
     /**
      * Return the board's current phase.
-     * 
+     *
      * @return current phase of the board
      */
     public Phase getPhase() {
@@ -200,7 +224,7 @@ public class Board extends Subject {
 
     /**
      * Set the phase of the board.
-     * 
+     *
      * @param phase the phase to become active
      */
     public void setPhase(Phase phase) {
@@ -212,7 +236,7 @@ public class Board extends Subject {
 
     /**
      * Return the step of the board.
-     * 
+     *
      * @return the current step of the board
      */
     public int getStep() {
@@ -221,7 +245,7 @@ public class Board extends Subject {
 
     /**
      * Set the step of the board.
-     * 
+     *
      * @param step the step to be set
      */
     public void setStep(int step) {
@@ -233,7 +257,7 @@ public class Board extends Subject {
 
     /**
      * Check whether the board is in step mode.
-     * 
+     *
      * @return true if the board is in step mode, false otherwise
      */
     public boolean isStepMode() {
@@ -242,7 +266,7 @@ public class Board extends Subject {
 
     /**
      * Set step mode on or off.
-     * 
+     *
      * @param stepMode true if step mode is to be on, false otherwise
      */
     public void setStepMode(boolean stepMode) {
@@ -254,7 +278,7 @@ public class Board extends Subject {
 
     /**
      * Return the index of a player in the board's player list.
-     * 
+     *
      * @param player the player to return the index of
      * @return the index of the player in the board's player list
      */
@@ -277,6 +301,13 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        if (space.getWalls().contains(heading)) {
+            return null;
+        }
+
+        // XXX an other option (not for now) would be that null represents a hole
+        //     or the edge of the board in which the players can fall
+
         int x = space.x;
         int y = space.y;
         switch (heading) {
@@ -293,8 +324,14 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-
-        return getSpace(x, y);
+        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
+        Space result = getSpace(x, y);
+        if (result != null) {
+            if (result.getWalls().contains(reverse)) {
+                return null;
+            }
+        }
+        return result;
     }
 
     /**
@@ -306,7 +343,7 @@ public class Board extends Subject {
     }
 
     /**
-     * @author s224804
+     * @author Frederik Bode Hendrichsen s224804
      * @param moveCount the amount of moves to set the move count to
      */
 
@@ -325,7 +362,7 @@ public class Board extends Subject {
     /**
      * Return a string describing the current status of the game with the phase,
      * current player, current step and the move count.
-     * 
+     *
      * @return the status message
      */
     public String getStatusMessage() {
@@ -337,5 +374,19 @@ public class Board extends Subject {
                 ", Player = " + getCurrentPlayer().getName() +
                 ", Step: " + getStep() +
                 ", Move: " + getMoveCount();
+
+
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public List<Player> getPlayers() { return players; }
+
+    public BoardData getData() {
+        return data;
     }
 }

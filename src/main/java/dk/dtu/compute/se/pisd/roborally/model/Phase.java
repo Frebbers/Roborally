@@ -28,5 +28,22 @@ package dk.dtu.compute.se.pisd.roborally.model;
  *
  */
 public enum Phase {
-    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION
+    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION;
+
+    /**
+     * Convert a string to a phase.
+     * @param input the string to be converted.
+     * @return the phase represented by the string, or null if the string does not represent a phase.
+     * @author Frederik Bode Hendrichsen s224804
+     */
+    public static Phase fromString(String input){
+        return switch (input) {
+            case "INITIALISATION" -> Phase.INITIALISATION;
+            case "PROGRAMMING" -> Phase.PROGRAMMING;
+            case "ACTIVATION" -> Phase.ACTIVATION;
+            case "PLAYER_INTERACTION" -> Phase.PLAYER_INTERACTION;
+            default -> null;
+        };
+    }
 }
+

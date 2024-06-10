@@ -21,6 +21,7 @@ public class Wall extends Subject {
      * @param x the x-coordinate of the wall on the board
      * @param y the y-coordinate of the wall on the board
      * @param heading the direction the wall faces
+     * @param offset the direction the wall is offset
      */
     public Wall(int x, int y, String heading, String offset) {
         this.x = x;

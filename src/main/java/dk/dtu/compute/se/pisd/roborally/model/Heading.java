@@ -54,8 +54,16 @@ public enum Heading {
     }
 
     /**
+
+     Get the opposite cardinal direction.
+     @return the cardinal direction opposite to the current one.*/
+    public Heading opposite() {
+        return values()[(this.ordinal() + 2) % values().length];}
+
+
+    /**
      * Converts a string to a Heading enum.
-     * @author s224804
+     * @author Frederik Bode Hendrichsen s224804
      * @param input the string to be converted
      * @return the Heading enum corresponding to the input string
      * @throws IllegalArgumentException if the input string is not a valid heading

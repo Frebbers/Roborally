@@ -39,7 +39,7 @@ public class ConveyorBeltController extends FieldAction {
      * @param gameController the game controller
      * @param space          the space with the conveyor belt
      * @return true if the action was successfully performed, false otherwise
-     * @author s224804 Frederik Bode Hendrichsen
+     * @author Frederik Bode Hendrichsen s224804
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {

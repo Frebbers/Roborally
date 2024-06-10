@@ -50,13 +50,17 @@ public class Player extends Subject {
     private Space space;
     private Heading heading = SOUTH;
 
+    private int previousCard;
+
+    //The programming cards added during the programming phase
     private CommandCardField[] program;
+    //The command cards that the player has in their hand
     private CommandCardField[] cards;
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
     /**
      * Create a player object with a name and a color, on a board.
-     * 
+     *
      * @param board the board the player is on
      * @param color the color of the player's robot
      * @param name the name of the player
@@ -82,7 +86,7 @@ public class Player extends Subject {
 
     /**
      * Return name of player.
-     * 
+     *
      * @return name of player
      */
     public String getName() {
@@ -91,7 +95,7 @@ public class Player extends Subject {
 
     /**
      * Set the name of this player as a non-null string.
-     * 
+     *
      * @param name new name of player
      */
     public void setName(String name) {
@@ -106,7 +110,7 @@ public class Player extends Subject {
 
     /**
      * Return color of player.
-     * 
+     *
      * @return color of player as a string
      */
     public String getColor() {
@@ -115,7 +119,7 @@ public class Player extends Subject {
 
     /**
      * Set color of player.
-     * 
+     *
      * @param color new color of player
      */
     public void setColor(String color) {
@@ -128,7 +132,7 @@ public class Player extends Subject {
 
     /**
      * Return space where the player's robot is located.
-     * 
+     *
      * @return space of the player's robot.
      */
     public Space getSpace() {
@@ -137,7 +141,7 @@ public class Player extends Subject {
 
     /**
      * Set the space of this player.
-     * 
+     *
      * @param space new space of player
      */
     public void setSpace(Space space) {
@@ -157,7 +161,7 @@ public class Player extends Subject {
 
     /**
      * Return the direction the player's robot is heading.
-     * 
+     *
      * @return heading of player's robot
      */
     public Heading getHeading() {
@@ -166,7 +170,7 @@ public class Player extends Subject {
 
     /**
      * Set direction for the player's robot to be heading.
-     * 
+     *
      * @param heading new heading of the player's robot
      */
     public void setHeading(@NotNull Heading heading) {
@@ -181,9 +185,9 @@ public class Player extends Subject {
 
     /**
      * Return the command card field at the given index of the player's register.
-     * 
+     *
      * @param i index of the register
-     * 
+     *
      * @return command card field at the given index of the register
      */
     public CommandCardField getProgramField(int i) {
@@ -192,15 +196,23 @@ public class Player extends Subject {
 
     /**
      * Return the command card field at the given index of the player's cards.
-     * 
+     *
      * @param i index of the cards
-     * 
+     *
      * @return command card field at the given index of the cards
      */
     public CommandCardField getCardField(int i) {
+        previousCard = i;
         return cards[i];
     }
 
+    /**
+     *
+     * @return command card field at the previous index of cards
+     */
+        public CommandCardField getPreviousCardField(){
+            return cards[previousCard];
+    }
     /**
      * Returns the checkpoint at a specified index.
      *
@@ -243,4 +255,6 @@ public class Player extends Subject {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

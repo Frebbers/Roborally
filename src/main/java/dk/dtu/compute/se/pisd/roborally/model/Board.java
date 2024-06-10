@@ -127,6 +127,7 @@ public class Board extends Subject {
         }
     }
 
+
     /**
      * Return the number of players.
      *
@@ -342,7 +343,7 @@ public class Board extends Subject {
     }
 
     /**
-     * @author s224804
+     * @author Frederik Bode Hendrichsen s224804
      * @param moveCount the amount of moves to set the move count to
      */
 

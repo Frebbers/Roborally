@@ -24,9 +24,11 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.JsonReader;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -54,6 +56,7 @@ public class AppController implements Observer {
     final private RoboRally roboRally;
 
     private GameController gameController;
+    private ApiServices apiServices;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -61,6 +64,7 @@ public class AppController implements Observer {
      * @param roboRally
      */
     public AppController(@NotNull RoboRally roboRally) {
+        this.apiServices = new ApiServices();
         this.roboRally = roboRally;
     }
 
@@ -114,6 +118,25 @@ public class AppController implements Observer {
             roboRally.createBoardView(gameController);
         }
     }
+
+    public void joinGame() {
+        List<Integer> listOfGames = apiServices.getAllGameIds();
+        if (listOfGames == null || listOfGames.isEmpty()) {
+            System.out.println("No games available to join.");
+            return;
+        }
+            ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
+            playerDialog.setTitle("Game Lobbies");
+            playerDialog.setHeaderText("Select lobby you would like to join");
+            playerDialog.setContentText("Choose your game:");
+
+            // Show dialog and capture result
+            playerDialog.showAndWait().ifPresent(gameId -> {
+                System.out.println("Selected game ID: " + gameId);
+                // Add logic to join the selected game
+            });
+    }
+
     private BoardData loadJsonBoardFromNumber(int boardNumber) {
         JsonReader jsonReader = new JsonReader(boardNumber);
         return jsonReader.readBoardJson();

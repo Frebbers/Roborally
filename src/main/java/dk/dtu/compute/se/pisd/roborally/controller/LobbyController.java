@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.LobbyPlayer;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.Game;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.LobbyPlayer;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import dk.dtu.compute.se.pisd.roborally.service.ApiService;
 import javafx.application.Platform;
@@ -51,9 +51,9 @@ public class LobbyController {
         int readyPlayers = 0;
         for (LobbyPlayer player : playerList) {
             if (player.gameId.equals(game.id)) {
-                items.add(player.id + " " + player.name + " " + player.state);
-                if (player.state == PlayerState.READY) {
-                    readyPlayers += 1;
+                items.add(player.id + " " + player.name + " " + player.getState());
+                if (player.isReady()) {
+                    readyPlayers++;
                 }
             }
         }
@@ -64,8 +64,9 @@ public class LobbyController {
 
     private boolean allPlayersReady(Game game) {
         List<LobbyPlayer> playerList = ApiService.getPlayersInGame(game.id);
+        assert playerList != null;
         for (LobbyPlayer player : playerList) {
-            if (player.state != PlayerState.READY) {
+            if (player.isReady()) {
                 return false;
             }
         }

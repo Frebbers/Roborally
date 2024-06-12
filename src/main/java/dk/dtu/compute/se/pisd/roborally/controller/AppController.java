@@ -25,21 +25,14 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.service.ApiService;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controls the outermost functions of the game such as creating a new game, saving, loading, and stopping the game.
@@ -96,13 +89,13 @@ public class AppController implements Observer {
                 lobbyController = new LobbyController(this);
 
                 // Create the player
-                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Host");
+                LobbyPlayer lobbyPlayer = ApiService.createPlayer("Host");
 
                 // Create the lobby
-                Game game = ApiServices.createGame((long) boardNumber, playerCount);
+                Game game = ApiService.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                ApiServices.joinGame(game.id, lobbyPlayer.id);
+                ApiService.joinGame(game.id, lobbyPlayer.id);
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, game.id);
@@ -111,7 +104,7 @@ public class AppController implements Observer {
     }
 
     public void joinLobby() {
-        List<Integer> listOfGames = ApiServices.getAllGameIds();
+        List<Integer> listOfGames = ApiService.getAllGameIds();
         if (listOfGames == null || listOfGames.isEmpty()) {
             System.out.println("No games available to join.");
             return;
@@ -130,10 +123,10 @@ public class AppController implements Observer {
                 Long id = Long.valueOf(gameId);
 
                 // Create the player
-                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Client");
+                LobbyPlayer lobbyPlayer = ApiService.createPlayer("Client");
 
                 // Join the game
-                ApiServices.joinGame(id, lobbyPlayer.id);
+                ApiService.joinGame(id, lobbyPlayer.id);
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, id);

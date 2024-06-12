@@ -12,10 +12,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ApiServices {
-    private static final String GAMES_URL = "http://localhost:8080/api/games";
-    private static final String PLAYERS_URL = "http://localhost:8080/api/players";
+public class ApiService {
+    //private static final String GAMES_URL = "http://localhost:8080/api/games";
+    private final String GAMES_URL;
+    private final String PLAYERS_URL;
+    //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
+    //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
 
+    public ApiService(String IP, String port) {
+        GAMES_URL = "http://" + IP + ":" + port + "/api/games";
+        PLAYERS_URL = "http://" + IP + ":" + port + "/api/players";
+    }
     public static LobbyPlayer localPlayer;
 
     private static final RestTemplate restTemplate = new RestTemplate();

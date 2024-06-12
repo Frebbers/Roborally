@@ -3,7 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.LobbyPlayer;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.service.ApiService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,8 +44,8 @@ public class LobbyController {
     }
 
     public Game updateLobby(ListView<String> listView, Long gameId) {
-        Game game = ApiServices.getGameById(gameId);
-        List<LobbyPlayer> playerList = ApiServices.getPlayersInGame(game.id);
+        Game game = ApiService.getGameById(gameId);
+        List<LobbyPlayer> playerList = ApiService.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
 
         int readyPlayers = 0;
@@ -63,7 +63,7 @@ public class LobbyController {
     }
 
     private boolean allPlayersReady(Game game) {
-        List<LobbyPlayer> playerList = ApiServices.getPlayersInGame(game.id);
+        List<LobbyPlayer> playerList = ApiService.getPlayersInGame(game.id);
         for (LobbyPlayer player : playerList) {
             if (player.state != PlayerState.READY) {
                 return false;

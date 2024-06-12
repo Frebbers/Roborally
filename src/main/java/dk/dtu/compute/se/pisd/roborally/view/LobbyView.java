@@ -1,9 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
-import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import javafx.scene.Scene;
+import dk.dtu.compute.se.pisd.roborally.service.ApiService;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
@@ -27,7 +25,7 @@ public class LobbyView extends VBox {
         lobbyController.updateLobby(playerListView, gameId);
 
         // Set up button to set the players ready state
-        readyButton.setOnAction(e -> ApiServices.updatePlayerState(ApiServices.localPlayer.id));
+        readyButton.setOnAction(e -> ApiService.updatePlayerState(ApiService.localPlayer.id));
 
         // Start polling to refresh the list periodically
         lobbyController.startLobbyPolling(gameId, playerListView);

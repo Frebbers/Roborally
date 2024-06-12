@@ -58,7 +58,7 @@ public class RoboRallyMenuBar extends MenuBar {
     public RoboRallyMenuBar(AppController appController) {
         this.appController = appController;
 
-        controlMenu = new Menu("File");
+        controlMenu = new Menu("Menu");
         this.getMenus().add(controlMenu);
 
         createLobby = new MenuItem("Create Lobby");

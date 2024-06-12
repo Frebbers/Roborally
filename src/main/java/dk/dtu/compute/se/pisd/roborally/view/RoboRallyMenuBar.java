@@ -39,14 +39,14 @@ public class RoboRallyMenuBar extends MenuBar {
 
     private Menu controlMenu;
 
-    private MenuItem saveGame;
+    //private MenuItem saveGame;
 
-    private MenuItem newGame;
-    private MenuItem joinGame;
+    private MenuItem createLobby;
+    private MenuItem joinLobby;
 
-    private MenuItem loadGame;
+    //private MenuItem loadGame;
 
-    private MenuItem stopGame;
+    private MenuItem leaveLobby;
 
     private MenuItem exitApp;
 
@@ -61,18 +61,19 @@ public class RoboRallyMenuBar extends MenuBar {
         controlMenu = new Menu("File");
         this.getMenus().add(controlMenu);
 
-        newGame = new MenuItem("New Game");
-        newGame.setOnAction( e -> this.appController.newGame());
-        controlMenu.getItems().add(newGame);
+        createLobby = new MenuItem("Create Lobby");
+        createLobby.setOnAction( e -> this.appController.createLobby());
+        controlMenu.getItems().add(createLobby);
 
-        joinGame = new MenuItem("Join Game");
-        joinGame.setOnAction( e -> this.appController.joinGame());
-        controlMenu.getItems().add(joinGame);
+        joinLobby = new MenuItem("Join Lobby");
+        joinLobby.setOnAction( e -> this.appController.joinLobby());
+        controlMenu.getItems().add(joinLobby);
 
-        stopGame = new MenuItem("Stop Game");
-        stopGame.setOnAction( e -> this.appController.stopGame());
-        controlMenu.getItems().add(stopGame);
+        leaveLobby = new MenuItem("Leave");
+        leaveLobby.setOnAction( e -> this.appController.leave());
+        controlMenu.getItems().add(leaveLobby);
 
+        /*
         saveGame = new MenuItem("Save Game");
         saveGame.setOnAction( e -> this.appController.saveGame());
         controlMenu.getItems().add(saveGame);
@@ -80,6 +81,7 @@ public class RoboRallyMenuBar extends MenuBar {
         loadGame = new MenuItem("Load Game");
         loadGame.setOnAction( e -> this.appController.loadGame());
         controlMenu.getItems().add(loadGame);
+         */
 
         exitApp = new MenuItem("Exit");
         exitApp.setOnAction( e -> this.appController.exit());
@@ -94,19 +96,18 @@ public class RoboRallyMenuBar extends MenuBar {
      * Update menu bar as to include a recent change in state.
      */
     public void update() {
-        if (appController.isGameRunning()) {
-            newGame.setVisible(false);
-            joinGame.setVisible(false);
-            stopGame.setVisible(true);
-            saveGame.setVisible(true);
-            loadGame.setVisible(false);
+        if (appController.isInLobby()) {
+            createLobby.setVisible(false);
+            joinLobby.setVisible(false);
+            leaveLobby.setVisible(true);
+            //saveGame.setVisible(true);
+            //loadGame.setVisible(false);
         } else {
-            newGame.setVisible(true);
-            joinGame.setVisible(true);
-            stopGame.setVisible(false);
-            saveGame.setVisible(false);
-            loadGame.setVisible(true);
+            createLobby.setVisible(true);
+            joinLobby.setVisible(true);
+            leaveLobby.setVisible(false);
+            //saveGame.setVisible(false);
+            //loadGame.setVisible(true);
         }
     }
-
 }

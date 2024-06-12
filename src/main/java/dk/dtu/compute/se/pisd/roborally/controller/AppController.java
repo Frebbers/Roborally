@@ -56,7 +56,7 @@ public class AppController implements Observer {
     final private RoboRally roboRally;
 
     private GameController gameController;
-    private ApiServices apiServices;
+    private LobbyController lobbyController;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -64,7 +64,6 @@ public class AppController implements Observer {
      * @param roboRally
      */
     public AppController(@NotNull RoboRally roboRally) {
-        this.apiServices = new ApiServices();
         this.roboRally = roboRally;
     }
 
@@ -72,7 +71,7 @@ public class AppController implements Observer {
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
-    public void newGame() {
+    public void createLobby() {
         ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         playerDialog.setTitle("Select number of players and map");
         playerDialog.setHeaderText("Select number of players");
@@ -93,23 +92,26 @@ public class AppController implements Observer {
                 int playerCount = playerResult.get();
                 int boardNumber = boardResult.get();
 
+                // Create the lobby controller
+                lobbyController = new LobbyController(this);
+
                 // Create the player
-                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Host");
+                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Host");
 
                 // Create the lobby
-                Game game = apiServices.createGame((long) boardNumber, playerCount);
+                Game game = ApiServices.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                apiServices.joinGame(game.id, lobbyPlayer.id);
+                ApiServices.joinGame(game.id, lobbyPlayer.id);
 
-                // Show the lobby
-                showLobby(game.id);
+                // Display the Lobby Window
+                roboRally.createLobbyView(lobbyController, game.id);
             }
         }
     }
 
-    public void joinGame() {
-        List<Integer> listOfGames = apiServices.getAllGameIds();
+    public void joinLobby() {
+        List<Integer> listOfGames = ApiServices.getAllGameIds();
         if (listOfGames == null || listOfGames.isEmpty()) {
             System.out.println("No games available to join.");
             return;
@@ -121,99 +123,27 @@ public class AppController implements Observer {
 
             // Show dialog and capture result
             playerDialog.showAndWait().ifPresent(gameId -> {
+                // Create the lobby controller
+                lobbyController = new LobbyController(this);
+
                 // Generate a long based on the id selected
                 Long id = Long.valueOf(gameId);
 
                 // Create the player
-                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Client");
+                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Client");
 
                 // Join the game
-                apiServices.joinGame(id, lobbyPlayer.id);
-                showLobby(id);
+                ApiServices.joinGame(id, lobbyPlayer.id);
+
+                // Display the Lobby Window
+                roboRally.createLobbyView(lobbyController, id);
             });
     }
 
-    public void showLobby(Long gameId) {
-        Stage stage = roboRally.getStage();
-        Scene mainScene = stage.getScene();
-
-        ListView<String> listView = new ListView<>();
-        Button btn = new Button("Are you ready, sir?");
-
-        // Initial population of the ListView
-        updateLobby(listView, gameId);
-
-        // Set up button to set the players ready state
-        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id));
-
-        // Set up polling to refresh the list periodically
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            Game game = updateLobby(listView, gameId);
-            if (game != null && allPlayersReady(game)) {
-                scheduler.shutdown();
-                loadGameScene(mainScene, game.boardId, game.maxPlayers);
-            }
-        }), 0, 500, TimeUnit.MILLISECONDS);
-
-        // Set up the layout and scene
-        HBox hbox = new HBox(10, listView, btn); // Adding spacing between ListView and Button
-        Scene scene = new Scene(hbox, 500, 350);
-        stage.setScene(scene);
-
-        // Ensure the executor service is shut down when the stage is closed
-        stage.setOnCloseRequest(event -> scheduler.shutdown());
-
-        stage.show();
-    }
-
-    // Method to update the ListView with the current data and check if all players are ready
-    private Game updateLobby(ListView<String> listView, Long gameId) {
-        // Get the game lobby
-        Game game = apiServices.getGameById(gameId);
-
-        // Get all the players of the game
-        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
-        ObservableList<String> items = FXCollections.observableArrayList();
-
-        int readyPlayers = 0;
-        for (LobbyPlayer player : playerList) {
-            if (player.gameId.equals(game.id)) {
-                // Add the player to the list view
-                items.add(player.id + " " + player.name + " " + player.state);
-
-                if (player.state == PlayerState.READY) {
-                    readyPlayers += 1;
-                }
-            }
-        }
-
-        // Update the listView items
-        listView.setItems(items);
-
-        // Return the game if all players are ready, otherwise return null
-        return readyPlayers == game.maxPlayers ? game : null;
-    }
-
-    // Helper method to check if all players are ready
-    private boolean allPlayersReady(Game game) {
-        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
-        for (LobbyPlayer player : playerList) {
-            if (player.state != PlayerState.READY) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void loadGameScene(Scene scene, Long boardNumber, int playerCount){
-        if (gameController != null && !stopGame()) {
+    public void loadGameScene(Long boardNumber, int playerCount){
+        if (gameController != null && !leave()) {
             return;
         }
-
-        // Load the main scene which displays the board
-        Stage stage = roboRally.getStage();
-        stage.setScene(scene);
 
         // Load the board data
         BoardData data = loadJsonBoardFromNumber(Math.toIntExact(boardNumber));
@@ -256,7 +186,7 @@ public class AppController implements Observer {
         // XXX needs to be implemented eventually
         // for now, we just create a new game
         if (gameController == null) {
-            newGame();
+            createLobby();
         }
     }
 
@@ -269,7 +199,7 @@ public class AppController implements Observer {
      *
      * @return true if the current game was stopped, false otherwise
      */
-    public boolean stopGame() {
+    public boolean leave() {
         if (gameController != null) {
 
             // here we save the game (without asking the user).
@@ -302,9 +232,19 @@ public class AppController implements Observer {
 
         // If the user did not cancel, the RoboRally application will exit
         // after the option to save the game
-        if (gameController == null || stopGame()) {
+        if (gameController == null || leave()) {
             Platform.exit();
         }
+    }
+
+
+    /**
+     * Check whether this object's lobbyController is not null.
+     *
+     * @return true if lobbyController is not null, false otherwise.
+     */
+    public boolean isInLobby(){
+        return lobbyController != null;
     }
 
     /**
@@ -327,4 +267,7 @@ public class AppController implements Observer {
         // XXX do nothing for now
     }
 
+    public RoboRally getRoboRally() {
+        return roboRally;
+    }
 }

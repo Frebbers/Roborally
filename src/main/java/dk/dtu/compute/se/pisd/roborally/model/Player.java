@@ -40,10 +40,8 @@ public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
 
-    final public Board board;
+    public Board board;
 
-    private String name;
-    private int id;
     private String color;
 
 
@@ -57,6 +55,12 @@ public class Player extends Subject {
     //The command cards that the player has in their hand
     private CommandCardField[] cards;
     private List<Checkpoint> checkpoints = new ArrayList<>();
+
+    // API References
+    private String name;
+    private int id;
+    private String state;
+    private Long gameId;
 
     /**
      * Create a player object with a name and a color, on a board.
@@ -256,5 +260,20 @@ public class Player extends Subject {
         this.id = id;
     }
 
+    public String getState(){
+        return state;
+    }
+
+    public void setState(String state){
+        this.state = state;
+    }
+
+    public Long getGameId(){
+        return gameId;
+    }
+
+    public void setGameId(Long gameId){
+        this.gameId = gameId;
+    }
 
 }

@@ -41,7 +41,6 @@ public class GameController {
     public ConveyorBeltController beltCtrl;
     public BoardController boardController;
     private Command nextCommand;
-    private ApiServices apiServices;
     /**
      * Initialize a GameController object with a certain Board.
      *
@@ -51,7 +50,6 @@ public class GameController {
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
-        this.apiServices = new ApiServices();
     }
 
     /**
@@ -63,9 +61,6 @@ public class GameController {
         board.updatePlayerTurnOrder();
         board.setCurrentPlayer(board.getPlayerByTurnOrder(0));
         board.setStep(0);
-
-        apiServices.createGame(board.getPlayers().size());
-
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {

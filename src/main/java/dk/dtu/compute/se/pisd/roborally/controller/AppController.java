@@ -23,10 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.JsonReader;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
@@ -93,6 +90,14 @@ public class AppController implements Observer {
                 int playerCount = playerResult.get();
                 int boardNumber = boardResult.get();
 
+                // Create the player
+                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Host");
+
+                // Create the lobby
+                Game game = apiServices.createGame((long) boardNumber, playerCount);
+
+                apiServices.joinGame(game.id, lobbyPlayer.id);
+
                 if (gameController!= null && !stopGame()) {
                     return;
                 }
@@ -132,8 +137,11 @@ public class AppController implements Observer {
 
             // Show dialog and capture result
             playerDialog.showAndWait().ifPresent(gameId -> {
-                System.out.println("Selected game ID: " + gameId);
-                // Add logic to join the selected game
+                // Create the player
+                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Client");
+
+                // Join the game
+                apiServices.joinGame(Long.valueOf(gameId), lobbyPlayer.id);
             });
     }
 

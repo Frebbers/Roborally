@@ -1,7 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.service;
 
-import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.LobbyPlayer;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.ApiObject;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.Game;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.LobbyPlayer;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,32 +13,68 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ApiService {
-    //private static final String GAMES_URL = "http://localhost:8080/api/games";
-    private final String GAMES_URL;
-    private final String PLAYERS_URL;
+public abstract class ApiService {
+    private final String GAMES_URL = "/api/games";
+    private final String serverURL;
+    private final String PLAYERS_URL = "/api/players";
     //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
     //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
 
+    /**
+     * Constructor for ApiService connecting to a server
+     * @author s224804
+     * @param IP IP address of the server
+     * @param port Port of the server
+     */
     public ApiService(String IP, String port) {
-        GAMES_URL = "http://" + IP + ":" + port + "/api/games";
-        PLAYERS_URL = "http://" + IP + ":" + port + "/api/players";
+        this.serverURL = "http://" + IP + ":" + port;
+    }
+    /**
+     * Constructor for ApiService running on localhost
+     * @author s224804
+     * @param endpointURL URL of the API endpoint, beginning with "/"
+     */
+    public ApiService(String endpointURL) {
+        this.serverURL = "http://localhost:8080" + endpointURL;
     }
     public static LobbyPlayer localPlayer;
 
     private static final RestTemplate restTemplate = new RestTemplate();
 
-    public static List<Game> getAllGames() {
-        ResponseEntity<Game[]> response = restTemplate.getForEntity(GAMES_URL, Game[].class);
-        return Arrays.asList(response.getBody());
+    public <T extends ApiObject> List<T> getAllObjects(String url, Class<T[]> object) {
+        String responseMessage = "No response received from server.";
+        try {
+            ResponseEntity<T[]> response = restTemplate.getForEntity((serverURL+url), object);
+            if (response.getStatusCode()==HttpStatus.OK) {
+                return Arrays.asList(response.getBody());
+            }
+            responseMessage = response.getStatusCode().toString();
+        } catch (Exception e) {
+            System.out.println("Error getting objects: " + e.getMessage());
+            return null;
+        }
+        System.out.println("Error getting objects: " + responseMessage);
+        return null;
+    }
+    public void postObject(ApiObject object){
+        try {
+            ResponseEntity<ApiObject> response = restTemplate.postForEntity(serverURL + object.getPath(), object, object.getClass());
+        } catch (Exception e) {
+            System.out.println("Error posting object: " + e.getMessage());
+        }
     }
 
-    public static List<LobbyPlayer> getAllPlayers() {
-        ResponseEntity<LobbyPlayer[]> response = restTemplate.getForEntity(PLAYERS_URL, LobbyPlayer[].class);
-        return Arrays.asList(response.getBody());
+    public List<Game> getAllGames() {
+        //ResponseEntity<Game[]> response = restTemplate.getForEntity(GAMES_URL, Game[].class);
+        return getAllObjects(GAMES_URL, Game[].class);
     }
 
-    public static List<Integer> getAllPlayerIds() {
+    public List<LobbyPlayer> getAllPlayers() {
+        //ResponseEntity<LobbyPlayer[]> response = restTemplate.getForEntity(PLAYERS_URL, LobbyPlayer[].class);
+        return getAllObjects(PLAYERS_URL, LobbyPlayer[].class);
+    }
+
+    public List<Integer> getAllPlayerIds() {
         List<LobbyPlayer> playerList = getAllPlayers();
         List<Integer> playerIds = new ArrayList<>();
         for (LobbyPlayer player : playerList) {
@@ -46,7 +83,7 @@ public class ApiService {
         return playerIds;
     }
 
-    public static List<Integer> getAllGameIds() {
+    public List<Integer> getAllGameIds() {
         List<Game> gameList = getAllGames();
         List<Integer> gameIds = new ArrayList<>();
         for (Game game : gameList) {
@@ -55,14 +92,14 @@ public class ApiService {
         return gameIds;
     }
 
-    public static Game getGameById(Long gameId) {
+    public Game getGameById(Long gameId) {
         String url = GAMES_URL + "/" + gameId;
         ResponseEntity<Game> response = restTemplate.getForEntity(url, Game.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
-    public static Game createGame(Long boardId, int maxPlayers) {
-        Game game = new Game();
+    public Game createGame(Long gameId, Long boardId, int maxPlayers) {
+        Game game = new Game(gameId, boardId,maxPlayers, GAMES_URL);
         game.boardId = boardId;
         game.maxPlayers = maxPlayers;
 
@@ -70,7 +107,7 @@ public class ApiService {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
-    public static String joinGame(Long gameId, Long playerId) {
+    public String joinGame(Long gameId, Long playerId) {
         Game game = getGameById(gameId);
         if (game != null) {
             game.playerIds.add(playerId);
@@ -85,7 +122,6 @@ public class ApiService {
             LobbyPlayer player = getPlayerById(playerId);
             if (player != null) {
                 player.gameId = gameId;
-                player.state = PlayerState.NOT_READY;
                 String playerUrl = PLAYERS_URL + "/" + playerId;
                 try {
                     restTemplate.put(playerUrl, player); // Update player with new gameId

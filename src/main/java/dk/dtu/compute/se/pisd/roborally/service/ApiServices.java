@@ -15,6 +15,7 @@ import java.util.List;
 public class ApiServices {
     private static final String GAMES_URL = "http://localhost:8080/api/games";
     private static final String PLAYERS_URL = "http://localhost:8080/api/players";
+    public LobbyPlayer localPlayer;
 
     private final RestTemplate restTemplate;
 
@@ -25,6 +26,19 @@ public class ApiServices {
     public List<Game> getAllGames() {
         ResponseEntity<Game[]> response = restTemplate.getForEntity(GAMES_URL, Game[].class);
         return Arrays.asList(response.getBody());
+    }
+    public List<LobbyPlayer> getAllPlayers() {
+        ResponseEntity<LobbyPlayer[]> response = restTemplate.getForEntity(PLAYERS_URL, LobbyPlayer[].class);
+        return Arrays.asList(response.getBody());
+    }
+
+    public List<Integer> getAllPlayerIds() {
+        List<LobbyPlayer> playerList = getAllPlayers();
+        List<Integer> playerIds = new ArrayList<>();
+        for (LobbyPlayer player : playerList) {
+            playerIds.add(player.id.intValue());
+        }
+        return playerIds;
     }
     public List<Integer> getAllGameIds() {
         List<Game> gameList = getAllGames();
@@ -53,9 +67,23 @@ public class ApiServices {
     public LobbyPlayer createPlayer(String name){
         LobbyPlayer player = new LobbyPlayer();
         player.name = name;
-
         ResponseEntity<LobbyPlayer> response = restTemplate.postForEntity(PLAYERS_URL, player, LobbyPlayer.class);
+        localPlayer = response.getBody();
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public String updatePlayerState(Long id,String state){
+        LobbyPlayer player = getPlayerById(id);
+        if (player != null) {
+            player.state = state;
+            String playerUrl = PLAYERS_URL + "/" + player.id;
+            try {
+                restTemplate.put(playerUrl, player); // Update player with new gameId
+            } catch (Exception e) {
+                return "Error updating player: " + e.getMessage();
+            }
+        }
+       return "Player does not exist.";
     }
 
     public LobbyPlayer getPlayerById(Long playerId) {
@@ -63,6 +91,7 @@ public class ApiServices {
         ResponseEntity<LobbyPlayer> response = restTemplate.getForEntity(url, LobbyPlayer.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
+
 
     public String joinGame(Long gameId, Long playerId) {
         Game game = getGameById(gameId);

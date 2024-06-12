@@ -27,16 +27,19 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controls the outermost functions of the game such as creating a new game, saving, loading, and stopping the game.
@@ -142,7 +145,49 @@ public class AppController implements Observer {
 
                 // Join the game
                 apiServices.joinGame(Long.valueOf(gameId), lobbyPlayer.id);
+                showLobbies(gameId);
             });
+    }
+
+    public void showLobbies(int gameId) {
+        Stage lobbyStage = new Stage();
+        ListView<String> listView = new ListView<>();
+        Button btn = new Button("Are you ready, sir?");
+
+        // Initial population of the ListView
+        updateListView(listView, gameId);
+
+        System.out.println(apiServices.localPlayer.id);
+        System.out.println(apiServices.localPlayer.state);
+        System.out.println(apiServices.localPlayer.name);
+        // Set up button to manually refresh the list
+        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id,"ready"));
+        // Set up polling to refresh the list periodically
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            Platform.runLater(() -> updateListView(listView, gameId));
+        }, 0, 2, TimeUnit.SECONDS); // Adjust the interval as needed
+
+        // Set up the layout and scene
+        HBox hbox = new HBox(10, listView, btn); // Adding spacing between ListView and Button
+        Scene scene = new Scene(hbox, 500, 350);
+        lobbyStage.setScene(scene);
+
+        // Ensure the executor service is shut down when the stage is closed
+        lobbyStage.setOnCloseRequest(event -> scheduler.shutdown());
+
+        lobbyStage.show();
+    }
+
+    // Method to update the ListView with the current data
+    private void updateListView(ListView<String> listView, int gameId) {
+        listView.getItems().clear();
+        List<LobbyPlayer> playerList = apiServices.getAllPlayers();
+        for (LobbyPlayer player : playerList) {
+            if (player.gameId == gameId) {
+                listView.getItems().add(player.id + " " + player.name + " " + player.state);
+            }
+        }
     }
 
     private BoardData loadJsonBoardFromNumber(int boardNumber) {

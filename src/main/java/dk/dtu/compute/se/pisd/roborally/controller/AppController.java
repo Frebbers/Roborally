@@ -135,18 +135,26 @@ public class AppController implements Observer {
 
     public void showLobby(Long gameId) {
         Stage stage = roboRally.getStage();
+        Scene mainScene = stage.getScene();
+
         ListView<String> listView = new ListView<>();
         Button btn = new Button("Are you ready, sir?");
 
         // Initial population of the ListView
-        updateListView(listView, gameId);
+        updateLobby(listView, gameId);
 
         // Set up button to set the players ready state
-        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id, "ready"));
+        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id));
 
         // Set up polling to refresh the list periodically
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> updateListView(listView, gameId)), 0, 2, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            Game game = updateLobby(listView, gameId);
+            if (game != null && allPlayersReady(game)) {
+                scheduler.shutdown();
+                loadGameScene(mainScene, game.boardId, game.maxPlayers);
+            }
+        }), 0, 500, TimeUnit.MILLISECONDS);
 
         // Set up the layout and scene
         HBox hbox = new HBox(10, listView, btn); // Adding spacing between ListView and Button
@@ -159,26 +167,56 @@ public class AppController implements Observer {
         stage.show();
     }
 
-    // Method to update the ListView with the current data
-    private void updateListView(ListView<String> listView, Long gameId) {
-        List<LobbyPlayer> playerList = apiServices.getAllPlayers();
+    // Method to update the ListView with the current data and check if all players are ready
+    private Game updateLobby(ListView<String> listView, Long gameId) {
+        // Get the game lobby
+        Game game = apiServices.getGameById(gameId);
+
+        // Get all the players of the game
+        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
 
+        int readyPlayers = 0;
         for (LobbyPlayer player : playerList) {
-            if (player.gameId == gameId) {
+            if (player.gameId.equals(game.id)) {
+                // Add the player to the list view
                 items.add(player.id + " " + player.name + " " + player.state);
+
+                if (player.state == PlayerState.READY) {
+                    readyPlayers += 1;
+                }
             }
         }
 
-        Platform.runLater(() -> listView.setItems(items));
+        // Update the listView items
+        listView.setItems(items);
+
+        // Return the game if all players are ready, otherwise return null
+        return readyPlayers == game.maxPlayers ? game : null;
     }
 
-    private void loadGameScene(int boardNumber, int playerCount){
-        if (gameController!= null && !stopGame()) {
+    // Helper method to check if all players are ready
+    private boolean allPlayersReady(Game game) {
+        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
+        for (LobbyPlayer player : playerList) {
+            if (player.state != PlayerState.READY) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void loadGameScene(Scene scene, Long boardNumber, int playerCount){
+        if (gameController != null && !stopGame()) {
             return;
         }
+
+        // Load the main scene which displays the board
+        Stage stage = roboRally.getStage();
+        stage.setScene(scene);
+
         // Load the board data
-        BoardData data = loadJsonBoardFromNumber(boardNumber);
+        BoardData data = loadJsonBoardFromNumber(Math.toIntExact(boardNumber));
 
         // Create a board from the data
         Board board = new Board(data);

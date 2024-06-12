@@ -1,4 +1,6 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.APIObjects;
+
+import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 
 public class LobbyPlayer {
     public Long id;

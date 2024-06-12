@@ -115,6 +115,10 @@ public class RoboRally extends Application {
         //     so that the AppController can take care of that.
     }
 
+    public Stage getStage(){
+        return stage;
+    }
+
     /**
      * Call the javafx method launch() with the given arguments. This automatically calls RoboRally.start().
      * 

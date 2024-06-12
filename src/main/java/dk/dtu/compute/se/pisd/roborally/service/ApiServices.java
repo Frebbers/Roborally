@@ -92,7 +92,6 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
-
     public String joinGame(Long gameId, Long playerId) {
         Game game = getGameById(gameId);
         if (game != null) {
@@ -124,5 +123,4 @@ public class ApiServices {
             return "Error joining game";
         }
     }
-
 }

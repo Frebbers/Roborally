@@ -27,6 +27,8 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -34,9 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -99,31 +99,12 @@ public class AppController implements Observer {
                 // Create the lobby
                 Game game = apiServices.createGame((long) boardNumber, playerCount);
 
+                // Join the lobby that was just created
                 apiServices.joinGame(game.id, lobbyPlayer.id);
 
-                if (gameController!= null && !stopGame()) {
-                    return;
-                }
-                // Load the board data
-                BoardData data = loadJsonBoardFromNumber(boardNumber);
-
-                // Create a board from the data
-                Board board = new Board(data);
-
-                gameController = new GameController(board);
-
-                for (int i = 0; i < playerCount; i++) {
-                    Player player = new Player(board, "Player " + (i + 1),i,  PLAYER_COLORS.get(i));
-                    board.addPlayer(player);
-                    player.setSpace(board.getSpace(i % board.width, i));
-                }
+                // Show the lobby
+                showLobby(game.id);
             }
-
-            // XXX: V2
-            // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
-
-            roboRally.createBoardView(gameController);
         }
     }
 
@@ -140,54 +121,81 @@ public class AppController implements Observer {
 
             // Show dialog and capture result
             playerDialog.showAndWait().ifPresent(gameId -> {
+                // Generate a long based on the id selected
+                Long id = Long.valueOf(gameId);
+
                 // Create the player
                 LobbyPlayer lobbyPlayer = apiServices.createPlayer("Client");
 
                 // Join the game
-                apiServices.joinGame(Long.valueOf(gameId), lobbyPlayer.id);
-                showLobbies(gameId);
+                apiServices.joinGame(id, lobbyPlayer.id);
+                showLobby(id);
             });
     }
 
-    public void showLobbies(int gameId) {
-        Stage lobbyStage = new Stage();
+    public void showLobby(Long gameId) {
+        Stage stage = roboRally.getStage();
         ListView<String> listView = new ListView<>();
         Button btn = new Button("Are you ready, sir?");
 
         // Initial population of the ListView
         updateListView(listView, gameId);
 
-        System.out.println(apiServices.localPlayer.id);
-        System.out.println(apiServices.localPlayer.state);
-        System.out.println(apiServices.localPlayer.name);
-        // Set up button to manually refresh the list
-        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id,"ready"));
+        // Set up button to set the players ready state
+        btn.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id, "ready"));
+
         // Set up polling to refresh the list periodically
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            Platform.runLater(() -> updateListView(listView, gameId));
-        }, 0, 2, TimeUnit.SECONDS); // Adjust the interval as needed
+        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> updateListView(listView, gameId)), 0, 2, TimeUnit.SECONDS);
 
         // Set up the layout and scene
         HBox hbox = new HBox(10, listView, btn); // Adding spacing between ListView and Button
         Scene scene = new Scene(hbox, 500, 350);
-        lobbyStage.setScene(scene);
+        stage.setScene(scene);
 
         // Ensure the executor service is shut down when the stage is closed
-        lobbyStage.setOnCloseRequest(event -> scheduler.shutdown());
+        stage.setOnCloseRequest(event -> scheduler.shutdown());
 
-        lobbyStage.show();
+        stage.show();
     }
 
     // Method to update the ListView with the current data
-    private void updateListView(ListView<String> listView, int gameId) {
-        listView.getItems().clear();
+    private void updateListView(ListView<String> listView, Long gameId) {
         List<LobbyPlayer> playerList = apiServices.getAllPlayers();
+        ObservableList<String> items = FXCollections.observableArrayList();
+
         for (LobbyPlayer player : playerList) {
             if (player.gameId == gameId) {
-                listView.getItems().add(player.id + " " + player.name + " " + player.state);
+                items.add(player.id + " " + player.name + " " + player.state);
             }
         }
+
+        Platform.runLater(() -> listView.setItems(items));
+    }
+
+    private void loadGameScene(int boardNumber, int playerCount){
+        if (gameController!= null && !stopGame()) {
+            return;
+        }
+        // Load the board data
+        BoardData data = loadJsonBoardFromNumber(boardNumber);
+
+        // Create a board from the data
+        Board board = new Board(data);
+
+        gameController = new GameController(board);
+
+        for (int i = 0; i < playerCount; i++) {
+            Player player = new Player(board, "Player " + (i + 1),i,  PLAYER_COLORS.get(i));
+            board.addPlayer(player);
+            player.setSpace(board.getSpace(i % board.width, i));
+        }
+
+        // XXX: V2
+        // board.setCurrentPlayer(board.getPlayer(0));
+        gameController.startProgrammingPhase();
+
+        roboRally.createBoardView(gameController);
     }
 
     private BoardData loadJsonBoardFromNumber(int boardNumber) {

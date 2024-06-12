@@ -25,6 +25,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.Game;
+import dk.dtu.compute.se.pisd.roborally.model.APIObjects.LobbyPlayer;
 import dk.dtu.compute.se.pisd.roborally.service.ApiService;
 import javafx.application.Platform;
 import javafx.scene.control.*;

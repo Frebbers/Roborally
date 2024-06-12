@@ -12,7 +12,7 @@ public class Game implements ApiObject {
         this.id = id;
         this.boardId = boardId;
         this.maxPlayers = maxPlayers;
-        this.path = path;
+        this.path = path+id;
     }
     public void addPlayer(Long playerId){
         playerIds.add(playerId);

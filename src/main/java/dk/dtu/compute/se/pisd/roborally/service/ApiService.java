@@ -56,6 +56,7 @@ public abstract class ApiService {
         System.out.println("Error getting objects: " + responseMessage);
         return null;
     }
+    //TODO fix this
     public void postObject(ApiObject object){
         try {
             ResponseEntity<ApiObject> response = restTemplate.postForEntity(serverURL + object.getPath(), object, object.getClass());
@@ -106,7 +107,7 @@ public abstract class ApiService {
         ResponseEntity<Game> response = restTemplate.postForEntity(GAMES_URL, game, Game.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
-
+//TODO Fix this. Player objects are probably being created in the wrong place. Fix createPlayer() first
     public String joinGame(Long gameId, Long playerId) {
         Game game = getGameById(gameId);
         if (game != null) {
@@ -138,13 +139,14 @@ public abstract class ApiService {
         }
     }
 
-    public static List<LobbyPlayer> getPlayersInGame(Long gameid){
+    public List<LobbyPlayer> getPlayersInGame(Long gameid){
         String lobbyUrl = GAMES_URL + "/" + gameid + "/players";
         ResponseEntity<LobbyPlayer[]> response = restTemplate.getForEntity(lobbyUrl, LobbyPlayer[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
 
-    public static LobbyPlayer createPlayer(String name){
+    //TODO fix this
+    public LobbyPlayer createPlayer(String name){
         LobbyPlayer player = new LobbyPlayer();
         player.name = name;
         ResponseEntity<LobbyPlayer> response = restTemplate.postForEntity(PLAYERS_URL, player, LobbyPlayer.class);
@@ -152,11 +154,10 @@ public abstract class ApiService {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
-    public static String updatePlayerState(Long id){
+    public String updatePlayerState(Long id, PlayerState newState){
         LobbyPlayer player = getPlayerById(id);
         if (player != null) {
-            player.state = player.state == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY;
-
+            player.setState(newState);
             String playerUrl = PLAYERS_URL + "/" + player.id;
             try {
                 restTemplate.put(playerUrl, player); // Update player with new gameId
@@ -167,8 +168,8 @@ public abstract class ApiService {
         }
         return "Player does not exist.";
     }
-
-    public static LobbyPlayer getPlayerById(Long playerId) {
+//TODO streamline this
+    public LobbyPlayer getPlayerById(Long playerId) {
         String url = PLAYERS_URL + "/" + playerId;
         ResponseEntity<LobbyPlayer> response = restTemplate.getForEntity(url, LobbyPlayer.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;

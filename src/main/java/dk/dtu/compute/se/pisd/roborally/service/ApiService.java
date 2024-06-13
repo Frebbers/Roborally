@@ -13,13 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class ApiService {
+public class ApiService {
     private final String GAMES_URL = "/api/games";
     private final String serverURL;
     private final String PLAYERS_URL = "/api/players";
     //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
     //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
-
+    private Game currentGame;
     /**
      * Constructor for ApiService connecting to a server
      * @author s224804
@@ -129,7 +129,7 @@ public abstract class ApiService {
                 } catch (Exception e) {
                     return "Error updating player: " + e.getMessage();
                 }
-
+                this.currentGame =
                 return "Player joined game successfully";
             } else {
                 return "Player not found";
@@ -139,8 +139,8 @@ public abstract class ApiService {
         }
     }
 
-    public List<LobbyPlayer> getPlayersInGame(Long gameid){
-        String lobbyUrl = GAMES_URL + "/" + gameid + "/players";
+    public List<LobbyPlayer> getPlayersInGame(Long gameId){
+        String lobbyUrl = GAMES_URL + "/" + gameId + "/players";
         ResponseEntity<LobbyPlayer[]> response = restTemplate.getForEntity(lobbyUrl, LobbyPlayer[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }

@@ -2,7 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.model.APIObjects;
 
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 
-public class LobbyPlayer extends ApiObject{
+public class LobbyPlayer implements ApiObject {
     public Long id;
     public String name;
     private PlayerState state = PlayerState.NOT_READY;

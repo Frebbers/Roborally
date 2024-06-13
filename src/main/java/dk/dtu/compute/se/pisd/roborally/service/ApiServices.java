@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.service;
 
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.LobbyPlayer;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
@@ -13,8 +14,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class ApiServices {
-    private static final String GAMES_URL = "http://localhost:8080/api/games";
-    private static final String PLAYERS_URL = "http://localhost:8080/api/players";
+    //private static final String GAMES_URL = "http://localhost:8080/api/games";
+    //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
+    private static final String BASE_URL = AppConfig.getProperty("base.url");
+    private static final String GAMES_URL = BASE_URL + "/games";
+    private static final String PLAYERS_URL = BASE_URL + "/players";
 
     public static LobbyPlayer localPlayer;
 

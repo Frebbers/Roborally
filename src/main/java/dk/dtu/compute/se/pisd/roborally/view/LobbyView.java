@@ -29,7 +29,7 @@ public class LobbyView extends VBox {
         lobbyController.updateLobby(playerListView, gameId);
 
         // Set up button to set the players ready state
-        readyButton.setOnAction(e -> apiServices.updatePlayerState(apiServices.localPlayer.id));
+        readyButton.setOnAction(e -> apiServices.updatePlayerState(apiServices.getLocalPlayer().getId()));
 
         // Start polling to refresh the list periodically
         lobbyController.startLobbyPolling(gameId, playerListView);

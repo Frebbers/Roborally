@@ -1,7 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.LobbyPlayer;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
@@ -34,7 +35,7 @@ public class LobbyController {
             Game game = updateLobby(playerListView, gameId);
             if (game != null && allPlayersReady(game)) {
                 stopLobbyPolling();
-                appController.loadGameScene(game.boardId, game.maxPlayers);
+                appController.loadGameScene(gameId, game.boardId);
             }
         }), 0, 500, TimeUnit.MILLISECONDS);
     }
@@ -47,14 +48,15 @@ public class LobbyController {
 
     public Game updateLobby(ListView<String> listView, Long gameId) {
         Game game = apiServices.getGameById(gameId);
-        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
+        List<PlayerDTO> playerList = apiServices.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
 
         int readyPlayers = 0;
-        for (LobbyPlayer player : playerList) {
-            if (player.gameId.equals(game.id)) {
-                items.add(player.id + " " + player.name + " " + player.state);
-                if (player.state == PlayerState.READY) {
+        for (PlayerDTO player : playerList) {
+            if (player.getGameId().equals(game.id)) {
+                items.add(player.getId() + " " + player.getName() + " " + player.getState());
+
+                if (player.getState() == PlayerState.READY) {
                     readyPlayers += 1;
                 }
             }
@@ -65,9 +67,9 @@ public class LobbyController {
     }
 
     private boolean allPlayersReady(Game game) {
-        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
-        for (LobbyPlayer player : playerList) {
-            if (player.state != PlayerState.READY) {
+        List<PlayerDTO> playerList = apiServices.getPlayersInGame(game.id);
+        for (PlayerDTO player : playerList) {
+            if (player.getState() != PlayerState.READY) {
                 return false;
             }
         }

@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -91,14 +92,14 @@ public class AppController implements Observer {
                 int playerCount = playerResult.get();
                 int boardNumber = boardResult.get();
 
-                // Create the player
-                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Host");
+                // Tell the server to create the player in the database
+                PlayerDTO playerDTO = apiServices.createPlayer("Host");
 
                 // Create the lobby
                 Game game = apiServices.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                apiServices.joinGame(game.id, lobbyPlayer.id);
+                apiServices.joinGame(game.id, playerDTO.getId());
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, game.id);
@@ -107,12 +108,12 @@ public class AppController implements Observer {
     }
 
     public void joinLobby() {
-        List<Integer> listOfGames = apiServices.getAllGameIds();
+        List<Long> listOfGames = apiServices.getAllGameIds();
         if (listOfGames == null || listOfGames.isEmpty()) {
             System.out.println("No games available to join.");
             return;
         }
-            ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
+            ChoiceDialog<Long> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
             playerDialog.setTitle("Game Lobbies");
             playerDialog.setHeaderText("Select lobby you would like to join");
             playerDialog.setContentText("Choose your game:");
@@ -123,18 +124,18 @@ public class AppController implements Observer {
                 // Generate a long based on the id selected
                 Long id = Long.valueOf(gameId);
 
-                // Create the player
-                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Client");
+                // Tell the server to create the player in the database
+                PlayerDTO playerDTO = apiServices.createPlayer("Client");
 
                 // Join the game
-                apiServices.joinGame(id, lobbyPlayer.id);
+                apiServices.joinGame(id, playerDTO.getId());
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, id);
             });
     }
 
-    public void loadGameScene(Long boardNumber, int playerCount){
+    public void loadGameScene(Long gameId, Long boardNumber){
         if (gameController != null && !leave()) {
             return;
         }
@@ -145,12 +146,26 @@ public class AppController implements Observer {
         // Create a board from the data
         Board board = new Board(data);
 
+        // Create a new controller for the game
         gameController = new GameController(board);
 
-        for (int i = 0; i < playerCount; i++) {
-            Player player = new Player(board, "Player " + (i + 1),i,  PLAYER_COLORS.get(i));
-            board.addPlayer(player);
+        // Get all the players from the lobby
+        List<PlayerDTO> playersDTOs = apiServices.getPlayersInGame(gameId);
+
+        for (int i = 0; i < playersDTOs.size(); i++) {
+            // Get he DTO of the player
+            PlayerDTO playerDTO = playersDTOs.get(i);
+
+            // Create the actual player object for the local client
+            Player player = new Player(playerDTO.getId(), playerDTO.getName(), playerDTO.getState(), playerDTO.getGameId());
+
+            // Update the required fields for the player
+            System.out.println("Set the color of the player!");
+            player.setBoard(board);
             player.setSpace(board.getSpace(i % board.width, i));
+
+            // Add the player to the board
+            board.addPlayer(player);
         }
 
         // XXX: V2
@@ -238,7 +253,7 @@ public class AppController implements Observer {
      * @return true if localPlayer is not null, false otherwise.
      */
     public boolean isInLobby(){
-        return apiServices.localPlayer != null;
+        return apiServices.getLocalPlayer() != null;
     }
 
     /**

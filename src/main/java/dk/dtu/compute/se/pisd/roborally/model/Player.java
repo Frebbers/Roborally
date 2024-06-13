@@ -58,23 +58,18 @@ public class Player extends Subject {
 
     // API References
     private String name;
-    private int id;
-    private String state;
+    private Long id;
+    private PlayerState state;
     private Long gameId;
 
-    /**
-     * Create a player object with a name and a color, on a board.
-     *
-     * @param board the board the player is on
-     * @param color the color of the player's robot
-     * @param name the name of the player
-     */
-    public Player(@NotNull Board board, @NotNull String name, int id, String color) {
-        this.board = board;
-        this.name = name;
+    public Player(Long id, String name, PlayerState state, Long gameId){
+        // Set the information sent by the PlayerDTO from the API
         this.id = id;
-        this.color = color;
+        this.name = name;
+        this.state = state;
+        this.gameId = gameId;
 
+        // Set initial player variables
         this.space = null;
 
         program = new CommandCardField[NO_REGISTERS];
@@ -89,49 +84,21 @@ public class Player extends Subject {
     }
 
     /**
-     * Return name of player.
+     * Set the board of the player
      *
-     * @return name of player
+     * @return the board the player is on
      */
-    public String getName() {
-        return name;
+    public Board getBoard(){
+        return board;
     }
 
     /**
-     * Set the name of this player as a non-null string.
+     * Set the active board of player.
      *
-     * @param name new name of player
+     * @param board the board to play on
      */
-    public void setName(String name) {
-        if (name != null && !name.equals(this.name)) {
-            this.name = name;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
-        }
-    }
-
-    /**
-     * Return color of player.
-     *
-     * @return color of player as a string
-     */
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * Set color of player.
-     *
-     * @param color new color of player
-     */
-    public void setColor(String color) {
-        this.color = color;
-        notifyChange();
-        if (space != null) {
-            space.playerChanged();
-        }
+    public void setBoard(Board board){
+        this.board = board;
     }
 
     /**
@@ -252,28 +219,104 @@ public class Player extends Subject {
         return checkpoints;
     }
 
-    public int getId() {
+    /**
+     * Get id of player.
+     *
+     * @return id of the player
+     */
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    /**
+     * Set id of player
+     *
+     * @param id id of the player
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getState(){
+
+    /**
+     * Return name of player.
+     *
+     * @return name of player
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name of this player as a non-null string.
+     *
+     * @param name new name of player
+     */
+    public void setName(String name) {
+        if (name != null && !name.equals(this.name)) {
+            this.name = name;
+            notifyChange();
+            if (space != null) {
+                space.playerChanged();
+            }
+        }
+    }
+
+    /**
+     * Return color of player.
+     *
+     * @return color of player as a string
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Set color of player.
+     *
+     * @param color new color of player
+     */
+    public void setColor(String color) {
+        this.color = color;
+        notifyChange();
+        if (space != null) {
+            space.playerChanged();
+        }
+    }
+
+    /**
+     * Get player state of player.
+     *
+     * @return the player state of the player
+     */
+    public PlayerState getState(){
         return state;
     }
 
-    public void setState(String state){
+    /**
+     * Set player state of the player
+     *
+     * @param state new player state of the player
+     */
+    public void setState(PlayerState state){
         this.state = state;
     }
 
+    /**
+     * Set color of player.
+     *
+     * @return Get the gameID of the player
+     */
     public Long getGameId(){
         return gameId;
     }
 
+    /**
+     * Set color of player.
+     *
+     * @param gameId new game ID of the player
+     */
     public void setGameId(Long gameId){
         this.gameId = gameId;
     }
-
 }

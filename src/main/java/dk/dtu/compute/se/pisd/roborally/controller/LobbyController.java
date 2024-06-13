@@ -19,10 +19,12 @@ public class LobbyController {
 
     private ScheduledExecutorService scheduler;
     private AppController appController;
+    private ApiServices apiServices;
     private Scene scene;
 
-    public LobbyController(AppController appController) {
+    public LobbyController(AppController appController, ApiServices apiServices) {
         this.appController = appController;
+        this.apiServices = apiServices;
         this.scene = appController.getRoboRally().getStage().getScene();
     }
 
@@ -44,8 +46,8 @@ public class LobbyController {
     }
 
     public Game updateLobby(ListView<String> listView, Long gameId) {
-        Game game = ApiServices.getGameById(gameId);
-        List<LobbyPlayer> playerList = ApiServices.getPlayersInGame(game.id);
+        Game game = apiServices.getGameById(gameId);
+        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
 
         int readyPlayers = 0;
@@ -63,7 +65,7 @@ public class LobbyController {
     }
 
     private boolean allPlayersReady(Game game) {
-        List<LobbyPlayer> playerList = ApiServices.getPlayersInGame(game.id);
+        List<LobbyPlayer> playerList = apiServices.getPlayersInGame(game.id);
         for (LobbyPlayer player : playerList) {
             if (player.state != PlayerState.READY) {
                 return false;
@@ -74,5 +76,9 @@ public class LobbyController {
 
     public Scene getScene() {
         return scene;
+    }
+
+    public ApiServices getApiServices(){
+        return apiServices;
     }
 }

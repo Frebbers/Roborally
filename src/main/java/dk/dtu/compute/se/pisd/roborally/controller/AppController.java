@@ -27,19 +27,12 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controls the outermost functions of the game such as creating a new game, saving, loading, and stopping the game.
@@ -54,6 +47,7 @@ public class AppController implements Observer {
     final private List<Integer> BOARD_NUMBER_OPTIONS = Arrays.asList(1);
 
     final private RoboRally roboRally;
+    private ApiServices apiServices;
 
     private GameController gameController;
     private LobbyController lobbyController;
@@ -65,6 +59,11 @@ public class AppController implements Observer {
      */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
+        this.apiServices = new ApiServices();
+
+        Platform.runLater(() -> {
+            this.lobbyController = new LobbyController(this, apiServices);
+        });
     }
 
     /**
@@ -92,17 +91,14 @@ public class AppController implements Observer {
                 int playerCount = playerResult.get();
                 int boardNumber = boardResult.get();
 
-                // Create the lobby controller
-                lobbyController = new LobbyController(this);
-
                 // Create the player
-                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Host");
+                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Host");
 
                 // Create the lobby
-                Game game = ApiServices.createGame((long) boardNumber, playerCount);
+                Game game = apiServices.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                ApiServices.joinGame(game.id, lobbyPlayer.id);
+                apiServices.joinGame(game.id, lobbyPlayer.id);
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, game.id);
@@ -111,7 +107,7 @@ public class AppController implements Observer {
     }
 
     public void joinLobby() {
-        List<Integer> listOfGames = ApiServices.getAllGameIds();
+        List<Integer> listOfGames = apiServices.getAllGameIds();
         if (listOfGames == null || listOfGames.isEmpty()) {
             System.out.println("No games available to join.");
             return;
@@ -123,17 +119,15 @@ public class AppController implements Observer {
 
             // Show dialog and capture result
             playerDialog.showAndWait().ifPresent(gameId -> {
-                // Create the lobby controller
-                lobbyController = new LobbyController(this);
 
                 // Generate a long based on the id selected
                 Long id = Long.valueOf(gameId);
 
                 // Create the player
-                LobbyPlayer lobbyPlayer = ApiServices.createPlayer("Client");
+                LobbyPlayer lobbyPlayer = apiServices.createPlayer("Client");
 
                 // Join the game
-                ApiServices.joinGame(id, lobbyPlayer.id);
+                apiServices.joinGame(id, lobbyPlayer.id);
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, id);
@@ -241,10 +235,10 @@ public class AppController implements Observer {
     /**
      * Check whether this object's lobbyController is not null.
      *
-     * @return true if lobbyController is not null, false otherwise.
+     * @return true if localPlayer is not null, false otherwise.
      */
     public boolean isInLobby(){
-        return lobbyController != null;
+        return apiServices.localPlayer != null;
     }
 
     /**

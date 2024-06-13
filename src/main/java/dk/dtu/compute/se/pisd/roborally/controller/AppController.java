@@ -266,6 +266,17 @@ public class AppController implements Observer {
     }
 
 
+    public void createCharacter() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create Character");
+        dialog.setHeaderText("Enter your name");
+        dialog.setContentText("Name:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            apiServices.createPlayer(name);
+        });
+    }
     /**
      * NOT IMPLEMENTED
      * 

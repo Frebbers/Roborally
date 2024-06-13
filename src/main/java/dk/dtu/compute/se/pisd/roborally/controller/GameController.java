@@ -113,7 +113,7 @@ public class GameController {
         }
 
         // Upload the moves to the server
-        apiServices.createMove(localPlayer.getGameId(), localPlayer.getId(), moves);
+        apiServices.createMove(localPlayer.getGameId(), localPlayer.getId(), board.getMoveCount(), moves);
 
         // Make the cards invisible
         makeProgramFieldsInvisible();

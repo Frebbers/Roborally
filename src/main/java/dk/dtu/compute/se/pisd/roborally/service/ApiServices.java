@@ -185,7 +185,7 @@ public class ApiServices {
         return localPlayer;
     }
 
-    public MoveDTO createMove(Long gameId, Long playerId, List<String> moves){
+    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moves){
         // Create a new move on the client and fill the information (Do not create a constructor for this)
         MoveDTO move = new MoveDTO();
         move.setGameId(gameId);

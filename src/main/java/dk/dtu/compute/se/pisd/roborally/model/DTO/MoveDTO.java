@@ -8,6 +8,7 @@ import java.util.List;
 public class MoveDTO {
     private Long gameId;
     private Long playerId;
+    private Integer turnIndex;
     List<String> moves = new ArrayList<>();
 
     public Long getGameId() {
@@ -24,6 +25,14 @@ public class MoveDTO {
 
     public void setPlayerId(Long id){
         this.playerId = id;
+    }
+
+    public Integer getTurnIndex() {
+        return turnIndex;
+    }
+
+    public void setTurnIndex(Integer turnIndex){
+        this.turnIndex = turnIndex;
     }
 
     public List<String> getMoves(){

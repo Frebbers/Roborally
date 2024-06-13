@@ -14,11 +14,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ApiServices {
-    //private static final String GAMES_URL = "http://localhost:8080/api/games";
-    //private static final String PLAYERS_URL = "http://localhost:8080/api/players";
     private static final String BASE_URL = AppConfig.getProperty("base.url");
-    private static final String GAMES_URL = BASE_URL + "/games";
-    private static final String PLAYERS_URL = BASE_URL + "/players";
+    private static final String GAMES_URL = AppConfig.getProperty("games.url");
+    private static final String PLAYERS_URL = AppConfig.getProperty("players.url");
 
     public static LobbyPlayer localPlayer;
 

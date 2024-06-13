@@ -147,7 +147,7 @@ public class AppController implements Observer {
         Board board = new Board(data);
 
         // Create a new controller for the game
-        gameController = new GameController(board);
+        gameController = new GameController(apiServices, board);
 
         // Get all the players from the lobby
         List<PlayerDTO> playersDTOs = apiServices.getPlayersInGame(gameId);

@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -46,13 +47,15 @@ public class GameController {
     private Command nextCommand;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ApiServices apiServices;
 
     /**
      * Initialize a GameController object with a certain Board.
      *
      * @param board
      */
-    public GameController(@NotNull Board board) {
+    public GameController(ApiServices apiServices, @NotNull Board board) {
+        this.apiServices = apiServices;
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
@@ -96,14 +99,31 @@ public class GameController {
      */
     // XXX: implemented in the current version
     public void finishProgrammingPhase() {
+        // Get the local player from the board
+        Player localPlayer = board.getLocalPlayer(apiServices.getLocalPlayer());
+
+        // Add the moves from the ProgramCard in the Registers of the local player
+        List<String> moves = new ArrayList<>();
+        for(int i = 0; i < localPlayer.getProgramFieldCount(); i++){
+            CommandCard programCard = localPlayer.getProgramField(i).getCard();
+
+            if(programCard != null){
+                moves.add((programCard.getName()));
+            }
+        }
+
+        // Upload the moves to the server
+        apiServices.createMove(localPlayer.getGameId(), localPlayer.getId(), moves);
+
+        // Make the cards invisible
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
-        //board.setCurrentPlayer(board.getPlayer(0));
-        // this line has been commented because it caused problems in the execution of the first register
-        board.setPhase(Phase.ACTIVATION);
-        board.setStep(0);
 
         // Poll to the server if all the players are ready
+
+        // Update the board
+        board.setPhase(Phase.ACTIVATION);
+        board.setStep(0);
 
         // Activate the programs
         executePrograms();

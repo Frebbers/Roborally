@@ -23,10 +23,12 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
@@ -388,5 +390,9 @@ public class Board extends Subject {
 
     public BoardData getData() {
         return data;
+    }
+
+    public Player getLocalPlayer(PlayerDTO playerDTO){
+        return players.stream().filter(p -> Objects.equals(p.getId(), playerDTO.getId())).findFirst().orElse(null);
     }
 }

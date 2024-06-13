@@ -20,6 +20,7 @@ public class ApiServices {
     private String BASE_URL;
     private String GAMES_URL;
     private String PLAYERS_URL;
+    private String MOVES_URL;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -32,11 +33,13 @@ public class ApiServices {
             BASE_URL = AppConfig.getProperty("local.base.url");
             GAMES_URL = AppConfig.getProperty("local.games.url");
             PLAYERS_URL = AppConfig.getProperty("local.players.url");
+            MOVES_URL = AppConfig.getProperty("local.moves.url");
         }
         else if(type == ApiType.SERVER){
             BASE_URL = AppConfig.getProperty("server.base.url");
             GAMES_URL = AppConfig.getProperty("server.games.url");
             PLAYERS_URL = AppConfig.getProperty("server.players.url");
+            MOVES_URL = AppConfig.getProperty("server.moves.url");
         }
     }
 
@@ -190,7 +193,7 @@ public class ApiServices {
         move.setMoves(moves);
 
         // Upload the move to the server
-        ResponseEntity<MoveDTO> response = restTemplate.postForEntity(PLAYERS_URL, move, MoveDTO.class);
+        ResponseEntity<MoveDTO> response = restTemplate.postForEntity(MOVES_URL, move, MoveDTO.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 }

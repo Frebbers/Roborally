@@ -155,6 +155,15 @@ public class Player extends Subject {
     }
 
     /**
+     * Return the amount of program fields the player has
+     *
+     * @return integer of the amount of program fields
+     */
+    public int getProgramFieldCount(){
+        return program.length;
+    }
+
+    /**
      * Return the command card field at the given index of the player's register.
      *
      * @param i index of the register

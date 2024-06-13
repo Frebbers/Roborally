@@ -144,7 +144,7 @@ public class Board extends Subject {
      */
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
-            System.out.println(player);
+            players.add(player);
             priorityAntenna.updatePlayers();
             notifyChange();
         }

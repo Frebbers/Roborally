@@ -275,6 +275,7 @@ public class AppController implements Observer {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             apiServices.createPlayer(name);
+            //TODO check if player was created and add to properties file
         });
     }
     /**

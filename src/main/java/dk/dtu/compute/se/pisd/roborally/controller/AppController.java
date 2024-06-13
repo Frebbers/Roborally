@@ -283,7 +283,7 @@ public class AppController implements Observer {
                 System.out.println("Player created");
                 setProperty("playerName", name);
             }
-            //TODO check if player was created and add to properties file
+            //TODO maybe also store the player id in the config file
 
         });
     }

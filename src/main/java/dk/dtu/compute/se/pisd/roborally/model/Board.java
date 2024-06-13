@@ -46,7 +46,7 @@ public class Board extends Subject {
 
     public final int height;
 
-    private Integer gameId;
+    private Long gameId;
 
     private final Space[][] spaces;
 
@@ -92,7 +92,7 @@ public class Board extends Subject {
      *
      * @return gameId
      */
-    public Integer getGameId() {
+    public Long getGameId() {
         return gameId;
     }
 
@@ -101,7 +101,7 @@ public class Board extends Subject {
      *
      * @param gameId new gameId
      */
-    public void setGameId(int gameId) {
+    public void setGameId(Long gameId) {
         if (this.gameId == null) {
             this.gameId = gameId;
         } else {

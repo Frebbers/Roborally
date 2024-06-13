@@ -41,7 +41,7 @@ public class RoboRallyMenuBar extends MenuBar {
 
     private MenuItem createLobby;
     private MenuItem joinLobby;
-
+    private MenuItem createCharacter;
 
     private MenuItem leaveLobby;
 
@@ -61,6 +61,10 @@ public class RoboRallyMenuBar extends MenuBar {
         createLobby = new MenuItem("Create Lobby");
         createLobby.setOnAction( e -> this.appController.createLobby());
         controlMenu.getItems().add(createLobby);
+
+        createCharacter = new MenuItem("Create Character");
+        createCharacter.setOnAction( e -> this.appController.createCharacter());
+        controlMenu.getItems().add(createCharacter);
 
         joinLobby = new MenuItem("Join Lobby");
         joinLobby.setOnAction( e -> this.appController.joinLobby());
@@ -87,7 +91,9 @@ public class RoboRallyMenuBar extends MenuBar {
             createLobby.setVisible(false);
             joinLobby.setVisible(false);
             leaveLobby.setVisible(true);
+            createCharacter.setVisible(false);
         } else {
+            createCharacter.setVisible(true);
             createLobby.setVisible(true);
             joinLobby.setVisible(true);
             leaveLobby.setVisible(false);

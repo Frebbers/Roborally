@@ -214,6 +214,7 @@ public class AppController implements Observer {
         }
         if (gameController != null) {
             //saveGame(); NOT IMPLEMENTED
+            gameController.shutdownScheduler();
             gameController = null;
             roboRally.createBoardView(null);
             return true;

@@ -26,6 +26,9 @@ import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
 
@@ -41,6 +44,9 @@ public class GameController {
     public ConveyorBeltController beltCtrl;
     public BoardController boardController;
     private Command nextCommand;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     /**
      * Initialize a GameController object with a certain Board.
      *
@@ -96,6 +102,11 @@ public class GameController {
         // this line has been commented because it caused problems in the execution of the first register
         board.setPhase(Phase.ACTIVATION);
         board.setStep(0);
+
+        // Poll to the server if all the players are ready
+
+        // Activate the programs
+        executePrograms();
     }
 
     // XXX: implemented in the current version
@@ -138,12 +149,31 @@ public class GameController {
         continuePrograms();
     }
 
-    // XXX: implemented in the current version
     private void continuePrograms() {
-        do {
-            executeNextStep();
-        } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
+        scheduleNextStep();
     }
+
+    private void scheduleNextStep() {
+        scheduler.schedule(() -> {
+            if (board.getPhase() == Phase.ACTIVATION && !board.isStepMode()) {
+                executeNextStep();
+                scheduleNextStep(); // Schedule the next step after the current one completes
+            }
+        }, 1000, TimeUnit.MILLISECONDS); // 500ms delay
+    }
+
+    // Shutdown the scheduler when no longer needed
+    public void shutdownScheduler() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+        }
+    }
+
     private void finishNextStep(Player currentPlayer) {
         int step = board.getStep(); // get current register number
         int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
@@ -181,16 +211,13 @@ public class GameController {
                         StartPlayerInteractionPhase(nextCommand.getOptions());
                     }
                     else {executeCommand(currentPlayer, nextCommand);
-                    finishNextStep(currentPlayer);
+                        finishNextStep(currentPlayer);
                     } // execute the card's command
                 }
-            } else {
-                // this should not happen
-                assert false;
+                else{
+                    finishNextStep(currentPlayer);
+                }
             }
-        } else {
-            // this should not happen
-            assert false;
         }
     }
 

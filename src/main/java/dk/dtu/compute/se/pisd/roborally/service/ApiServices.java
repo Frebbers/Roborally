@@ -2,9 +2,9 @@ package dk.dtu.compute.se.pisd.roborally.service;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.ApiType;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import org.springframework.http.HttpStatus;
@@ -138,20 +138,18 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? localPlayer : null;
     }
 
-    public String updatePlayerState(Long id){
+    public void updatePlayerState(Long id){
         PlayerDTO player = getPlayerById(id);
         if (player != null) {
             player.setState(player.getState() == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY);
 
             String playerUrl = PLAYERS_URL + "/" + player.getId();
             try {
-                restTemplate.put(playerUrl, player); // Update player with new gameId
+                restTemplate.put(playerUrl, player);
             } catch (Exception e) {
-                return "Error updating player: " + e.getMessage();
+                e.getMessage();
             }
-            return "Player state updated successfully.";
         }
-        return "Player does not exist.";
     }
 
     public PlayerDTO getPlayerById(Long playerId) {
@@ -182,5 +180,17 @@ public class ApiServices {
 
     public PlayerDTO getLocalPlayer(){
         return localPlayer;
+    }
+
+    public MoveDTO createMove(Long gameId, Long playerId, List<String> moves){
+        // Create a new move on the client and fill the information (Do not create a constructor for this)
+        MoveDTO move = new MoveDTO();
+        move.setGameId(gameId);
+        move.setPlayerId(playerId);
+        move.setMoves(moves);
+
+        // Upload the move to the server
+        ResponseEntity<MoveDTO> response = restTemplate.postForEntity(PLAYERS_URL, move, MoveDTO.class);
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 }

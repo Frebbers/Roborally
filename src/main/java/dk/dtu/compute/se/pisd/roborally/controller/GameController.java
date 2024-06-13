@@ -96,6 +96,11 @@ public class GameController {
         // this line has been commented because it caused problems in the execution of the first register
         board.setPhase(Phase.ACTIVATION);
         board.setStep(0);
+
+        // Poll to the server if all the players are ready
+
+        // Activate the programs
+        executePrograms();
     }
 
     // XXX: implemented in the current version
@@ -140,10 +145,17 @@ public class GameController {
 
     // XXX: implemented in the current version
     private void continuePrograms() {
-        do {
-            executeNextStep();
-        } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
+        while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode()) {
+            try {
+                executeNextStep();
+                Thread.sleep(500); // Wait for half a second
+            } catch (InterruptedException e) {
+                // Handle the interruption
+                Thread.currentThread().interrupt(); // Restore the interrupted status
+            }
+        }
     }
+
     private void finishNextStep(Player currentPlayer) {
         int step = board.getStep(); // get current register number
         int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
@@ -181,16 +193,13 @@ public class GameController {
                         StartPlayerInteractionPhase(nextCommand.getOptions());
                     }
                     else {executeCommand(currentPlayer, nextCommand);
-                    finishNextStep(currentPlayer);
+                        finishNextStep(currentPlayer);
                     } // execute the card's command
                 }
-            } else {
-                // this should not happen
-                assert false;
+                else{
+                    finishNextStep(currentPlayer);
+                }
             }
-        } else {
-            // this should not happen
-            assert false;
         }
     }
 

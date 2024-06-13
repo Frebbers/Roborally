@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
+
 /**
  * Controls the outermost functions of the game such as creating a new game, saving, loading, and stopping the game.
  *
@@ -274,8 +276,15 @@ public class AppController implements Observer {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            apiServices.createPlayer(name);
+            if (apiServices.createPlayer(name)==null){
+                System.out.println("Error creating player");
+            }
+            else {
+                System.out.println("Player created");
+                setProperty("playerName", name);
+            }
             //TODO check if player was created and add to properties file
+
         });
     }
     /**

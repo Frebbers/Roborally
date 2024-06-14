@@ -113,8 +113,10 @@ public class RoboRally extends Application {
         // if present, remove old BoardView
         boardRoot.getChildren().clear();
 
-        LobbyView lobbyView = new LobbyView(controller, gameId);
-        boardRoot.setCenter(lobbyView);
+        if(controller != null){
+            LobbyView lobbyView = new LobbyView(controller, gameId);
+            boardRoot.setCenter(lobbyView);
+        }
 
         stage.sizeToScene();
     }

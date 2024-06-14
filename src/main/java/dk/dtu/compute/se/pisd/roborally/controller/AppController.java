@@ -273,8 +273,9 @@ public class AppController implements Observer {
         dialog.setTitle("Create Character");
         dialog.setHeaderText("Enter your name");
         dialog.setContentText("Name:");
-
+        //TODO maybe also store the player id in the config file
         Optional<String> result = dialog.showAndWait();
+
         result.ifPresent(name -> {
             if (apiServices.createPlayer(name)==null){
                 System.out.println("Error creating player");
@@ -283,8 +284,6 @@ public class AppController implements Observer {
                 System.out.println("Player created");
                 setProperty("playerName", name);
             }
-            //TODO maybe also store the player id in the config file
-
         });
     }
     /**

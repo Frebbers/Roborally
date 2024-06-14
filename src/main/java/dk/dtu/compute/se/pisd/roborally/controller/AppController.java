@@ -57,9 +57,11 @@ public class AppController implements Observer {
     private GameController gameController;
     private LobbyController lobbyController;
 
+    public static PlayerDTO localPlayer;
+
     /**
      * Create an AppController object tied to the given RoboRally object.
-     * 
+     *
      * @param roboRally
      */
     public AppController(@NotNull RoboRally roboRally) {
@@ -97,13 +99,14 @@ public class AppController implements Observer {
                 int boardNumber = boardResult.get();
 
                 // Tell the server to create the player in the database
-                PlayerDTO playerDTO = apiServices.createPlayer("Host");
+                sendPlayerToServer();
 
                 // Create the lobby
                 Game game = apiServices.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                apiServices.joinGame(game.id, playerDTO.getId());
+                localPlayer.setState(PlayerState.NOT_READY);
+                apiServices.joinGame(game.id, localPlayer.getId());
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, game.id);
@@ -112,17 +115,17 @@ public class AppController implements Observer {
     }
 
     public void joinLobby(Long gameId) {
-        // Tell the server to create the player in the database
-        PlayerDTO playerDTO = apiServices.createPlayer("Client");
+        sendPlayerToServer();
 
         // Join the game
-        apiServices.joinGame(gameId, playerDTO.getId());
+        localPlayer.setState(PlayerState.NOT_READY);
+        apiServices.joinGame(gameId, localPlayer.getId());
 
         // Display the Lobby Window
         roboRally.createLobbyView(lobbyController, gameId);
     }
 
-    public void loadGameScene(Long gameId, Long boardNumber){
+    public void loadGameScene(Long gameId, Long boardNumber) {
         if (gameController != null && !leave()) {
             return;
         }
@@ -175,7 +178,8 @@ public class AppController implements Observer {
         // XXX needs to be implemented eventually
     }
 
-    /** NOT IMPLEMENTED
+    /**
+     * NOT IMPLEMENTED
      * Load a previously saved game state.
      */
     public void loadGame() {
@@ -197,7 +201,8 @@ public class AppController implements Observer {
      */
     public boolean leave() {
         if(apiServices != null){
-            apiServices.onPlayerLeave(apiServices.getLocalPlayer().getId());
+            apiServices.onPlayerLeave(localPlayer.getId());
+            roboRally.createLobbyView(null, 0L);
         }
         if (gameController != null) {
             //saveGame(); NOT IMPLEMENTED
@@ -240,13 +245,16 @@ public class AppController implements Observer {
      *
      * @return true if localPlayer is not null, false otherwise.
      */
-    public boolean isInLobby(){
-        return apiServices.getLocalPlayer() != null;
+    public boolean isInLobby() {
+        if (localPlayer == null) {
+            return false;
+        }
+        return (!(localPlayer.getState().equals(PlayerState.NOT_IN_LOBBY)));
     }
 
     /**
      * Check whether this object's gameController is not null.
-     * 
+     *
      * @return true if gameController is not null, false otherwise.
      */
     public boolean isGameRunning() {
@@ -263,18 +271,23 @@ public class AppController implements Observer {
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(name -> {
-            if (apiServices.createPlayer(name)==null){
+            //Attempt to create player
+            localPlayer = apiServices.createPlayer(name);
+            if (apiServices.createPlayer(name) == null) {
                 System.out.println("Error creating player");
-            }
-            else {
+                Alert alert = new Alert(AlertType.ERROR,
+                        "Error creating player. Check your connection to the server.", ButtonType.OK);
+                alert.showAndWait();
+            } else {
                 System.out.println("Player created");
-                setProperty("playerName", name);
+                setProperty("local.player.name", name);
             }
         });
     }
+
     /**
      * NOT IMPLEMENTED
-     * 
+     *
      * @param subject
      */
     @Override
@@ -286,7 +299,22 @@ public class AppController implements Observer {
         return roboRally;
     }
 
-    public ApiServices getApiServices(){
+    public ApiServices getApiServices() {
         return apiServices;
     }
+
+    private void sendPlayerToServer() {
+        if (localPlayer != null) {
+            if (!apiServices.createPlayerOnServer(localPlayer)){System.out.println("Error posting player to server!");}
+        } else if (!(getProperty("local.player.name").isEmpty())) {
+            localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
+        } else {
+            //If the player does not exist, create it
+            createCharacter();
+        }
+    }
+
+    public void toggleReady() {apiServices.updatePlayerState(localPlayer.getId());}
+
+    public void setLocalPlayer(PlayerDTO body) {}
 }

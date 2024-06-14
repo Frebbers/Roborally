@@ -22,10 +22,15 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.scene.control.TabPane;
+
+import java.util.Objects;
 
 /**
  * Handles the views of several players on a particular board.
@@ -46,7 +51,6 @@ public class PlayersView extends TabPane implements ViewObserver {
      */
     public PlayersView(GameController gameController) {
         board = gameController.board;
-
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
         playerViews = new PlayerView[board.getPlayersNumber()];
@@ -91,8 +95,6 @@ public class PlayersView extends TabPane implements ViewObserver {
         }
     }
 
-
-
     /**
      * Update board view as to include a recent change in state.
      * 
@@ -101,10 +103,22 @@ public class PlayersView extends TabPane implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {
-            Player current = board.getCurrentPlayer();
-            this.updatePlayersViewOrder();
-            this.getSelectionModel().select(board.getPlayerNumberByTurnOrder(current));
+            if(board.getPhase() == Phase.ACTIVATION){
+                Player current = board.getCurrentPlayer();
+                this.updatePlayersViewOrder();
+                this.getSelectionModel().select(board.getPlayerNumberByTurnOrder(current));
+            }
+            else if(board.getPhase() == Phase.PROGRAMMING) {
+                for(PlayerView view : playerViews){
+                    if(!Objects.equals(view.getPlayer().getId(), AppController.localPlayer.getId())){
+                        TabPane tabPane = view.getTabPane();
+
+                        if(tabPane != null){
+                            tabPane.getTabs().remove(view);
+                        }
+                    }
+                }
+            }
         }
     }
-
 }

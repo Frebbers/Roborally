@@ -13,11 +13,11 @@ public class LobbyView extends VBox {
     private ListView<String> playerListView;
     private Button readyButton;
     private LobbyController lobbyController;
-    private ApiServices apiServices;
+    private AppController appController;
 
     public LobbyView(LobbyController lobbyController, Long gameId) {
         this.lobbyController = lobbyController;
-        this.apiServices = lobbyController.getApiServices();
+        this.appController = lobbyController.getAppController();
         setupLobbyView(gameId);
     }
 
@@ -29,7 +29,7 @@ public class LobbyView extends VBox {
         lobbyController.updateLobby(playerListView, gameId);
 
         // Set up button to set the players ready state
-        readyButton.setOnAction(e -> apiServices.updatePlayerState(apiServices.getLocalPlayer().getId()));
+        readyButton.setOnAction(e -> appController.toggleReady());
 
         // Start polling to refresh the list periodically
         lobbyController.startLobbyPolling(gameId, playerListView);

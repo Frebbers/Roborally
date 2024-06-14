@@ -72,22 +72,7 @@ public class BoardView extends VBox implements ViewObserver {
 
         spaceEventHandler = new SpaceEventHandler(gameController);
 
-        for (int x = 0; x < board.width; x++) {
-            for (int y = 0; y < board.height; y++) {
-                Space space = board.getSpace(x, y);
-                SpaceView spaceView = new SpaceView(space);
-                spaces[x][y] = spaceView;
-                mainBoardPane.add(spaceView, x, y);
-                spaceView.setOnMouseClicked(spaceEventHandler);
-            }
-        }
-
-        for (Wall wall : board.getData().walls) {
-            Space space = board.getSpace(wall.x, wall.y);
-            space.setWall(wall);
-            WallView wallView = new WallView(wall);
-            mainBoardPane.add(wallView, space.x, space.y);
-        }
+        // Elements to draw below the players
         for (Checkpoint checkpoint : board.getData().checkpoints){
             Space space = board.getSpace(checkpoint.x, checkpoint.y);
             space.setCheckpoint(checkpoint);
@@ -105,6 +90,25 @@ public class BoardView extends VBox implements ViewObserver {
             space.setPriorityAntenna(priorityAntenna);
             PriorityAntennaView priorityAntennaView = new PriorityAntennaView(priorityAntenna);
             mainBoardPane.add(priorityAntennaView, space.x, space.y);
+        }
+
+        // Drawing the players and backgrounds
+        for (int x = 0; x < board.width; x++) {
+            for (int y = 0; y < board.height; y++) {
+                Space space = board.getSpace(x, y);
+                SpaceView spaceView = new SpaceView(space);
+                spaces[x][y] = spaceView;
+                mainBoardPane.add(spaceView, x, y);
+                spaceView.setOnMouseClicked(spaceEventHandler);
+            }
+        }
+
+        // Elements to draw above the players
+        for (Wall wall : board.getData().walls) {
+            Space space = board.getSpace(wall.x, wall.y);
+            space.setWall(wall);
+            WallView wallView = new WallView(wall);
+            mainBoardPane.add(wallView, space.x, space.y);
         }
 
         board.attach(this);

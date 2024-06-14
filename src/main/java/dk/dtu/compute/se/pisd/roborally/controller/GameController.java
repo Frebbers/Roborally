@@ -22,14 +22,20 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import javafx.application.Platform;
+import javafx.scene.control.ListView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
 
@@ -49,6 +55,8 @@ public class GameController {
     private Command nextCommand;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private List<ScheduledFuture<?>> scheduledTasks = new ArrayList<>();
+
 
     /**
      * Initialize a GameController object with a certain Board.
@@ -91,7 +99,7 @@ public class GameController {
     // XXX: implemented in the current version
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
-        int random = (int) (Math.random() * commands.length);
+        int random = 1 + (int) (Math.random() * commands.length - 1); // Plus 1 to remove the Empty command card
         return new CommandCard(commands[random]);
     }
 
@@ -104,34 +112,94 @@ public class GameController {
         ApiServices apiServices = appController.getApiServices();
 
         // Get the local player from the board
-        Player localPlayer = board.getLocalPlayer(apiServices.getLocalPlayer());
+        Player localPlayer = board.getLocalPlayer(AppController.localPlayer);
+
+        // Get the game ID of the player
+        Long gameId = localPlayer.getGameId();
 
         // Add the moves from the ProgramCard in the Registers of the local player
-        List<String> moves = new ArrayList<>();
+        List<String> localMoveTypes = new ArrayList<>();
         for(int i = 0; i < localPlayer.getProgramFieldCount(); i++){
             CommandCard programCard = localPlayer.getProgramField(i).getCard();
 
             if(programCard != null){
-                moves.add((programCard.getName()));
+                localMoveTypes.add((programCard.getName()));
+            }
+            else {
+                localMoveTypes.add("Empty");
             }
         }
 
         // Upload the moves to the server
-        apiServices.createMove(localPlayer.getGameId(), localPlayer.getId(), board.getMoveCount(), moves);
+        apiServices.createMove(gameId, localPlayer.getId(), board.getMoveCount(), localMoveTypes);
 
         // Make the cards invisible
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
 
         // Poll to the server if all the players are ready
+        startPollingForMoves(gameId, board.getMoveCount(), moves -> {
+            // Ensure that any moves has been fetched
+            if(moves != null && !moves.isEmpty()){
+                // Loop through the players and set their
+                for(Player player : board.getPlayers()){
+                    // Return if this is the local player
+                    if(player == localPlayer) continue;
+
+                    // Get the move types object from the player
+                    MoveDTO moveDTO = moves.stream().filter(m -> m.getPlayerId() == player.getId()).findFirst().orElse(null);
+
+                    // Get the list of moves from the moveDTO
+                    List<String> clientMoveTypes = moveDTO.getMoveTypes();
+
+                    for(int i = 0; i < clientMoveTypes.size(); i++){
+                        // Create a CommandCard from the String
+                        Command command = Command.fromString(clientMoveTypes.get(i));
+                        CommandCard commandCard = new CommandCard(command);
+
+                        // Update the card for the programField
+                        player.getProgramField(i).setCard(commandCard);
+                    }
+                }
+
+                // Activate the robots on the board
+                board.setPhase(Phase.ACTIVATION);
+                board.setStep(0);
+
+                // Execute the robot programs
+                executePrograms();
+            }
+        });
+    }
+
+    /**
+     * Starts polling the game state at fixed intervals and updates the game based on the responses.
+     * Stores the ScheduledFuture for possible cancellation.
+     */
+    public void startPollingForMoves(Long gameId, Integer turnIndex, Consumer<List<MoveDTO>> callback) {
+        ApiServices apiServices = appController.getApiServices();
+        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            Integer readyPlayers = apiServices.getPlayerReadyCount(gameId, turnIndex);
+            if (readyPlayers == board.getPlayers().size()) {
+                List<MoveDTO> moveTypes = apiServices.getAllMoves(gameId, turnIndex);
+                stopPollingForMoves();
+                callback.accept(moveTypes);
+            }
+        }), 0, 500, TimeUnit.MILLISECONDS);
+        scheduledTasks.add(future);
+    }
 
 
-        // Update the board
-        board.setPhase(Phase.ACTIVATION);
-        board.setStep(0);
-
-        // Activate the programs
-        executePrograms();
+    /**
+     * Stops all polling tasks and clears the list of ScheduledFuture.
+     */
+    public void stopPollingForMoves() {
+        for (ScheduledFuture<?> task : scheduledTasks) {
+            if (!task.isDone()) {
+                task.cancel(false); // Cancel if not already done
+            }
+        }
+        scheduledTasks.clear();
     }
 
     // XXX: implemented in the current version
@@ -178,17 +246,28 @@ public class GameController {
         scheduleNextStep();
     }
 
+    /**
+     * Schedules the next step in the game loop and adds the future to the list for management.
+     */
     private void scheduleNextStep() {
-        scheduler.schedule(() -> {
-            if (board.getPhase() == Phase.ACTIVATION && !board.isStepMode()) {
-                executeNextStep();
-                scheduleNextStep(); // Schedule the next step after the current one completes
-            }
-        }, 1000, TimeUnit.MILLISECONDS); // 500ms delay
+        if (!scheduler.isShutdown()) {
+            ScheduledFuture<?> future = scheduler.schedule(() -> {
+                if (board.getPhase() == Phase.ACTIVATION && !board.isStepMode()) {
+                    executeNextStep();
+                    scheduleNextStep();
+                }
+            }, 1000, TimeUnit.MILLISECONDS);
+            scheduledTasks.add(future);
+        }
     }
 
-    // Shutdown the scheduler when no longer needed
+
+    /**
+     *   Shutdown the scheduler carefully
+     */
     public void shutdownScheduler() {
+        // Ensure all tasks are cancelled first
+        stopPollingForMoves();
         scheduler.shutdown();
         try {
             if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
@@ -404,6 +483,16 @@ public class GameController {
         } else {
             return false;
         }
+    }
+
+    public CommandCardField createCommandCardFieldFromString(String s, Player player){
+        // Create a CommandCardField from the String
+        Command command = Command.fromString(s);
+        CommandCard commandCard = new CommandCard(command);
+        CommandCardField commandCardField = new CommandCardField(player);
+        commandCardField.setCard(commandCard);
+
+        return commandCardField;
     }
 
     /**

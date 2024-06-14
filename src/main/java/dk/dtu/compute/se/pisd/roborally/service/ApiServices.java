@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.service;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -23,8 +24,8 @@ public class ApiServices {
     private String MOVES_URL;
 
     private final RestTemplate restTemplate = new RestTemplate();
-
-    private PlayerDTO localPlayer;
+    //LocalPlayer is stored in AppController now
+   // private PlayerDTO localPlayer;
 
     public ApiServices(){
         ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
@@ -130,22 +131,29 @@ public class ApiServices {
         // Create a new player on the client and set the name (Do not create a constructor for this)
         PlayerDTO player = new PlayerDTO();
         player.setName(name);
-        player.setState(PlayerState.NOT_READY);
+        player.setState(PlayerState.NOT_IN_LOBBY);
         player.setGameId(0L);
-
         // Upload the player to the server
-        ResponseEntity<PlayerDTO> response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
-
-        // Set the local player to the response from the server with its corresponding ID
-        localPlayer = response.getBody();
-        return response.getStatusCode() == HttpStatus.OK ? localPlayer : null;
+        ResponseEntity<PlayerDTO> response = null;
+        try {
+            response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
+        } catch (Exception e) {
+            return null;
+        }
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
+    }
+    public boolean createPlayerOnServer(PlayerDTO playerDTO){
+        return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
     }
 
     public void updatePlayerState(Long id){
         PlayerDTO player = getPlayerById(id);
+        if (player.getState() == PlayerState.NOT_IN_LOBBY){
+            player.setState(PlayerState.NOT_READY);
+        }
+        else
         if (player != null) {
             player.setState(player.getState() == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY);
-
             String playerUrl = PLAYERS_URL + "/" + player.getId();
             try {
                 restTemplate.put(playerUrl, player);
@@ -178,23 +186,37 @@ public class ApiServices {
         }
 
         // Clear the local player
-        localPlayer = null;
+        AppController.localPlayer = null;
     }
 
-    public PlayerDTO getLocalPlayer(){
+ /*   public PlayerDTO getLocalPlayer(){
         return localPlayer;
     }
+*/
 
-    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moves){
+
+    public Integer getPlayerReadyCount(Long gameId, Integer turnIndex){
+        String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex + "/player-count";
+        ResponseEntity<Integer> response = restTemplate.getForEntity(url, Integer.class);
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moveTypes){
         // Create a new move on the client and fill the information (Do not create a constructor for this)
         MoveDTO move = new MoveDTO();
         move.setGameId(gameId);
         move.setPlayerId(playerId);
-        move.setMoves(moves);
+        move.setMoveTypes(moveTypes);
         move.setTurnIndex(turnIndex);
 
         // Upload the move to the server
         ResponseEntity<MoveDTO> response = restTemplate.postForEntity(MOVES_URL, move, MoveDTO.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public List<MoveDTO> getAllMoves(Long gameId, Integer turnIndex){
+        String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex;
+        ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
+        return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
 }

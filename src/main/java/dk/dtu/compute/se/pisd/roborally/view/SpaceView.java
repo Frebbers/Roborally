@@ -70,7 +70,10 @@ public class SpaceView extends StackPane implements ViewObserver {
         playerImage.setFitHeight(SPACE_HEIGHT);
 
         // Add the image view as the first child of the stack pane
-        this.getChildren().addAll(backgroundImage, playerImage);
+        if (space.getCheckpoint() == null && space.getBelt() == null) {
+            this.getChildren().addAll(backgroundImage);
+        }
+        this.getChildren().addAll(playerImage);
 
         // Register as an observer to the checkpoint
         space.attach(this);
@@ -78,7 +81,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     /**
-     * Draw a player (if there is one) as a triangle on this space.
+     * Draw a player (if there is one) on this space.
      */
     private void updatePlayer() {
         // Clear the player
@@ -95,6 +98,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             switch(player.getHeading()) {
                 case NORTH:
                     playerImage.setRotate(180);
+                    break;
                 case EAST:
                     playerImage.setRotate(270);
                     break;

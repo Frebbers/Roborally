@@ -9,7 +9,7 @@ public class MoveDTO {
     private Long gameId;
     private Long playerId;
     private Integer turnIndex;
-    List<String> moves = new ArrayList<>();
+    List<String> moveTypes = new ArrayList<>();
 
     public Long getGameId() {
         return gameId;
@@ -35,11 +35,11 @@ public class MoveDTO {
         this.turnIndex = turnIndex;
     }
 
-    public List<String> getMoves(){
-        return moves;
+    public List<String> getMoveTypes(){
+        return moveTypes;
     }
 
-    public void setMoves(List<String> moves){
-        this.moves = moves;
+    public void setMoveTypes(List<String> moves){
+        this.moveTypes = moves;
     }
 }

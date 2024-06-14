@@ -10,14 +10,18 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class LobbyBrowserView extends VBox {
+public class LobbyBrowserView extends BaseView {
     private AppController appController;
     private ApiServices apiServices;
 
     public LobbyBrowserView(AppController appController) {
+        super();
         this.appController = appController;
         this.apiServices = appController.getApiServices();
+    }
 
+    @Override
+    public void initialize(){
         // Fetch list of games
         List<Long> listOfGames = apiServices.getAllGameIds();
 

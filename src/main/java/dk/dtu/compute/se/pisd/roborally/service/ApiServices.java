@@ -22,15 +22,12 @@ public class ApiServices {
     private String GAMES_URL;
     private String PLAYERS_URL;
     private String MOVES_URL;
-    AppController appController;
-
 
     private final RestTemplate restTemplate = new RestTemplate();
     //LocalPlayer is stored in AppController now
    // private PlayerDTO localPlayer;
 
-    public ApiServices(AppController appController){
-        this.appController = appController;
+    public ApiServices(){
         ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
 
         if(type == ApiType.LOCAL){
@@ -140,15 +137,9 @@ public class ApiServices {
         ResponseEntity<PlayerDTO> response = null;
         try {
             response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
-            //appController.setLocalPlayer(response.getBody());
         } catch (Exception e) {
             return null;
         }
-        //ResponseEntity<PlayerDTO> response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
-
-        // Set the local player to the response from the server with its corresponding ID
-
-        //return response.getStatusCode() == HttpStatus.OK ? player: null;
         return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
     }
     public boolean createPlayerOnServer(PlayerDTO playerDTO){
@@ -195,7 +186,7 @@ public class ApiServices {
         }
 
         // Clear the local player
-        appController.setLocalPlayer(null);
+        AppController.localPlayer = null;
     }
 
  /*   public PlayerDTO getLocalPlayer(){

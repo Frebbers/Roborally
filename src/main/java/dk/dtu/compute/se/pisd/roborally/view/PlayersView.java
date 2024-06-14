@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
@@ -39,7 +40,6 @@ import java.util.Objects;
  */
 public class PlayersView extends TabPane implements ViewObserver {
 
-    private GameController gameController;
     private Board board;
 
     private PlayerView[] playerViews;
@@ -50,7 +50,6 @@ public class PlayersView extends TabPane implements ViewObserver {
      * @param gameController
      */
     public PlayersView(GameController gameController) {
-        this.gameController = gameController;
         board = gameController.board;
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
@@ -110,10 +109,8 @@ public class PlayersView extends TabPane implements ViewObserver {
                 this.getSelectionModel().select(board.getPlayerNumberByTurnOrder(current));
             }
             else if(board.getPhase() == Phase.PROGRAMMING) {
-                ApiServices apiServices = gameController.getApiServices();
-
                 for(PlayerView view : playerViews){
-                    if(!Objects.equals(view.getPlayer().getId(), apiServices.getLocalPlayer().getId())){
+                    if(!Objects.equals(view.getPlayer().getId(), AppController.localPlayer.getId())){
                         TabPane tabPane = view.getTabPane();
 
                         if(tabPane != null){

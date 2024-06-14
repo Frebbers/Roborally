@@ -112,7 +112,7 @@ public class GameController {
         ApiServices apiServices = appController.getApiServices();
 
         // Get the local player from the board
-        Player localPlayer = board.getLocalPlayer(appController.getLocalPlayer());
+        Player localPlayer = board.getLocalPlayer(AppController.localPlayer);
 
         // Get the game ID of the player
         Long gameId = localPlayer.getGameId();

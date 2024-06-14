@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
@@ -79,8 +80,7 @@ public class PlayerView extends Tab implements ViewObserver {
         this.gameController = gameController;
         this.player = player;
 
-        ApiServices apiServices = gameController.getApiServices();
-        isLocalPlayer = Objects.equals(apiServices.getLocalPlayer().getId(), player.getId());
+        isLocalPlayer = Objects.equals(AppController.localPlayer.getId(), player.getId());
 
         // Set up GUI components
         initializeGUIComponents();

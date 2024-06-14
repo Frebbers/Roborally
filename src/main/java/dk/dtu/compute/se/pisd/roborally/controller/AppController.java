@@ -55,8 +55,8 @@ public class AppController implements Observer {
 
     private GameController gameController;
     private LobbyController lobbyController;
-    private PlayerDTO localPlayer;
 
+    public static PlayerDTO localPlayer;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -65,7 +65,7 @@ public class AppController implements Observer {
      */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
-        this.apiServices = new ApiServices(this);
+        this.apiServices = new ApiServices();
 
         Platform.runLater(() -> {
             this.lobbyController = new LobbyController(this);
@@ -333,9 +333,6 @@ public class AppController implements Observer {
             //If the player does not exist, create it
             createCharacter();
         }
-    }
-    public PlayerDTO getLocalPlayer() {
-        return localPlayer;
     }
 
     public void toggleReady() {apiServices.updatePlayerState(localPlayer.getId());}

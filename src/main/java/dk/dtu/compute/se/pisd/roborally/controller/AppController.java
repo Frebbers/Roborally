@@ -30,13 +30,12 @@ import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
 import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
 
 /**

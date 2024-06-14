@@ -20,7 +20,6 @@ public class LobbySelectView extends VBox {
         this.appController = appController;
         this.apiServices = appController.getApiServices();
 
-
         List<Long> listOfGames = apiServices.getAllGameIds();
         Text joinLobbyHeader = new Text("Join a lobby");
 

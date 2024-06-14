@@ -71,8 +71,7 @@ public class RoboRally extends Application {
         RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
         boardRoot = new BorderPane();
 
-        StartView startView = new StartView(appController);
-        VBox vbox = new VBox(menuBar, startView, boardRoot);
+        VBox vbox = new VBox(menuBar, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
         Scene primaryScene = new Scene(vbox);
 
@@ -84,7 +83,28 @@ public class RoboRally extends Application {
                     appController.exit();} );
         stage.setResizable(false);
         stage.sizeToScene();
+
+        createStartView(appController);
+
         stage.show();
+    }
+
+    /**
+     * Create a StartView with the given appController
+     *
+     * @param appController
+     */
+    public void createStartView(AppController appController) {
+        // if present, remove old BoardView
+        boardRoot.getChildren().clear();
+
+        if (appController != null) {
+            // create and add view for new board
+            StartView startView = new StartView(appController);
+            boardRoot.setCenter(startView);
+        }
+
+        stage.sizeToScene();
     }
 
     /**

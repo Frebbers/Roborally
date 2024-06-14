@@ -71,7 +71,7 @@ public class RoboRally extends Application {
         RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
         boardRoot = new BorderPane();
 
-        VBox vbox = new VBox(menuBar, boardRoot);
+        VBox vbox = new VBox(boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
         Scene primaryScene = new Scene(vbox);
 

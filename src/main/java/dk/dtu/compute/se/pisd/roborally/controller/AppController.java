@@ -202,15 +202,14 @@ public class AppController implements Observer {
     public boolean leave() {
         if(apiServices != null){
             apiServices.onPlayerLeave(localPlayer.getId());
-            roboRally.createLobbyView(null, 0L);
         }
         if (gameController != null) {
             //saveGame(); NOT IMPLEMENTED
             gameController.shutdownScheduler();
             gameController = null;
-            roboRally.createBoardView(null);
             return true;
         }
+        roboRally.createStartView(this);
         return false;
     }
 

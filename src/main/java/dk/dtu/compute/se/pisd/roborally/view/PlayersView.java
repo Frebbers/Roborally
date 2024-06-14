@@ -91,8 +91,6 @@ public class PlayersView extends TabPane implements ViewObserver {
         }
     }
 
-
-
     /**
      * Update board view as to include a recent change in state.
      * 
@@ -106,5 +104,4 @@ public class PlayersView extends TabPane implements ViewObserver {
             this.getSelectionModel().select(board.getPlayerNumberByTurnOrder(current));
         }
     }
-
 }

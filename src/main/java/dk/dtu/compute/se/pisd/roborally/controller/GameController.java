@@ -136,7 +136,6 @@ public class GameController {
 
         // Poll to the server if all the players are ready
         startPollingForMoves(gameId, board.getMoveCount(), moves -> {
-            System.out.println(moves.size());
             // Ensure that any moves has been fetched
             if(moves != null && !moves.isEmpty()){
                 // Loop through the players and set their
@@ -150,14 +149,15 @@ public class GameController {
                     // Get the list of moves from the moveDTO
                     List<String> clientMoveTypes = moveDTO.getMoveTypes();
 
+                    System.out.println(clientMoveTypes.size());
+
                     for(int i = 0; i < clientMoveTypes.size(); i++){
-                        System.out.println(clientMoveTypes.get(i));
+                        // Create a CommandCard from the String
+                        Command command = Command.fromString(clientMoveTypes.get(i));
+                        CommandCard commandCard = new CommandCard(command);
 
-                        // Create a CommandCardField from the String
-                        CommandCardField programCard = createCommandCardFieldFromString(clientMoveTypes.get(i), player);
-
-                        // Set the programField for the client
-                        player.setProgramField(i, programCard);
+                        // Update the card for the programField
+                        player.getProgramField(i).setCard(commandCard);
                     }
                 }
 
@@ -167,8 +167,6 @@ public class GameController {
 
                 // Execute the robot programs
                 executePrograms();
-
-                System.out.println("wtfff");
             }
         });
     }

@@ -279,8 +279,12 @@ public class AppController implements Observer {
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(name -> {
+            //Attempt to create player
             if (apiServices.createPlayer(name)==null){
                 System.out.println("Error creating player");
+                Alert alert = new Alert(AlertType.ERROR,
+                        "Error creating player. Check your connection to the server.", ButtonType.OK);
+                alert.showAndWait();
             }
             else {
                 System.out.println("Player created");

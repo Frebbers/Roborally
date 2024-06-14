@@ -134,10 +134,17 @@ public class ApiServices {
         player.setGameId(0L);
 
         // Upload the player to the server
-        ResponseEntity<PlayerDTO> response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
+        ResponseEntity<PlayerDTO> response = null;
+        try {
+            response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
+            localPlayer = response.getBody();
+        } catch (Exception e) {
+            return null;
+        }
+        //ResponseEntity<PlayerDTO> response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
 
         // Set the local player to the response from the server with its corresponding ID
-        localPlayer = response.getBody();
+
         return response.getStatusCode() == HttpStatus.OK ? localPlayer : null;
     }
 

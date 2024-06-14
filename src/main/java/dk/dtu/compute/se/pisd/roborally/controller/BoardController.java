@@ -70,5 +70,4 @@ public class BoardController {
         // No blockage
         return false;
     }
-
 }

@@ -79,7 +79,5 @@ public enum Command {
 
             default -> throw new IllegalArgumentException("Invalid command");
         };
-
     }
-
 }

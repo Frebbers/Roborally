@@ -93,7 +93,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         Player player = space.getPlayer();
 
         if (player != null) {
-            String imagePath = "images/r" + (player.getRobotType().getValue()) + ".png";
+            String imagePath = "images/robots/r" + (player.getRobotType().getValue()) + ".png";
             URL imageUrl = getClass().getClassLoader().getResource(imagePath);
 
             if (imageUrl != null) {

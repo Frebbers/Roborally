@@ -95,13 +95,33 @@ public class RoboRally extends Application {
      * @param appController
      */
     public void createStartView(AppController appController) {
-        // if present, remove old BoardView
+        // if present, remove old view
+        boardRoot.getChildren().clear();
+
+        if (appController != null) {
+            // create and add view for start screen
+            StartView startView = new StartView(appController);
+            startView.initialize();
+            boardRoot.setCenter(startView);
+        }
+
+        stage.sizeToScene();
+    }
+
+    /**
+     * Create a RobotSettingsView with the given appController
+     *
+     * @param appController
+     */
+    public void createRobotSettingsView(AppController appController) {
+        // if present, remove old view
         boardRoot.getChildren().clear();
 
         if (appController != null) {
             // create and add view for new board
-            StartView startView = new StartView(appController);
-            boardRoot.setCenter(startView);
+            RobotSettingsView robotSettingsView = new RobotSettingsView(appController);
+            robotSettingsView.initialize();
+            boardRoot.setCenter(robotSettingsView);
         }
 
         stage.sizeToScene();
@@ -113,7 +133,7 @@ public class RoboRally extends Application {
      * @param gameController
      */
     public void createBoardView(GameController gameController) {
-        // if present, remove old BoardView
+        // if present, remove old view
         boardRoot.getChildren().clear();
 
         if (gameController != null) {
@@ -130,11 +150,12 @@ public class RoboRally extends Application {
      *
      */
     public void createLobbyView(LobbyController controller, Long gameId) {
-        // if present, remove old BoardView
+        // if present, remove old view
         boardRoot.getChildren().clear();
 
         if(controller != null){
             LobbyView lobbyView = new LobbyView(controller, gameId);
+            lobbyView.initialize();
             boardRoot.setCenter(lobbyView);
         }
 
@@ -145,12 +166,13 @@ public class RoboRally extends Application {
      * Create a LobbySelectView
      *
      */
-    public void createLobbySelectView(AppController controller) {
-        // if present, remove old LobbySelectView
+    public void createLobbyBrowserView(AppController controller) {
+        // if present, remove old view
         boardRoot.getChildren().clear();
 
         if(controller != null){
             LobbyBrowserView lobbyBrowserView = new LobbyBrowserView(controller);
+            lobbyBrowserView.initialize();
             boardRoot.setCenter(lobbyBrowserView);
         }
 

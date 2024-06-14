@@ -8,20 +8,27 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 
-public class LobbyView extends VBox {
+public class LobbyView extends BaseView {
 
     private ListView<String> playerListView;
     private Button readyButton;
     private LobbyController lobbyController;
     private AppController appController;
+    private Long gameId;
 
     public LobbyView(LobbyController lobbyController, Long gameId) {
+        super();
         this.lobbyController = lobbyController;
         this.appController = lobbyController.getAppController();
-        setupLobbyView(gameId);
+        this.gameId = gameId;
     }
 
-    public void setupLobbyView(Long gameId) {
+    @Override
+    public void initialize(){
+        setupLobbyView();
+    }
+
+    public void setupLobbyView() {
         playerListView = new ListView<>();
         readyButton = new Button("Ready");
 

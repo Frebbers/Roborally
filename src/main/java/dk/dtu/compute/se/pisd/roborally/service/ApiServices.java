@@ -23,7 +23,7 @@ public class ApiServices {
     private String PLAYERS_URL;
     private String MOVES_URL;
     AppController appController;
-    private String PLAYERS_READY_URL;
+
 
     private final RestTemplate restTemplate = new RestTemplate();
     //LocalPlayer is stored in AppController now
@@ -202,7 +202,7 @@ public class ApiServices {
         return localPlayer;
     }
 */
-    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moves){
+
 
     public Integer getPlayerReadyCount(Long gameId, Integer turnIndex){
         String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex + "/player-count";

@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
+import dk.dtu.compute.se.pisd.roborally.model.RobotType;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
 
 public class ApiServices {
     private String BASE_URL;
@@ -133,8 +136,14 @@ public class ApiServices {
         player.setName(name);
         player.setState(PlayerState.NOT_IN_LOBBY);
         player.setGameId(0L);
+
+        // Set the Robot Type of the Player
+        int robotIndex = Integer.parseInt(getProperty("local.player.robotType"));
+        RobotType robotType = Utilities.toEnum(RobotType.class, robotIndex);
+        player.setRobotType(robotType);
+
         // Upload the player to the server
-        ResponseEntity<PlayerDTO> response = null;
+        ResponseEntity<PlayerDTO> response;
         try {
             response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
         } catch (Exception e) {
@@ -142,6 +151,7 @@ public class ApiServices {
         }
         return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
     }
+
     public boolean createPlayerOnServer(PlayerDTO playerDTO){
         return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
     }

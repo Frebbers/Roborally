@@ -62,10 +62,11 @@ public class Player extends Subject {
     private PlayerState state;
     private Long gameId;
 
-    public Player(Long id, String name, PlayerState state, Long gameId){
+    public Player(Long id, String name, RobotType robotType, PlayerState state, Long gameId){
         // Set the information sent by the PlayerDTO from the API
         this.id = id;
         this.name = name;
+        this.robotType = robotType;
         this.state = state;
         this.gameId = gameId;
 

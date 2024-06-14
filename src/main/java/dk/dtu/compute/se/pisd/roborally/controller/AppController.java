@@ -148,12 +148,7 @@ public class AppController implements Observer {
             PlayerDTO playerDTO = playersDTOs.get(i);
 
             // Create the actual player object for the local client
-            Player player = new Player(playerDTO.getId(), playerDTO.getName(), playerDTO.getState(), playerDTO.getGameId());
-
-            // Set the Robot Type of the Player
-            int robotIndex = Integer.parseInt(getProperty("local.player.robotType"));
-            RobotType robotType = Utilities.toEnum(RobotType.class, robotIndex);
-            player.setRobotType(robotType);
+            Player player = new Player(playerDTO.getId(), playerDTO.getName(), playerDTO.getRobotType(), playerDTO.getState(), playerDTO.getGameId());
 
             // Update the required fields for the player
             player.setBoard(board);

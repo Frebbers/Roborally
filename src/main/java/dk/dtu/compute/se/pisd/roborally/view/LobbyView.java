@@ -40,7 +40,7 @@ public class LobbyView extends BaseView {
 
         // Set up a button to leave the lobby
         Button leaveButton = new Button("Leave");
-        leaveButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
+        leaveButton.setOnAction(event -> appController.leave());
 
         // Set up button to set the players ready state
         Button readyButton = new Button("Ready");

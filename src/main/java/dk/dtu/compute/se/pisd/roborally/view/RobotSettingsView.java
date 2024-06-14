@@ -3,12 +3,10 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
@@ -44,15 +42,8 @@ public class RobotSettingsView extends BaseView {
         robotsSelection.setVgap(10);
         loadRobotImages();
 
-        // Add a button to go back
-        Button backButton = new Button("Back");
-        backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
-        HBox bottomContainer = new HBox(backButton);
-        bottomContainer.setAlignment(Pos.BOTTOM_LEFT);
-        bottomContainer.setPadding(new Insets(10));
-
         // Layout arrangement
-        VBox mainLayout = new VBox(20, nameHeader, nameField, robotsSelection, backButton);
+        VBox mainLayout = new VBox(20, nameHeader, nameField, robotsSelection);
         getChildren().addAll(mainLayout);
     }
 

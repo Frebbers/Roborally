@@ -99,7 +99,7 @@ public class GameController {
     // XXX: implemented in the current version
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
-        int random = (int) (Math.random() * commands.length);
+        int random = 1 + (int) (Math.random() * commands.length - 1); // Plus 1 to remove the Empty command card
         return new CommandCard(commands[random]);
     }
 
@@ -125,6 +125,9 @@ public class GameController {
             if(programCard != null){
                 localMoveTypes.add((programCard.getName()));
             }
+            else {
+                localMoveTypes.add("Empty");
+            }
         }
 
         // Upload the moves to the server
@@ -148,8 +151,6 @@ public class GameController {
 
                     // Get the list of moves from the moveDTO
                     List<String> clientMoveTypes = moveDTO.getMoveTypes();
-
-                    System.out.println(clientMoveTypes.size());
 
                     for(int i = 0; i < clientMoveTypes.size(); i++){
                         // Create a CommandCard from the String

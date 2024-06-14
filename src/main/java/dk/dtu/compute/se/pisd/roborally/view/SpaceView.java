@@ -35,6 +35,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URL;
+
 /**
  * Handles the drawing of a space on a board and its contents.
  *
@@ -91,28 +93,36 @@ public class SpaceView extends StackPane implements ViewObserver {
         Player player = space.getPlayer();
 
         if (player != null) {
-            // Set the image of the player
-            Image image = new Image("/images/r" + (player.getId() + 1) + ".png");
-            playerImage.setImage(image);
+            String imagePath = "images/r" + (player.getId() + 1) + ".png";
 
-            switch(player.getHeading()) {
-                case NORTH:
-                    playerImage.setRotate(180);
-                    break;
-                case EAST:
-                    playerImage.setRotate(270);
-                    break;
-                case SOUTH:
-                    playerImage.setRotate(0);
-                    break;
-                case WEST:
-                    playerImage.setRotate(90);
-                    break;
-                default:
-                    // code block
+            URL imageUrl = getClass().getClassLoader().getResource(imagePath);
+
+            if (imageUrl != null) {
+                // Set the image of the player
+                Image image = new Image(imageUrl.toString());
+                playerImage.setImage(image);
+                switch(player.getHeading()) {
+                    case NORTH:
+                        playerImage.setRotate(180);
+                        break;
+                    case EAST:
+                        playerImage.setRotate(270);
+                        break;
+                    case SOUTH:
+                        playerImage.setRotate(0);
+                        break;
+                    case WEST:
+                        playerImage.setRotate(90);
+                        break;
+                    default:
+                        // Handle whatever happens default
+                }
+            } else {
+                System.out.println("Image not found: " + imagePath);
             }
         }
     }
+
 
     /**
      * Update space view as to include a recent change in state.

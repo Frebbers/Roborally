@@ -87,4 +87,8 @@ public class LobbyController {
     public ApiServices getApiServices(){
         return appController.getApiServices();
     }
+
+    public AppController getAppController() {
+        return appController;
+    }
 }

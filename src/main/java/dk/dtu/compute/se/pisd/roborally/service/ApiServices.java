@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.service;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -21,12 +22,14 @@ public class ApiServices {
     private String GAMES_URL;
     private String PLAYERS_URL;
     private String MOVES_URL;
+    AppController appController;
 
     private final RestTemplate restTemplate = new RestTemplate();
+    //LocalPlayer is stored in AppController now
+   // private PlayerDTO localPlayer;
 
-    private PlayerDTO localPlayer;
-
-    public ApiServices(){
+    public ApiServices(AppController appController){
+        this.appController = appController;
         ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
 
         if(type == ApiType.LOCAL){
@@ -130,14 +133,15 @@ public class ApiServices {
         // Create a new player on the client and set the name (Do not create a constructor for this)
         PlayerDTO player = new PlayerDTO();
         player.setName(name);
-        player.setState(PlayerState.NOT_READY);
+        player.setState(PlayerState.NOT_IN_LOBBY);
         player.setGameId(0L);
+
 
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response = null;
         try {
             response = restTemplate.postForEntity(PLAYERS_URL, player, PlayerDTO.class);
-            localPlayer = response.getBody();
+            //appController.setLocalPlayer(response.getBody());
         } catch (Exception e) {
             return null;
         }
@@ -145,14 +149,17 @@ public class ApiServices {
 
         // Set the local player to the response from the server with its corresponding ID
 
-        return response.getStatusCode() == HttpStatus.OK ? localPlayer : null;
+        return response.getStatusCode() == HttpStatus.OK ? player: null;
     }
 
     public void updatePlayerState(Long id){
         PlayerDTO player = getPlayerById(id);
+        if (player.getState() == PlayerState.NOT_IN_LOBBY){
+            player.setState(PlayerState.NOT_READY);
+        }
+        else
         if (player != null) {
             player.setState(player.getState() == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY);
-
             String playerUrl = PLAYERS_URL + "/" + player.getId();
             try {
                 restTemplate.put(playerUrl, player);
@@ -185,13 +192,13 @@ public class ApiServices {
         }
 
         // Clear the local player
-        localPlayer = null;
+        appController.setLocalPlayer(null);
     }
 
-    public PlayerDTO getLocalPlayer(){
+ /*   public PlayerDTO getLocalPlayer(){
         return localPlayer;
     }
-
+*/
     public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moves){
         // Create a new move on the client and fill the information (Do not create a constructor for this)
         MoveDTO move = new MoveDTO();

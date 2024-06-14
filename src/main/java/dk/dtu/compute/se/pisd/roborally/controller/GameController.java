@@ -104,7 +104,7 @@ public class GameController {
         ApiServices apiServices = appController.getApiServices();
 
         // Get the local player from the board
-        Player localPlayer = board.getLocalPlayer(apiServices.getLocalPlayer());
+        Player localPlayer = board.getLocalPlayer(appController.getLocalPlayer());
 
         // Add the moves from the ProgramCard in the Registers of the local player
         List<String> moves = new ArrayList<>();

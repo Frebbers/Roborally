@@ -98,7 +98,7 @@ public class PlayerView extends Tab implements ViewObserver {
         //      players, but on the PlayersView (view for all players). This should be
         //      refactored.
         ApiServices apiServices = gameController.getApiServices();
-        System.out.println(apiServices.getLocalPlayer().getId());
+        //System.out.println(appC.getLocalPlayer().getId());
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
 

@@ -23,7 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -36,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
 import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
 
 /**
@@ -55,15 +55,17 @@ public class AppController implements Observer {
 
     private GameController gameController;
     private LobbyController lobbyController;
+    private PlayerDTO localPlayer;
+
 
     /**
      * Create an AppController object tied to the given RoboRally object.
-     * 
+     *
      * @param roboRally
      */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
-        this.apiServices = new ApiServices();
+        this.apiServices = new ApiServices(this);
 
         Platform.runLater(() -> {
             this.lobbyController = new LobbyController(this);
@@ -96,13 +98,14 @@ public class AppController implements Observer {
                 int boardNumber = boardResult.get();
 
                 // Tell the server to create the player in the database
-                PlayerDTO playerDTO = apiServices.createPlayer("Host");
+                sendPlayerToServer();
 
                 // Create the lobby
                 Game game = apiServices.createGame((long) boardNumber, playerCount);
 
                 // Join the lobby that was just created
-                apiServices.joinGame(game.id, playerDTO.getId());
+                localPlayer.setState(PlayerState.NOT_READY);
+                apiServices.joinGame(game.id, localPlayer.getId());
 
                 // Display the Lobby Window
                 roboRally.createLobbyView(lobbyController, game.id);
@@ -116,29 +119,34 @@ public class AppController implements Observer {
             System.out.println("No games available to join.");
             return;
         }
-            ChoiceDialog<Long> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
-            playerDialog.setTitle("Game Lobbies");
-            playerDialog.setHeaderText("Select lobby you would like to join");
-            playerDialog.setContentText("Choose your game:");
+        ChoiceDialog<Long> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
+        playerDialog.setTitle("Game Lobbies");
+        playerDialog.setHeaderText("Select lobby you would like to join");
+        playerDialog.setContentText("Choose your game:");
 
-            // Show dialog and capture result
-            playerDialog.showAndWait().ifPresent(gameId -> {
+        // Show dialog and capture result
+        playerDialog.showAndWait().ifPresent(gameId -> {
 
-                // Generate a long based on the id selected
-                Long id = Long.valueOf(gameId);
+            // Generate a long based on the id selected
+            Long id = Long.valueOf(gameId);
 
-                // Tell the server to create the player in the database
-                PlayerDTO playerDTO = apiServices.createPlayer("Client");
+            /* Tell the server to create the player in the database
+            if (getProperty("playerName").isEmpty()) {
+                createCharacter();
+            }
+               */
+            sendPlayerToServer();
 
-                // Join the game
-                apiServices.joinGame(id, playerDTO.getId());
+            // Join the game
+            localPlayer.setState(PlayerState.NOT_READY);
+            apiServices.joinGame(id, localPlayer.getId());
 
-                // Display the Lobby Window
-                roboRally.createLobbyView(lobbyController, id);
-            });
+            // Display the Lobby Window
+            roboRally.createLobbyView(lobbyController, id);
+        });
     }
 
-    public void loadGameScene(Long gameId, Long boardNumber){
+    public void loadGameScene(Long gameId, Long boardNumber) {
         if (gameController != null && !leave()) {
             return;
         }
@@ -191,7 +199,8 @@ public class AppController implements Observer {
         // XXX needs to be implemented eventually
     }
 
-    /** NOT IMPLEMENTED
+    /**
+     * NOT IMPLEMENTED
      * Load a previously saved game state.
      */
     public void loadGame() {
@@ -212,8 +221,8 @@ public class AppController implements Observer {
      * @return true if the current game was stopped, false otherwise
      */
     public boolean leave() {
-        if(apiServices != null){
-            apiServices.onPlayerLeave(apiServices.getLocalPlayer().getId());
+        if (apiServices != null) {
+            apiServices.onPlayerLeave(localPlayer.getId());
         }
         if (gameController != null) {
             //saveGame(); NOT IMPLEMENTED
@@ -256,13 +265,16 @@ public class AppController implements Observer {
      *
      * @return true if localPlayer is not null, false otherwise.
      */
-    public boolean isInLobby(){
-        return apiServices.getLocalPlayer() != null;
+    public boolean isInLobby() {
+        if (localPlayer == null) {
+            return false;
+        }
+        return (!(localPlayer.getState().equals(PlayerState.NOT_IN_LOBBY)));
     }
 
     /**
      * Check whether this object's gameController is not null.
-     * 
+     *
      * @return true if gameController is not null, false otherwise.
      */
     public boolean isGameRunning() {
@@ -280,21 +292,22 @@ public class AppController implements Observer {
 
         result.ifPresent(name -> {
             //Attempt to create player
-            if (apiServices.createPlayer(name)==null){
+            localPlayer = apiServices.createPlayer(name);
+            if (apiServices.createPlayer(name) == null) {
                 System.out.println("Error creating player");
                 Alert alert = new Alert(AlertType.ERROR,
                         "Error creating player. Check your connection to the server.", ButtonType.OK);
                 alert.showAndWait();
-            }
-            else {
+            } else {
                 System.out.println("Player created");
                 setProperty("playerName", name);
             }
         });
     }
+
     /**
      * NOT IMPLEMENTED
-     * 
+     *
      * @param subject
      */
     @Override
@@ -306,7 +319,25 @@ public class AppController implements Observer {
         return roboRally;
     }
 
-    public ApiServices getApiServices(){
+    public ApiServices getApiServices() {
         return apiServices;
     }
+
+    private void sendPlayerToServer() {
+        if (localPlayer != null) {
+            apiServices.createPlayer(localPlayer.getName());
+        } else if (getProperty("playerName") != null) {
+            localPlayer = apiServices.createPlayer(getProperty("playerName"));
+        } else {
+            //If the player does not exist, create it
+            createCharacter();
+        }
+    }
+    public PlayerDTO getLocalPlayer() {
+        return localPlayer;
+    }
+
+    public void toggleReady() {apiServices.updatePlayerState(localPlayer.getId());}
+
+    public void setLocalPlayer(PlayerDTO body) {}
 }

@@ -36,8 +36,7 @@ import java.util.List;
  */
 public enum Command {
 
-    // This is a very simplistic way of realizing different commands.
-
+    EMPTY(""),
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
@@ -47,7 +46,7 @@ public enum Command {
     BACK("Move Back"),
 
 
-    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+    OPTION_LEFT_RIGHT("Left or Right", LEFT, RIGHT);
 
     final public String displayName;
 
@@ -68,12 +67,13 @@ public enum Command {
 
     public static Command fromString(String input) throws IllegalArgumentException{
         return switch (input) {
+            case "Empty", "" -> Command.EMPTY;
             case "Fwd", "Forward", "forward", "fwd" -> Command.FORWARD;
             case "Turn Right", "turn right" -> Command.RIGHT;
             case "Turn Left","turn left" -> Command.LEFT;
             case "Fast Fwd","fast fwd", "Fast Forward", "fast forward" -> Command.FAST_FORWARD;
             case "Move Back", "Back", "Move back", "move back" -> Command.BACK;
-            case "U-turn", "u-turn", "Turn Around", "Turn around"->Command.U_TURN;
+            case "U-Turn", "u-turn", "Turn Around", "Turn around"->Command.U_TURN;
             case "Repeat", "Again", "again", "repeat"->Command.AGAIN;
             case "Left or right", "left or right", "L or R"-> Command.OPTION_LEFT_RIGHT;
 

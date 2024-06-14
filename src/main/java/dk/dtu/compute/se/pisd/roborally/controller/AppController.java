@@ -221,8 +221,9 @@ public class AppController implements Observer {
      * @return true if the current game was stopped, false otherwise
      */
     public boolean leave() {
-        if (apiServices != null) {
+        if(apiServices != null){
             apiServices.onPlayerLeave(localPlayer.getId());
+            roboRally.createLobbyView(null, 0L);
         }
         if (gameController != null) {
             //saveGame(); NOT IMPLEMENTED

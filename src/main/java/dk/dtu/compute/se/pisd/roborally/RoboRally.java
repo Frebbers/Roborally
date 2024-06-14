@@ -150,8 +150,8 @@ public class RoboRally extends Application {
         boardRoot.getChildren().clear();
 
         if(controller != null){
-            LobbySelectView lobbySelectView = new LobbySelectView(controller);
-            boardRoot.setCenter(lobbySelectView);
+            LobbyBrowserView lobbyBrowserView = new LobbyBrowserView(controller);
+            boardRoot.setCenter(lobbyBrowserView);
         }
 
         stage.sizeToScene();

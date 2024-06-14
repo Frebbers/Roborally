@@ -8,4 +8,19 @@ public class Utilities {
             throw new IllegalArgumentException("Unknown enum type: " + enumString);
         }
     }
+
+    public static <T extends Enum<T>> T toEnum(Class<T> enumType, int enumValue) {
+        try {
+            T[] enumConstants = enumType.getEnumConstants();
+            for (T enumConstant : enumConstants) {
+                Integer value = (Integer) enumType.getMethod("getValue").invoke(enumConstant);
+                if (value.equals(enumValue)) {
+                    return enumConstant;
+                }
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalArgumentException("Enum " + enumType.getName() + " does not have a reachable getValue method or another reflection issue occurred.", e);
+        }
+        throw new IllegalArgumentException("Unknown enum value: " + enumValue);
+    }
 }

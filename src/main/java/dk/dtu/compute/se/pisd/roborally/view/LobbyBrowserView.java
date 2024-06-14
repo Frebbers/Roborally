@@ -1,7 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
-import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -11,11 +10,11 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class LobbySelectView extends VBox {
+public class LobbyBrowserView extends VBox {
     private AppController appController;
     private ApiServices apiServices;
 
-    public LobbySelectView(AppController appController) {
+    public LobbyBrowserView(AppController appController) {
         this.appController = appController;
         this.apiServices = appController.getApiServices();
 
@@ -43,7 +42,6 @@ public class LobbySelectView extends VBox {
             Long selectedGameId = listView.getSelectionModel().getSelectedItem();
             if (selectedGameId != null) {
                 appController.joinLobby(selectedGameId);
-                System.out.println("Joining Game ID: " + selectedGameId);
             } else {
                 System.out.println("No game selected.");
             }

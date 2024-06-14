@@ -34,6 +34,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,7 +76,7 @@ public class PlayerView extends Tab implements ViewObserver {
      */
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
-        this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
+        //this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
         this.gameController = gameController;
         this.player = player;

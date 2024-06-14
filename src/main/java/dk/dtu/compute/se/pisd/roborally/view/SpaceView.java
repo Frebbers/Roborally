@@ -93,8 +93,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         Player player = space.getPlayer();
 
         if (player != null) {
-            String imagePath = "images/r" + (player.getId() + 1) + ".png";
-
+            String imagePath = "images/r" + (player.getRobotType().getValue()) + ".png";
             URL imageUrl = getClass().getClassLoader().getResource(imagePath);
 
             if (imageUrl != null) {
@@ -133,5 +132,4 @@ public class SpaceView extends StackPane implements ViewObserver {
             updatePlayer();
         }
     }
-
 }

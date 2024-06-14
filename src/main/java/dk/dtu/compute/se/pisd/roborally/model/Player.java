@@ -42,7 +42,7 @@ public class Player extends Subject {
 
     public Board board;
 
-    private String color;
+    private RobotType robotType;
 
 
     private Space space;
@@ -285,21 +285,21 @@ public class Player extends Subject {
     }
 
     /**
-     * Return color of player.
+     * Return the robot type of player.
      *
      * @return color of player as a string
      */
-    public String getColor() {
-        return color;
+    public RobotType getRobotType() {
+        return robotType;
     }
 
     /**
-     * Set color of player.
+     * Set the robot type of player.
      *
-     * @param color new color of player
+     * @param robotType new color of player
      */
-    public void setColor(String color) {
-        this.color = color;
+    public void setRobotType(RobotType robotType) {
+        this.robotType = robotType;
         notifyChange();
         if (space != null) {
             space.playerChanged();

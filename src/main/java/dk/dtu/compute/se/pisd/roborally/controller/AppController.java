@@ -23,10 +23,12 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -148,8 +150,12 @@ public class AppController implements Observer {
             // Create the actual player object for the local client
             Player player = new Player(playerDTO.getId(), playerDTO.getName(), playerDTO.getState(), playerDTO.getGameId());
 
+            // Set the Robot Type of the Player
+            int robotIndex = Integer.parseInt(getProperty("local.player.robotType"));
+            RobotType robotType = Utilities.toEnum(RobotType.class, robotIndex);
+            player.setRobotType(robotType);
+
             // Update the required fields for the player
-            System.out.println("Set the color of the player!");
             player.setBoard(board);
             player.setSpace(board.getSpace(i % board.width, i));
 

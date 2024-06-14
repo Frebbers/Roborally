@@ -15,51 +15,55 @@ public class LobbySelectView extends VBox {
     private AppController appController;
     private ApiServices apiServices;
 
-
     public LobbySelectView(AppController appController) {
         this.appController = appController;
         this.apiServices = appController.getApiServices();
 
+        // Fetch list of games
         List<Long> listOfGames = apiServices.getAllGameIds();
+
+        // Header for joining lobby via IP
         Text joinLobbyHeader = new Text("Join a lobby");
-
-        Text searchForLobby  = new Text("Search for a lobby");
-        TextField lobbyIPDialog = new TextField();
-        Button joinLobbyButton = new Button("Join lobby");
-        VBox searchLobbyInput = new VBox(10, lobbyIPDialog, joinLobbyButton);
-
-        // Event handler on the button to get IPDialog value
+        TextField lobbyIPDialog = new TextField("Enter lobby IP");
+        Button joinLobbyButton = new Button("Join via IP");
         joinLobbyButton.setOnAction(event -> {
-            String IPCall = lobbyIPDialog.getText();
-            System.out.println("IP Address: " + IPCall);
+            String ip = lobbyIPDialog.getText();
+            //appController.joinLobbyByIP(ip);
+            System.out.println("Joining IP Address: " + ip);
         });
 
-        VBox searchLobby = new VBox (joinLobbyHeader, searchForLobby, searchLobbyInput);
+        // Layout for IP based lobby joining
+        VBox searchLobbyInput = new VBox(10, lobbyIPDialog, joinLobbyButton);
 
+        // List view for local lobbies
         Text foundLobbiesHeader = new Text("Local lobbies found:");
         ListView<Long> listView = new ListView<>();
-
-        if (listOfGames == null || listOfGames.isEmpty()) {
-            Text noGames = new Text("Searching..");
-            System.out.println("No games available to join.");
-            return;
-        } else {
-            listView.getItems().addAll(listOfGames);
-        }
-        listView.setOnMouseClicked(event -> {
+        Button joinLocalLobbyButton = new Button("Join Selected Lobby");
+        joinLocalLobbyButton.setOnAction(event -> {
             Long selectedGameId = listView.getSelectionModel().getSelectedItem();
             if (selectedGameId != null) {
                 appController.joinLobby(selectedGameId);
+                System.out.println("Joining Game ID: " + selectedGameId);
+            } else {
+                System.out.println("No game selected.");
             }
         });
 
-        Button joinLocalLobbyButton = new Button("Join lobby");
-        joinLocalLobbyButton.setOnAction(event -> {
+        // Populate the list view
+        if (listOfGames == null || listOfGames.isEmpty()) {
+            Text noGames = new Text("No games available to join.");
+            listView.setPlaceholder(noGames);
+        } else {
+            listView.getItems().addAll(listOfGames);
+        }
 
+        // Layout for selecting local lobby
+        VBox localLobbies = new VBox(10, foundLobbiesHeader, listView, joinLocalLobbyButton);
 
-            // Populate the ListView with the game IDs
-            listView.getItems().clear();
-        });
+        // Main layout
+        VBox mainLayout = new VBox(20, joinLobbyHeader, searchLobbyInput, localLobbies);
+
+        // Add the components to the VBox
+        getChildren().addAll(mainLayout);
     }
-
 }

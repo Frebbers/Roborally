@@ -140,15 +140,17 @@ public class RoboRally extends Application {
     }
 
     /**
-     * Create a LobbyView
+     * Create a LobbySelectView
      *
      */
     public void createLobbySelectView(AppController controller) {
-        // if present, remove old BoardView
+        // if present, remove old LobbySelectView
         boardRoot.getChildren().clear();
 
-        LobbySelectView lobbySelectView = new LobbySelectView(controller);
-        boardRoot.setCenter(lobbySelectView);
+        if(controller != null){
+            LobbySelectView lobbySelectView = new LobbySelectView(controller);
+            boardRoot.setCenter(lobbySelectView);
+        }
 
         stage.sizeToScene();
     }

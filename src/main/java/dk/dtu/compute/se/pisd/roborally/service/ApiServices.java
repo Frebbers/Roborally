@@ -135,8 +135,6 @@ public class ApiServices {
         player.setName(name);
         player.setState(PlayerState.NOT_IN_LOBBY);
         player.setGameId(0L);
-
-
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response = null;
         try {
@@ -149,7 +147,11 @@ public class ApiServices {
 
         // Set the local player to the response from the server with its corresponding ID
 
-        return response.getStatusCode() == HttpStatus.OK ? player: null;
+        //return response.getStatusCode() == HttpStatus.OK ? player: null;
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
+    }
+    public boolean createPlayerOnServer(PlayerDTO playerDTO){
+        return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
     }
 
     public void updatePlayerState(Long id){

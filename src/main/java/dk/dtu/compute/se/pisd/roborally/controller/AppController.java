@@ -300,7 +300,7 @@ public class AppController implements Observer {
                 alert.showAndWait();
             } else {
                 System.out.println("Player created");
-                setProperty("playerName", name);
+                setProperty("local.player.name", name);
             }
         });
     }
@@ -325,9 +325,9 @@ public class AppController implements Observer {
 
     private void sendPlayerToServer() {
         if (localPlayer != null) {
-            apiServices.createPlayer(localPlayer.getName());
-        } else if (getProperty("playerName") != null) {
-            localPlayer = apiServices.createPlayer(getProperty("playerName"));
+            if (!apiServices.createPlayerOnServer(localPlayer)){System.out.println("Error posting player to server!");}
+        } else if (!(getProperty("local.player.name").isEmpty())) {
+            localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
         } else {
             //If the player does not exist, create it
             createCharacter();

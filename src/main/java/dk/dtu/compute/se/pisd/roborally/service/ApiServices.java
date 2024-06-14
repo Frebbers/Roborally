@@ -21,6 +21,7 @@ public class ApiServices {
     private String GAMES_URL;
     private String PLAYERS_URL;
     private String MOVES_URL;
+    private String PLAYERS_READY_URL;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -185,16 +186,28 @@ public class ApiServices {
         return localPlayer;
     }
 
-    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moves){
+    public Integer getPlayerReadyCount(Long gameId, Integer turnIndex){
+        String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex + "/player-count";
+        ResponseEntity<Integer> response = restTemplate.getForEntity(url, Integer.class);
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moveTypes){
         // Create a new move on the client and fill the information (Do not create a constructor for this)
         MoveDTO move = new MoveDTO();
         move.setGameId(gameId);
         move.setPlayerId(playerId);
-        move.setMoves(moves);
+        move.setMoveTypes(moveTypes);
         move.setTurnIndex(turnIndex);
 
         // Upload the move to the server
         ResponseEntity<MoveDTO> response = restTemplate.postForEntity(MOVES_URL, move, MoveDTO.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public List<MoveDTO> getAllMoves(Long gameId, Integer turnIndex){
+        String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex;
+        ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
+        return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
 }

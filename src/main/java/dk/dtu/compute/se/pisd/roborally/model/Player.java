@@ -175,6 +175,19 @@ public class Player extends Subject {
     }
 
     /**
+     * Set the command card field at the given index of the player's register.
+     *
+     * @param i index of the register
+     *
+     */
+    public void setProgramField(int i, CommandCardField cardField) {
+        if (i >= 0 && i < program.length) {
+            program[i] = cardField;
+            notifyChange();
+        }
+    }
+
+    /**
      * Return the command card field at the given index of the player's cards.
      *
      * @param i index of the cards

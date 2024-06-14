@@ -42,9 +42,7 @@ public class RoboRallyMenuBar extends MenuBar {
     private MenuItem createLobby;
     private MenuItem joinLobby;
     private MenuItem createCharacter;
-
     private MenuItem leaveLobby;
-
     private MenuItem exitApp;
 
     /**

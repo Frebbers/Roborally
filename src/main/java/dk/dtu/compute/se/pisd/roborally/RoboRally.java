@@ -24,15 +24,16 @@ package dk.dtu.compute.se.pisd.roborally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
 import dk.dtu.compute.se.pisd.roborally.view.LobbyView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
+import dk.dtu.compute.se.pisd.roborally.view.StartView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 /**
  * Class for handling the javaFX initialization of the RoboRally game.
@@ -72,7 +73,9 @@ public class RoboRally extends Application {
         // when the user creates a new game or loads a game
         RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
         boardRoot = new BorderPane();
-        VBox vbox = new VBox(menuBar, boardRoot);
+
+        StartView startView = new StartView(appController);
+        VBox vbox = new VBox(menuBar, startView, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
         Scene primaryScene = new Scene(vbox);
 

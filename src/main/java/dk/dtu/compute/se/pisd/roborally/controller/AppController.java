@@ -76,12 +76,12 @@ public class AppController implements Observer {
      */
     public void createLobby() {
         ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        playerDialog.setTitle("Select number of players and map");
+        playerDialog.setTitle("Number of players");
         playerDialog.setHeaderText("Select number of players");
 
         ChoiceDialog<Integer> boardDialog = new ChoiceDialog<>(BOARD_NUMBER_OPTIONS.get(0), BOARD_NUMBER_OPTIONS);
         boardDialog.setTitle("Select map");
-        boardDialog.setTitle("Choose board to play");
+        boardDialog.setHeaderText("Choose map");
 
         Stage boardStage = (Stage) boardDialog.getDialogPane().getScene().getWindow();
         boardStage.setAlwaysOnTop(true);

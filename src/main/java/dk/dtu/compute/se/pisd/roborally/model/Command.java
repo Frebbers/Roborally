@@ -46,7 +46,7 @@ public enum Command {
     BACK("Move Back"),
 
 
-    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+    OPTION_LEFT_RIGHT("Left or Right", LEFT, RIGHT);
 
     final public String displayName;
 

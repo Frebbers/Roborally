@@ -65,7 +65,7 @@ public class RoboRallyMenuBar extends MenuBar {
         controlMenu.getItems().add(createCharacter);
 
         joinLobby = new MenuItem("Join Lobby");
-        joinLobby.setOnAction( e -> this.appController.joinLobby());
+        joinLobby.setOnAction( e -> this.appController.joinLobby(0L));
         controlMenu.getItems().add(joinLobby);
 
         leaveLobby = new MenuItem("Leave");

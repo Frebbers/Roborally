@@ -31,7 +31,7 @@ public class StartView extends StackPane {
         createCharacterButton.setOnAction(e -> appController.createCharacter());
 
         Button joinLobbyButton = new Button("Join lobby");
-        joinLobbyButton.setOnAction(e -> appController.joinLobby());
+        joinLobbyButton.setOnAction(e -> appController.getRoboRally().createLobbySelectView(appController));
 
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(e -> appController.exit());

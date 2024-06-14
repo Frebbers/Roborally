@@ -23,7 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -31,6 +30,8 @@ import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
@@ -110,32 +111,15 @@ public class AppController implements Observer {
         }
     }
 
-    public void joinLobby() {
-        List<Long> listOfGames = apiServices.getAllGameIds();
-        if (listOfGames == null || listOfGames.isEmpty()) {
-            System.out.println("No games available to join.");
-            return;
-        }
-            ChoiceDialog<Long> playerDialog = new ChoiceDialog<>(listOfGames.get(0), listOfGames);
-            playerDialog.setTitle("Game Lobbies");
-            playerDialog.setHeaderText("Select lobby you would like to join");
-            playerDialog.setContentText("Choose your game:");
+    public void joinLobby(Long gameId) {
+        // Tell the server to create the player in the database
+        PlayerDTO playerDTO = apiServices.createPlayer("Client");
 
-            // Show dialog and capture result
-            playerDialog.showAndWait().ifPresent(gameId -> {
+        // Join the game
+        apiServices.joinGame(gameId, playerDTO.getId());
 
-                // Generate a long based on the id selected
-                Long id = Long.valueOf(gameId);
-
-                // Tell the server to create the player in the database
-                PlayerDTO playerDTO = apiServices.createPlayer("Client");
-
-                // Join the game
-                apiServices.joinGame(id, playerDTO.getId());
-
-                // Display the Lobby Window
-                roboRally.createLobbyView(lobbyController, id);
-            });
+        // Display the Lobby Window
+        roboRally.createLobbyView(lobbyController, gameId);
     }
 
     public void loadGameScene(Long gameId, Long boardNumber){

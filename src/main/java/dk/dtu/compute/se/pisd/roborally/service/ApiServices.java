@@ -191,6 +191,7 @@ public class ApiServices {
         move.setGameId(gameId);
         move.setPlayerId(playerId);
         move.setMoves(moves);
+        move.setTurnIndex(turnIndex);
 
         // Upload the move to the server
         ResponseEntity<MoveDTO> response = restTemplate.postForEntity(MOVES_URL, move, MoveDTO.class);

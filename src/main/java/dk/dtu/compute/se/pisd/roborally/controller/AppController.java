@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -63,7 +64,7 @@ public class AppController implements Observer {
         this.apiServices = new ApiServices();
 
         Platform.runLater(() -> {
-            this.lobbyController = new LobbyController(this, apiServices);
+            this.lobbyController = new LobbyController(this);
         });
     }
 
@@ -147,7 +148,7 @@ public class AppController implements Observer {
         Board board = new Board(data);
 
         // Create a new controller for the game
-        gameController = new GameController(apiServices, board);
+        gameController = new GameController(this, board);
 
         // Get all the players from the lobby
         List<PlayerDTO> playersDTOs = apiServices.getPlayersInGame(gameId);
@@ -291,5 +292,9 @@ public class AppController implements Observer {
 
     public RoboRally getRoboRally() {
         return roboRally;
+    }
+
+    public ApiServices getApiServices(){
+        return apiServices;
     }
 }

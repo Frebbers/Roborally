@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -96,7 +97,8 @@ public class PlayerView extends Tab implements ViewObserver {
         // XXX  the following buttons should actually not be on the tabs of the individual
         //      players, but on the PlayersView (view for all players). This should be
         //      refactored.
-
+        ApiServices apiServices = gameController.getApiServices();
+        System.out.println(apiServices.getLocalPlayer().getId());
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
 

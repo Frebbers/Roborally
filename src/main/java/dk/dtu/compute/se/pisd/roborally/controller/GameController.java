@@ -40,6 +40,8 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
  *
  */
 public class GameController {
+    private AppController appController;
+
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
@@ -47,15 +49,14 @@ public class GameController {
     private Command nextCommand;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private ApiServices apiServices;
 
     /**
      * Initialize a GameController object with a certain Board.
      *
      * @param board
      */
-    public GameController(ApiServices apiServices, @NotNull Board board) {
-        this.apiServices = apiServices;
+    public GameController(@NotNull AppController appController, @NotNull Board board) {
+        this.appController = appController;
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
@@ -99,6 +100,9 @@ public class GameController {
      */
     // XXX: implemented in the current version
     public void finishProgrammingPhase() {
+        // Get the API Services from the App Controller
+        ApiServices apiServices = appController.getApiServices();
+
         // Get the local player from the board
         Player localPlayer = board.getLocalPlayer(apiServices.getLocalPlayer());
 
@@ -120,6 +124,7 @@ public class GameController {
         makeProgramFieldsVisible(0);
 
         // Poll to the server if all the players are ready
+
 
         // Update the board
         board.setPhase(Phase.ACTIVATION);
@@ -439,5 +444,9 @@ public class GameController {
 
     public Command getNextCommand() {
         return nextCommand;
+    }
+
+    public ApiServices getApiServices(){
+        return appController.getApiServices();
     }
 }

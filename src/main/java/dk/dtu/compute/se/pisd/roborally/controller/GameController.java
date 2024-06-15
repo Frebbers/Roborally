@@ -359,21 +359,27 @@ public class GameController {
             switch (command) {
                 case FORWARD:
                     this.moveForward(player);
+                    player.setPreviousCommand(command);
                     break;
                 case RIGHT:
                     this.turnRight(player);
+                    player.setPreviousCommand(command);
                     break;
                 case LEFT:
                     this.turnLeft(player);
+                    player.setPreviousCommand(command);
                     break;
                 case FAST_FORWARD:
                     this.fastForward(player);
+                    player.setPreviousCommand(command);
                     break;
                 case BACK:
                     this.moveBack(player);
+                    player.setPreviousCommand(command);
                     break;
                 case U_TURN:
                     this.turnAround(player);
+                    player.setPreviousCommand(command);
                     break;
                 case AGAIN:
                     this.repeatPrevRegister(player);
@@ -452,8 +458,8 @@ public class GameController {
     }
 
     public void repeatPrevRegister(@NotNull Player player) {
-        CommandCardField previousRegister = player.getPreviousCardField();
-        executeCommand(player, previousRegister.getCard().command);
+        Command previousCommand = player.getPreviousCommand();
+        executeCommand(player, previousCommand);
     }
 
     /**

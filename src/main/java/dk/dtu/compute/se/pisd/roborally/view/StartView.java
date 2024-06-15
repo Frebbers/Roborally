@@ -68,6 +68,4 @@ public class StartView extends BaseView {
 
         getChildren().add(mainLayout);
     }
-
-
 }

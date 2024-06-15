@@ -99,8 +99,6 @@ public class RoboRally extends Application {
         // if present, remove old view
         boardRoot.getChildren().clear();
 
-        System.out.println(boardRoot.getChildren().size());
-
         if (appController != null) {
             // create and add view for start screen
             StartView startView = new StartView(appController);

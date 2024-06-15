@@ -26,17 +26,19 @@ import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Handles the drawing of a player mat.
@@ -104,7 +106,7 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
 
             Button leaveButton = new Button("Leave Game");
-            leaveButton.setOnAction(e -> gameController.getAppController().leave());
+            leaveButton.setOnAction(e -> onPlayerLeave());
 
             buttonPanel = new VBox(3);
             buttonPanel.getChildren().addAll(finishButton, leaveButton);
@@ -155,6 +157,19 @@ public class PlayerView extends Tab implements ViewObserver {
         return cardsPane;
     }
 
+    private void onPlayerLeave(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Leave the game");
+        alert.setHeaderText("Are you sure you wish to leave the game?");
+        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            // Tell the app controller to leave the lobby
+            gameController.getAppController().leave();
+        }
+    }
 
     /**
      * Return player this view belongs to.

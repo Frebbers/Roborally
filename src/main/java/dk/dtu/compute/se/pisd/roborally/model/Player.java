@@ -48,7 +48,7 @@ public class Player extends Subject {
     private Space space;
     private Heading heading = SOUTH;
 
-    private int previousCard;
+    private Command previousCommand;
 
     //The programming cards added during the programming phase
     private CommandCardField[] program;
@@ -196,16 +196,23 @@ public class Player extends Subject {
      * @return command card field at the given index of the cards
      */
     public CommandCardField getCardField(int i) {
-        previousCard = i;
         return cards[i];
+    }
+
+    /**
+     *
+     * @param  command the command the player last used
+     */
+    public void setPreviousCommand(Command command){
+        this.previousCommand = command;
     }
 
     /**
      *
      * @return command card field at the previous index of cards
      */
-        public CommandCardField getPreviousCardField(){
-            return cards[previousCard];
+    public Command getPreviousCommand(){
+        return previousCommand;
     }
     /**
      * Returns the checkpoint at a specified index.

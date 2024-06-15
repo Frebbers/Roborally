@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,22 +11,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.List;
-
 public class LobbyBrowserView extends BaseView {
+
     private AppController appController;
-    private ApiServices apiServices;
+    private LobbyBrowserController lobbyBrowserController;
+
+    private ListView<Long> lobbyListView;
 
     public LobbyBrowserView(AppController appController) {
         super();
         this.appController = appController;
-        this.apiServices = appController.getApiServices();
+        this.lobbyBrowserController = new LobbyBrowserController(appController);
     }
 
     @Override
-    public void initialize(){
-        // Fetch list of games
-        List<Long> listOfGames = apiServices.getAllGameIds();
+    public void initialize() {
+        lobbyListView = new ListView<>();
+
+        // Fetch and observe the list of games
+        lobbyBrowserController.startLobbyPolling(lobbyListView);
 
         // Header for joining lobby via IP
         Text joinLobbyHeader = new Text("Join a lobby");
@@ -34,8 +37,7 @@ public class LobbyBrowserView extends BaseView {
         Button joinLobbyButton = new Button("Join via IP");
         joinLobbyButton.setOnAction(event -> {
             String ip = lobbyIPDialog.getText();
-            //appController.joinLobbyByIP(ip);
-            System.out.println("Joining IP Address: " + ip);
+            lobbyBrowserController.joinLobbyByIP(ip);
         });
 
         // Layout for IP based lobby joining
@@ -43,27 +45,14 @@ public class LobbyBrowserView extends BaseView {
 
         // List view for local lobbies
         Text foundLobbiesHeader = new Text("Local lobbies found:");
-        ListView<Long> listView = new ListView<>();
         Button joinLocalLobbyButton = new Button("Join Selected Lobby");
         joinLocalLobbyButton.setOnAction(event -> {
-            Long selectedGameId = listView.getSelectionModel().getSelectedItem();
-            if (selectedGameId != null) {
-                appController.joinLobby(selectedGameId);
-            } else {
-                System.out.println("No game selected.");
-            }
+            Long selectedGameId = lobbyListView.getSelectionModel().getSelectedItem();
+            lobbyBrowserController.joinSelectedLobby(selectedGameId);
         });
 
-        // Populate the list view
-        if (listOfGames == null || listOfGames.isEmpty()) {
-            Text noGames = new Text("No games available to join.");
-            listView.setPlaceholder(noGames);
-        } else {
-            listView.getItems().addAll(listOfGames);
-        }
-
         // Layout for selecting local lobby
-        VBox localLobbies = new VBox(10, foundLobbiesHeader, listView, joinLocalLobbyButton);
+        VBox localLobbies = new VBox(10, foundLobbiesHeader, lobbyListView, joinLocalLobbyButton);
 
         // Add a button to go back
         Button backButton = new Button("Back");
@@ -77,5 +66,10 @@ public class LobbyBrowserView extends BaseView {
 
         // Add the components to the VBox
         getChildren().addAll(mainLayout);
+    }
+
+    // Clean up resources when no longer in use
+    public void dispose() {
+        lobbyBrowserController.stopLobbyPolling();
     }
 }

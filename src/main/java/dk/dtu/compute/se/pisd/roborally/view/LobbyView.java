@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.geometry.Insets;
@@ -20,11 +21,11 @@ public class LobbyView extends BaseView {
     private AppController appController;
     private Long gameId;
 
-    public LobbyView(LobbyController lobbyController, Long gameId) {
+    public LobbyView(AppController appController, Long gameId) {
         super();
-        this.lobbyController = lobbyController;
-        this.appController = lobbyController.getAppController();
+        this.appController = appController;
         this.gameId = gameId;
+        this.lobbyController = new LobbyController(appController);
     }
 
     @Override

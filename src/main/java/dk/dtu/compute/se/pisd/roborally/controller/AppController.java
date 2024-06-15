@@ -56,7 +56,6 @@ public class AppController implements Observer {
     private ApiServices apiServices;
 
     private GameController gameController;
-    private LobbyController lobbyController;
 
     public static PlayerDTO localPlayer;
 
@@ -68,10 +67,6 @@ public class AppController implements Observer {
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices();
-
-        Platform.runLater(() -> {
-            this.lobbyController = new LobbyController(this);
-        });
     }
 
     /**
@@ -110,7 +105,7 @@ public class AppController implements Observer {
                 apiServices.joinGame(game.id, localPlayer.getId());
 
                 // Display the Lobby Window
-                roboRally.createLobbyView(lobbyController, game.id);
+                roboRally.createLobbyView(this, game.id);
             }
         }
     }
@@ -123,7 +118,7 @@ public class AppController implements Observer {
         apiServices.joinGame(gameId, localPlayer.getId());
 
         // Display the Lobby Window
-        roboRally.createLobbyView(lobbyController, gameId);
+        roboRally.createLobbyView(this, gameId);
     }
 
     public void loadGameScene(Long gameId, Long boardNumber) {

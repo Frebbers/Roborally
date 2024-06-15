@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
 import dk.dtu.compute.se.pisd.roborally.view.*;
 import javafx.application.Application;
@@ -149,7 +150,7 @@ public class RoboRally extends Application {
      * Create a LobbyView
      *
      */
-    public void createLobbyView(LobbyController controller, Long gameId) {
+    public void createLobbyView(AppController controller, Long gameId) {
         // if present, remove old view
         boardRoot.getChildren().clear();
 

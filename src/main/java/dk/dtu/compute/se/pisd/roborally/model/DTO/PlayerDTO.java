@@ -11,6 +11,14 @@ public class PlayerDTO {
     private PlayerState state;
     private Long gameId;
 
+    public PlayerDTO(Long id, String name, RobotType robotType, PlayerState state) {
+        this.id = id;
+        this.name = name;
+        this.robotType = robotType;
+        this.state = state;
+    }
+    public PlayerDTO(){}
+
     public Long getId() {
         return id;
     }

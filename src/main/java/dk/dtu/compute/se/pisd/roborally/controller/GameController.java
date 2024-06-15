@@ -452,7 +452,8 @@ public class GameController {
     }
 
     public void repeatPrevRegister(@NotNull Player player) {
-        player.getPreviousCardField();
+        CommandCardField previousRegister = player.getPreviousCardField();
+        executeCommand(player, previousRegister.getCard().command);
     }
 
     /**

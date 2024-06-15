@@ -63,6 +63,6 @@ public class LobbyView extends BaseView {
         getChildren().addAll(playerListView, buttonContainer);
 
         // Ensure that the scheduler is closed if the scene is switched
-        lobbyController.getScene().getWindow().setOnCloseRequest(event -> lobbyController.stopLobbyPolling());
+        appController.getRoboRally().getActiveScene().getWindow().setOnCloseRequest(event -> lobbyController.stopLobbyPolling());
     }
 }

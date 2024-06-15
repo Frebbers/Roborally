@@ -104,12 +104,7 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
 
             buttonPanel = new VBox(finishButton);
-            buttonPanel.setAlignment(Pos.CENTER_LEFT);
-            buttonPanel.setSpacing(3.0);
-
             playerInteractionPanel = new VBox();
-            playerInteractionPanel.setAlignment(Pos.CENTER_LEFT);
-            playerInteractionPanel.setSpacing(3.0);
 
             cardsLabel = new Label("Command Cards");
             cardsPane = setupCardsPane();
@@ -121,7 +116,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private GridPane setupProgramPane() {
         GridPane programPane = new GridPane();
-        programPane.setVgap(2.0);
+        programPane.setVgap(20.0);
         programPane.setHgap(2.0);
         programCardViews = new CardFieldView[Player.NO_REGISTERS];
         for (int i = 0; i < Player.NO_REGISTERS; i++) {

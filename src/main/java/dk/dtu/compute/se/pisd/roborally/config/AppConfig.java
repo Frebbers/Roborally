@@ -25,6 +25,12 @@ public class AppConfig {
     public static String getProperty(String key) {
         return properties.getProperty(key);
     }
+    /**
+     * Set a property in the application.properties object and file
+     * @param key the key of the property. For example local.player.name
+     * @param value the value of the property
+     * @author s224804 Frederik Bode Hendrichsen
+     */
     public static void setProperty(String key, String value) {
         properties.setProperty(key, value);
         try (OutputStream output = new FileOutputStream("src/main/resources/application.properties")) {

@@ -33,5 +33,4 @@ public class AppConfig {
             throw new RuntimeException(e);
         }
     }
-
 }

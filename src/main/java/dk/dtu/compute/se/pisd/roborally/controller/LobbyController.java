@@ -20,11 +20,9 @@ public class LobbyController {
 
     private ScheduledExecutorService scheduler;
     private AppController appController;
-    private Scene scene;
 
     public LobbyController(AppController appController) {
         this.appController = appController;
-        this.scene = appController.getRoboRally().getStage().getScene();
     }
 
     public void startLobbyPolling(Long gameId, ListView<String> playerListView) {
@@ -78,17 +76,5 @@ public class LobbyController {
             }
         }
         return true;
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public ApiServices getApiServices(){
-        return appController.getApiServices();
-    }
-
-    public AppController getAppController() {
-        return appController;
     }
 }

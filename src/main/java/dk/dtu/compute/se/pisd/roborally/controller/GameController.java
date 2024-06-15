@@ -535,7 +535,7 @@ public class GameController {
         return nextCommand;
     }
 
-    public ApiServices getApiServices(){
-        return appController.getApiServices();
+    public AppController getAppController() {
+        return appController;
     }
 }

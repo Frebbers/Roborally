@@ -25,17 +25,17 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -47,7 +47,7 @@ import java.util.Objects;
 public class PlayerView extends Tab implements ViewObserver {
 
     private Player player;
-    private boolean isLocalPlayer = false;
+    private final boolean isLocalPlayer;
 
     private VBox top;
 
@@ -103,7 +103,12 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton = new Button("Finish Programming");
             finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
 
-            buttonPanel = new VBox(finishButton);
+            Button leaveButton = new Button("Leave Game");
+            leaveButton.setOnAction(e -> gameController.getAppController().leave());
+
+            buttonPanel = new VBox(3);
+            buttonPanel.getChildren().addAll(finishButton, leaveButton);
+
             playerInteractionPanel = new VBox();
 
             cardsLabel = new Label("Command Cards");
@@ -113,6 +118,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
         this.setContent(top);
     }
+
 
     private GridPane setupProgramPane() {
         GridPane programPane = new GridPane();

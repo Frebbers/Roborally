@@ -99,6 +99,8 @@ public class RoboRally extends Application {
         // if present, remove old view
         boardRoot.getChildren().clear();
 
+        System.out.println(boardRoot.getChildren().size());
+
         if (appController != null) {
             // create and add view for start screen
             StartView startView = new StartView(appController);
@@ -192,10 +194,6 @@ public class RoboRally extends Application {
         //     but right now the only way for the user to exit the app
         //     is delegated to the exit() method in the AppController,
         //     so that the AppController can take care of that.
-    }
-
-    public Stage getStage(){
-        return stage;
     }
 
     /**

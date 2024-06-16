@@ -180,24 +180,16 @@ public class ApiServices {
     }
 
     public void onPlayerLeave(Long playerId) {
-        PlayerDTO player = getPlayerById(playerId);
-        if (player != null) {
-            player.setGameId(0L);
-            player.setState(PlayerState.NOT_READY);
+        String url = PLAYERS_URL + "/" + playerId + "/leave";
+        ResponseEntity<Void> response = restTemplate.getForEntity(url, Void.class);
 
-            String playerUrl = PLAYERS_URL + "/" + playerId;
-            try {
-                restTemplate.put(playerUrl, player);
-            } catch (Exception e) {
-                throw new RuntimeException("Error updating player: " + e.getMessage());
-            }
+        if (response.getStatusCode() == HttpStatus.OK) {
+            AppController.localPlayer = null;
         } else {
-            throw new RuntimeException("Player not found");
+            System.err.println("Failed to leave the game, status code: " + response.getStatusCode());
         }
-
-        // Clear the local player
-        AppController.localPlayer = null;
     }
+
 
  /*   public PlayerDTO getLocalPlayer(){
         return localPlayer;

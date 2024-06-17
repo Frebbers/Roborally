@@ -57,6 +57,7 @@ public class AppController implements Observer {
 
     private GameController gameController;
 
+
     public static PlayerDTO localPlayer;
 
     /**

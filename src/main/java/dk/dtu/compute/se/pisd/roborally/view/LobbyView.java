@@ -41,7 +41,10 @@ public class LobbyView extends BaseView {
 
         // Set up a button to leave the lobby
         Button leaveButton = new Button("Leave");
-        leaveButton.setOnAction(event -> appController.leave());
+        leaveButton.setOnAction(event -> {
+            appController.leave();
+            lobbyController.stopLobbyPolling();
+        });
 
         // Set up button to set the players ready state
         Button readyButton = new Button("Ready");

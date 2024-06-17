@@ -146,12 +146,11 @@ public class MyStepdefs {
         Player player = gameController.board.getCurrentPlayer();
         CommandCardField commandCardField = player.getCardField(0);
         CommandCard commandCard = commandCardField.getCard();
-        CommandCardField lastCommandCardField = player.getPreviousCardField();
-        CommandCard prevcommandCard = lastCommandCardField.getCard();
+        Command prevCommand = player.getPreviousCommand();
 
         theRobotHasProgrammedACard(command);
 
-        assert (commandCard.equals(prevcommandCard));
+        assert (commandCard.command.equals(prevCommand));
 
     }
 
@@ -175,14 +174,14 @@ public class MyStepdefs {
     }
 
     /**
-     * Method to place a robot at a specific position
+     * Method to place a robot at a specific position with no state or gameID
      * @param x the x coordinate to place the robot
      * @param y the y coordinate to place the robot
      * @author Frederik Bode Hendrichsen s224804
      */
     @And("another robot is at position \\({int}, {int})")
     public void anotherRobotIsAtPosition(int x, int y) {
-        Player player = new Player(gameController.board, "Player2", 2, null);
+        Player player = new Player((long)10, "Player2", RobotType.Spark, null, null);
     }
     @And("there should be a robot at position \\({int}, {int})")
     public void thereShouldBeARobotAtPosition(int x, int y) {

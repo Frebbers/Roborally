@@ -81,8 +81,9 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
-    public Game createGame(Long boardId, int maxPlayers) {
+    public Game createGame(String name, Long boardId, int maxPlayers) {
         Game game = new Game();
+        game.name = name;
         game.boardId = boardId;
         game.maxPlayers = maxPlayers;
 

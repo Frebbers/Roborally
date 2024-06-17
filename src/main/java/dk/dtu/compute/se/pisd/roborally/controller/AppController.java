@@ -82,7 +82,7 @@ public class AppController implements Observer {
         sendPlayerToServer();
 
         // Create the lobby
-        Game game = apiServices.createGame((long) boardId, players);
+        Game game = apiServices.createGame(name, (long) boardId, players);
 
         // Join the lobby that was just created
         localPlayer.setState(PlayerState.NOT_READY);

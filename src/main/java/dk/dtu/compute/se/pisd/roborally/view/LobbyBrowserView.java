@@ -6,8 +6,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -16,7 +17,7 @@ public class LobbyBrowserView extends BaseView {
     private AppController appController;
     private LobbyBrowserController lobbyBrowserController;
 
-    private ListView<Long> lobbyListView;
+    private ListView<String> lobbyListView;
 
     public LobbyBrowserView(AppController appController) {
         super();
@@ -31,38 +32,32 @@ public class LobbyBrowserView extends BaseView {
         // Fetch and observe the list of games
         lobbyBrowserController.startLobbyPolling(lobbyListView);
 
-        // Header for joining lobby via IP
-        Text joinLobbyHeader = new Text("Join a lobby");
-        TextField lobbyIPDialog = new TextField("Enter lobby IP");
-        Button joinLobbyButton = new Button("Join via IP");
+        // List view for lobbies
+        Text foundLobbiesHeader = new Text("Lobbies:");
+        Button joinLobbyButton = new Button("Join");
         joinLobbyButton.setOnAction(event -> {
-            String ip = lobbyIPDialog.getText();
-            lobbyBrowserController.joinLobbyByIP(ip);
-        });
-
-        // Layout for IP based lobby joining
-        VBox searchLobbyInput = new VBox(10, lobbyIPDialog, joinLobbyButton);
-
-        // List view for local lobbies
-        Text foundLobbiesHeader = new Text("Local lobbies found:");
-        Button joinLocalLobbyButton = new Button("Join Selected Lobby");
-        joinLocalLobbyButton.setOnAction(event -> {
-            Long selectedGameId = lobbyListView.getSelectionModel().getSelectedItem();
-            lobbyBrowserController.joinSelectedLobby(selectedGameId);
+            String selectedGameName = lobbyListView.getSelectionModel().getSelectedItem();
+            lobbyBrowserController.joinSelectedLobby(selectedGameName);
         });
 
         // Layout for selecting local lobby
-        VBox localLobbies = new VBox(10, foundLobbiesHeader, lobbyListView, joinLocalLobbyButton);
+        VBox localLobbies = new VBox(10, foundLobbiesHeader, lobbyListView, joinLobbyButton);
 
         // Add a button to go back
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
-        HBox bottomContainer = new HBox(backButton);
-        bottomContainer.setAlignment(Pos.BOTTOM_LEFT);
-        bottomContainer.setPadding(new Insets(10));
+
+        // Spacer to push buttons to each side
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Add the buttons and spacer to a container
+        HBox buttonContainer = new HBox(backButton, spacer, joinLobbyButton);
+        buttonContainer.setAlignment(Pos.CENTER);
+        buttonContainer.setPadding(new Insets(10));
 
         // Main layout
-        VBox mainLayout = new VBox(20, joinLobbyHeader, searchLobbyInput, localLobbies, backButton);
+        VBox mainLayout = new VBox(20, localLobbies, buttonContainer);
 
         // Add the components to the VBox
         getChildren().addAll(mainLayout);

@@ -221,4 +221,12 @@ public class ApiServices {
         ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
+    public boolean isReachable(){
+        try {
+            getAllGames();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

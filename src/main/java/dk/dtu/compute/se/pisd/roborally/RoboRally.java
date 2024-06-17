@@ -154,7 +154,6 @@ public class RoboRally extends Application {
     public void createLobbyView(AppController controller, Long gameId) {
         // if present, remove old view
         boardRoot.getChildren().clear();
-
         if(controller != null){
             LobbyView lobbyView = new LobbyView(controller, gameId);
             lobbyView.initialize();

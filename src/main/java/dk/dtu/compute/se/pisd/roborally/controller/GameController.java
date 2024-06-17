@@ -454,7 +454,9 @@ public class GameController {
 
     public void moveBack(@NotNull Player player) {
         var neighbour = this.board.getNeighbour(player.getSpace(), player.getHeading().opposite());
+        turnAround(player);
         boardController.handleMovement(player.getSpace(), neighbour, player.getHeading());
+        turnAround(player);
     }
 
     public void repeatPrevRegister(@NotNull Player player) {

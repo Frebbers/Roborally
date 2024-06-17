@@ -33,7 +33,7 @@ public class LobbyController {
                 stopLobbyPolling();
                 appController.loadGameScene(gameId, game.boardId);
             }
-        }), 0, 500, TimeUnit.MILLISECONDS);
+        }), 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void stopLobbyPolling() {

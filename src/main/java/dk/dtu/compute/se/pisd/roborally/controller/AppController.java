@@ -77,7 +77,7 @@ public class AppController implements Observer {
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
-    public void createLobby(int boardId, int players) {
+    public void createLobby(String name, int boardId, int players) {
         // Tell the server to create the player in the database
         sendPlayerToServer();
 

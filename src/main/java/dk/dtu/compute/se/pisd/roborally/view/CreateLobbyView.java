@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -24,10 +25,11 @@ import java.util.stream.Collectors;
 public class CreateLobbyView extends BaseView {
     private AppController appController;
     private GridPane boardSelection;
-    private Integer numberOfPlayers = 1;
-    private Integer boardId = 0;
+    private String lobbyName;
+    private Integer numberOfPlayers = 2;
+    private Integer boardId = 1;
 
-    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(1, 2, 3, 4, 5, 6);
+    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
 
     public CreateLobbyView(AppController appController){
         this.appController = appController;
@@ -42,33 +44,48 @@ public class CreateLobbyView extends BaseView {
         boardSelection = new GridPane();
         boardSelection.setHgap(10);
         boardSelection.setVgap(10);
-        loadGamePictures();
+
+        // for setting lobby name
+        Text lobbyNameText = new Text("Lobby Name: ");
+        TextField lobbyNameField = new TextField();
+        lobbyNameField.setPromptText("Enter lobby name");
+        lobbyNameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            lobbyName = newValue;
+        });
+        lobbyNameField.setText(AppConfig.getProperty("local.player.name") + "'s lobby");
 
         //for selecting number of players
-        Text numberOfPlayersInfoText = new Text("Select the size of the lobby");
         Text numberOfPlayersText = new Text("Players: ");
         ComboBox<String> comboBox = new ComboBox<>();
         ObservableList<String> options = FXCollections.observableArrayList(
                 PLAYER_NUMBER_OPTIONS.stream().map(Object::toString).collect(Collectors.toList())
         );
         comboBox.setItems(options);
+        comboBox.getSelectionModel().select(0);
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 numberOfPlayers = Integer.valueOf(newValue);
             }
         });
 
+        // Load the pictures of the boards
+        Text boardText = new Text("Select a Board: ");
+        loadBoardPictures();
+
         Button startButton = new Button("Create");
         startButton.setOnAction(event -> {
-            appController.createLobby(boardId, numberOfPlayers);
+            appController.createLobby(lobbyName, boardId, numberOfPlayers);
         });
 
-        VBox mainLayout = new VBox(20, title, boardSelection, numberOfPlayersInfoText, numberOfPlayersText, comboBox, startButton);
+        VBox mainLayout = new VBox(20, title, lobbyNameText, lobbyNameField, numberOfPlayersText, comboBox, boardText, boardSelection,startButton);
         getChildren().addAll(mainLayout);
+
+        // Highlight the first selected board
+        highlightSelected(boardId);
     }
 
 
-    private void loadGamePictures() {
+    private void loadBoardPictures() {
         try {
             URL resourceUrl = getClass().getClassLoader().getResource("images/boards/");
             File dir = new File(resourceUrl.toURI());
@@ -83,7 +100,7 @@ public class CreateLobbyView extends BaseView {
                 int imageId = i + 1;
                 boardButton.setOnAction(event -> {
                     selectBoard(imageId);
-                    highlightSelected(boardButton);
+                    highlightSelected(imageId);
                 });
                 boardSelection.add(boardButton, i % 3, i / 3);
             }
@@ -97,14 +114,17 @@ public class CreateLobbyView extends BaseView {
         boardId = id;
     }
 
-    private void highlightSelected(Button selectedButton) {
-        // Iterating through all children of the robotsSelection GridPane
+    private void highlightSelected(int id) {
         for (Node child : boardSelection.getChildren()) {
             if (child instanceof Button) {
-                child.setStyle(""); // Reset style for all buttons
+                Button button = (Button) child;
+                int buttonId = boardSelection.getRowIndex(button) * 3 + boardSelection.getColumnIndex(button) + 1;
+                if (buttonId == id) {
+                    button.setStyle("-fx-border-color: blue; -fx-border-width: 2; -fx-border-style: solid;");
+                } else {
+                    button.setStyle(""); // Reset style for other buttons
+                }
             }
         }
-        // Apply style to highlight the selected button
-        selectedButton.setStyle("-fx-border-color: blue; -fx-border-width: 2; -fx-border-style: solid;");
     }
 }

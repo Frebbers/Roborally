@@ -104,7 +104,7 @@ public class AppController implements Observer {
     }
 
     public void loadGameScene(Long gameId, Long boardNumber) {
-        if (gameController != null && !leave()) {
+        if (gameController != null && !leave(true)) {
             return;
         }
 
@@ -176,7 +176,7 @@ public class AppController implements Observer {
      *
      * @return true if the current game was stopped, false otherwise
      */
-    public boolean leave() {
+    public boolean leave(boolean lobbyLeaveRequested) {
         if(apiServices != null){
             apiServices.onPlayerLeave(localPlayer.getId());
 
@@ -184,10 +184,7 @@ public class AppController implements Observer {
                 gameController.shutdownScheduler();
                 gameController = null;
             }
-
-            //TODO Check this. Below has been commented out to allow the application to shut down.
-            // May need reimplementation
-            //roboRally.createStartView(this);
+            if (lobbyLeaveRequested) roboRally.createStartView(this);
             return true;
         }
         return false;
@@ -213,7 +210,7 @@ public class AppController implements Observer {
 
         // If the user did not cancel, the RoboRally application will exit
         // after the option to save the game
-        if (gameController == null || leave()) {
+        if (gameController == null || leave(false)) {
             Platform.exit();
             System.exit(0);
         }

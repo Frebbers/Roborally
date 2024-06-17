@@ -167,7 +167,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
         if (result.isPresent() && result.get() == ButtonType.YES) {
             // Tell the app controller to leave the lobby
-            gameController.getAppController().leave();
+            gameController.getAppController().leave(true);
         }
     }
 

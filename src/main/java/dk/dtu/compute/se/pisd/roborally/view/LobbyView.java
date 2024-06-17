@@ -79,7 +79,7 @@ public class LobbyView extends BaseView {
         // Set up a button to leave the lobby
         Button leaveButton = new Button("Leave");
         leaveButton.setOnAction(event -> {
-            appController.leave();
+            appController.leave(true);
             lobbyController.stopLobbyPolling();
         });
 

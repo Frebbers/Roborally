@@ -19,7 +19,7 @@ public class StartView extends BaseView {
     private Text nameLabel;
 
     public StartView(AppController appController) {
-        super();
+        super(appController);
         this.appController = appController;
     }
 

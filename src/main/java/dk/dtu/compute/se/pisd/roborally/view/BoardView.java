@@ -33,7 +33,7 @@ public class BoardView extends BaseView implements ViewObserver {
      * @param gameController
      */
     public BoardView(@NotNull GameController gameController) {
-        super();
+        super(gameController.getAppController());
         this.gameController = gameController;
     }
 

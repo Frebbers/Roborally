@@ -24,7 +24,7 @@ public class RobotSettingsView extends BaseView {
     private GridPane robotsSelection;
 
     public RobotSettingsView(AppController appController) {
-        super();
+        super(appController);
         this.appController = appController;
     }
 

@@ -28,7 +28,7 @@ public class LobbyView extends BaseView {
     private Long gameId;
 
     public LobbyView(AppController appController, Long gameId) {
-        super();
+        super(appController);
         this.appController = appController;
         this.apiServices = appController.getApiServices();
         this.gameId = gameId;

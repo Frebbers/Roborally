@@ -71,6 +71,7 @@ public class RoboRally extends Application {
         // when the user creates a new game or loads a game
         boardRoot = new BorderPane();
 
+
         VBox vbox = new VBox(boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
         Scene primaryScene = new Scene(vbox);
@@ -215,6 +216,7 @@ public class RoboRally extends Application {
     public Scene getActiveScene(){
         return stage.getScene();
     }
+    public Stage getStage(){return stage;}
 
     /**
      * Call the javafx method launch() with the given arguments. This automatically calls RoboRally.start().

@@ -185,7 +185,9 @@ public class AppController implements Observer {
                 gameController = null;
             }
 
-            roboRally.createStartView(this);
+            //TODO Check this. Below has been commented out to allow the application to shut down.
+            // May need reimplementation
+            //roboRally.createStartView(this);
             return true;
         }
         return false;
@@ -204,7 +206,7 @@ public class AppController implements Observer {
             alert.setContentText("Are you sure you want to exit RoboRally?");
             Optional<ButtonType> result = alert.showAndWait();
 
-            if (!result.isPresent() || result.get() != ButtonType.OK) {
+            if (result.isEmpty() || result.get() != ButtonType.OK) {
                 return; // return without exiting the application
             }
         }
@@ -213,6 +215,7 @@ public class AppController implements Observer {
         // after the option to save the game
         if (gameController == null || leave()) {
             Platform.exit();
+            System.exit(0);
         }
     }
 

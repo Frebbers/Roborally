@@ -32,7 +32,7 @@ public class LobbyBrowserView extends BaseView {
     private Text maxPlayersText;
 
     public LobbyBrowserView(AppController appController) {
-        super();
+        super(appController);
         this.appController = appController;
         this.apiServices = appController.getApiServices();
         this.lobbyBrowserController = new LobbyBrowserController(appController);

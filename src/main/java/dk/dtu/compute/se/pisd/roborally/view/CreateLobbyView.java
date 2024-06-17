@@ -33,6 +33,7 @@ public class CreateLobbyView extends BaseView {
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
 
     public CreateLobbyView(AppController appController){
+        super(appController);
         this.appController = appController;
     }
 

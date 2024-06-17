@@ -1,0 +1,232 @@
+{
+  "name": "Board 2",
+  "height": 12,
+  "width": 12,
+  "spaces": [
+    {
+      "conveyorBelts":
+      {
+        "instances": [
+          {
+            "x": 6,
+            "y": 2,
+            "heading": "south"
+          },
+          {
+            "x": 6,
+            "y": 3,
+            "heading": "south"
+          },
+          {
+            "x": 8,
+            "y": 4,
+            "heading": "north"
+          },
+          {
+            "x": 8,
+            "y": 5,
+            "heading": "north"
+          },
+          {
+            "x": 2,
+            "y": 9,
+            "heading": "south"
+          },
+          {
+            "x": 3,
+            "y": 9,
+            "heading": "south"
+          },
+          {
+            "x": 2,
+            "y": 11,
+            "heading": "west"
+          },
+          {
+            "x": 3,
+            "y": 11,
+            "heading": "west"
+          },
+          {
+            "x": 4,
+            "y": 11,
+            "heading": "west"
+          },
+          {
+            "x": 5,
+            "y": 11,
+            "heading": "west"
+          }
+        ]
+      }
+    },
+    {
+      "walls":
+      {
+        "actions": {},
+        "instances": [
+          {
+            "x": 4,
+            "y": 3,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 4,
+            "y": 4,
+            "heading": "east",
+            "offset": "east"
+          },
+          {
+            "x": 3,
+            "y": 4,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 9,
+            "y": 4,
+            "heading": "east",
+            "offset": "east"
+          },
+          {
+            "x": 9,
+            "y": 5,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 10,
+            "y": 5,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 3,
+            "y": 6,
+            "heading": "west",
+            "offset": "west"
+          },
+          {
+            "x": 4,
+            "y": 6,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 5,
+            "y": 6,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 6,
+            "y": 6,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 7,
+            "y": 6,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 8,
+            "y": 6,
+            "heading": "north",
+            "offset": "south"
+          },
+          {
+            "x": 8,
+            "y": 7,
+            "heading": "west",
+            "offset": "west"
+          },
+          {
+            "x": 7,
+            "y": 9,
+            "heading": "south",
+            "offset": "south"
+          },
+          {
+            "x": 8,
+            "y": 9,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 9,
+            "y": 9,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 10,
+            "y": 9,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 11,
+            "y": 9,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 8,
+            "y": 11,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 4,
+            "y": 11,
+            "heading": "north",
+            "offset": "north"
+          },
+          {
+            "x": 5,
+            "y": 11,
+            "heading": "north",
+            "offset": "north"
+          }
+        ]
+      }
+    },
+    {
+      "priorityAntennas":
+      {
+        "instances": [
+          {
+            "x": 6,
+            "y": 7
+          }
+        ]
+      }
+    },
+    {
+      "checkpoints":
+      {
+        "actions": {},
+        "instances": [
+          {
+            "x": 6,
+            "y": 9,
+            "id": "1"
+          },
+          {
+            "x": 6,
+            "y": 4,
+            "id": "2"
+          },
+          {
+            "x": 8,
+            "y": 9,
+            "id": "3"
+          }
+        ]
+      }
+    }
+  ]
+}

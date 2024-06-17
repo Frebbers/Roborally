@@ -5,6 +5,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -44,6 +45,7 @@ public class LobbyBrowserView extends BaseView {
         // Server and Lobby list on the left
         Text serverHeader = new Text("Server");
         TextField serverIPDialog = new TextField();
+        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
         serverIPDialog.setPromptText("Enter server IP");
         Button connectToServerButton = new Button("Connect");
         connectToServerButton.setOnAction(event -> {

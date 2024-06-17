@@ -1,60 +1,35 @@
 {
   "name": "Board 2",
-  "height": 12,
-  "width": 12,
+  "height": 8,
+  "width": 8,
   "spaces": [
     {
       "conveyorBelts":
       {
         "instances": [
           {
-            "x": 6,
-            "y": 2,
-            "heading": "south"
+            "x": 5,
+            "y": 3,
+            "heading": "north"
           },
           {
-            "x": 6,
+            "x": 7,
             "y": 3,
-            "heading": "south"
+            "heading": "east"
+          },
+          {
+            "x": 3,
+            "y": 5,
+            "heading": "west"
           },
           {
             "x": 8,
             "y": 4,
-            "heading": "north"
-          },
-          {
-            "x": 8,
-            "y": 5,
-            "heading": "north"
-          },
-          {
-            "x": 2,
-            "y": 9,
             "heading": "south"
           },
           {
-            "x": 3,
-            "y": 9,
-            "heading": "south"
-          },
-          {
-            "x": 2,
-            "y": 11,
-            "heading": "west"
-          },
-          {
-            "x": 3,
-            "y": 11,
-            "heading": "west"
-          },
-          {
-            "x": 4,
-            "y": 11,
-            "heading": "west"
-          },
-          {
-            "x": 5,
-            "y": 11,
+            "x": 7,
+            "y": 6,
             "heading": "west"
           }
         ]
@@ -66,130 +41,46 @@
         "actions": {},
         "instances": [
           {
-            "x": 4,
-            "y": 3,
+            "x": 6,
+            "y": 2,
             "heading": "north",
-            "offset": "south"
-          },
-          {
-            "x": 4,
-            "y": 4,
-            "heading": "east",
-            "offset": "east"
-          },
-          {
-            "x": 3,
-            "y": 4,
-            "heading": "north",
-            "offset": "south"
-          },
-          {
-            "x": 9,
-            "y": 4,
-            "heading": "east",
-            "offset": "east"
-          },
-          {
-            "x": 9,
-            "y": 5,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 10,
-            "y": 5,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 3,
-            "y": 6,
-            "heading": "west",
             "offset": "west"
           },
           {
             "x": 4,
-            "y": 6,
-            "heading": "north",
-            "offset": "south"
+            "y": 4,
+            "heading": "west",
+            "offset": "north"
           },
           {
-            "x": 5,
-            "y": 6,
+            "x": 3,
+            "y": 4,
             "heading": "north",
-            "offset": "south"
+            "offset": "east"
+          },
+          {
+            "x": 6,
+            "y": 5,
+            "heading": "north",
+            "offset": "east"
           },
           {
             "x": 6,
             "y": 6,
-            "heading": "north",
-            "offset": "south"
-          },
-          {
-            "x": 7,
-            "y": 6,
-            "heading": "north",
-            "offset": "south"
-          },
-          {
-            "x": 8,
-            "y": 6,
-            "heading": "north",
-            "offset": "south"
-          },
-          {
-            "x": 8,
-            "y": 7,
             "heading": "west",
-            "offset": "west"
-          },
-          {
-            "x": 7,
-            "y": 9,
-            "heading": "south",
-            "offset": "south"
-          },
-          {
-            "x": 8,
-            "y": 9,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 9,
-            "y": 9,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 10,
-            "y": 9,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 11,
-            "y": 9,
-            "heading": "north",
-            "offset": "north"
-          },
-          {
-            "x": 8,
-            "y": 11,
-            "heading": "north",
             "offset": "north"
           },
           {
             "x": 4,
-            "y": 11,
+            "y": 7,
             "heading": "north",
-            "offset": "north"
+            "offset": "west"
           },
           {
-            "x": 5,
-            "y": 11,
+            "x": 4,
+            "y": 8,
             "heading": "north",
-            "offset": "north"
+            "offset": "west"
           }
         ]
       }
@@ -199,8 +90,8 @@
       {
         "instances": [
           {
-            "x": 6,
-            "y": 7
+            "x": 3,
+            "y": 3
           }
         ]
       }
@@ -211,18 +102,18 @@
         "actions": {},
         "instances": [
           {
-            "x": 6,
-            "y": 9,
+            "x": 7,
+            "y": 7,
             "id": "1"
           },
           {
-            "x": 6,
-            "y": 4,
+            "x": 7,
+            "y": 2,
             "id": "2"
           },
           {
-            "x": 8,
-            "y": 9,
+            "x": 2,
+            "y": 7,
             "id": "3"
           }
         ]

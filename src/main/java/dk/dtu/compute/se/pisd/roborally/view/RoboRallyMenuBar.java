@@ -57,8 +57,9 @@ public class RoboRallyMenuBar extends MenuBar {
         this.getMenus().add(controlMenu);
 
         createLobby = new MenuItem("Create Lobby");
-        createLobby.setOnAction( e -> this.appController.createLobby());
+        //createLobby.setOnAction( e -> this.appController.createLobby());
         controlMenu.getItems().add(createLobby);
+
 
         createCharacter = new MenuItem("Create Character");
         createCharacter.setOnAction( e -> this.appController.createCharacter());

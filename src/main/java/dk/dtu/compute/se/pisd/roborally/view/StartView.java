@@ -43,7 +43,7 @@ public class StartView extends BaseView {
         Button modifyRobotButton = new Button("Modify Robot");
         Button exitButton = new Button("Exit");
 
-        startLobbyButton.setOnAction(e -> appController.createLobby());
+        startLobbyButton.setOnAction(e -> appController.getRoboRally().createNewLobbyView(appController));
         modifyRobotButton.setOnAction(e -> appController.getRoboRally().createRobotSettingsView(appController));
         joinLobbyButton.setOnAction(e -> appController.getRoboRally().createLobbyBrowserView(appController));
         exitButton.setOnAction(e -> appController.exit());

@@ -77,43 +77,19 @@ public class AppController implements Observer {
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
-    public void createLobby() {
-        new CreateLobbyView();
+    public void createLobby(int boardId, int players) {
+        // Tell the server to create the player in the database
+        sendPlayerToServer();
 
-        ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        playerDialog.setTitle("Number of players");
-        playerDialog.setHeaderText("Select number of players");
+        // Create the lobby
+        Game game = apiServices.createGame((long) boardId, players);
 
-        ChoiceDialog<Integer> boardDialog = new ChoiceDialog<>(BOARD_NUMBER_OPTIONS.get(0), BOARD_NUMBER_OPTIONS);
-        boardDialog.setTitle("Select map");
-        boardDialog.setHeaderText("Choose map");
+        // Join the lobby that was just created
+        localPlayer.setState(PlayerState.NOT_READY);
+        apiServices.joinGame(game.id, localPlayer.getId());
 
-        Stage boardStage = (Stage) boardDialog.getDialogPane().getScene().getWindow();
-        boardStage.setAlwaysOnTop(true);
-
-        Optional<Integer> playerResult = playerDialog.showAndWait();
-
-        if (playerResult.isPresent()) {
-            Optional<Integer> boardResult = boardDialog.showAndWait();
-
-            if (boardResult.isPresent()) {
-                int playerCount = playerResult.get();
-                int boardNumber = boardResult.get();
-
-                // Tell the server to create the player in the database
-                sendPlayerToServer();
-
-                // Create the lobby
-                Game game = apiServices.createGame((long) boardNumber, playerCount);
-
-                // Join the lobby that was just created
-                localPlayer.setState(PlayerState.NOT_READY);
-                apiServices.joinGame(game.id, localPlayer.getId());
-
-                // Display the Lobby Window
-                roboRally.createLobbyView(this, game.id);
-            }
-        }
+        // Display the Lobby Window
+        roboRally.createLobbyView(this, game.id);
     }
 
     public void joinLobby(Long gameId) {
@@ -187,7 +163,7 @@ public class AppController implements Observer {
         // XXX needs to be implemented eventually
         // for now, we just create a new game
         if (gameController == null) {
-            createLobby();
+            //createLobby();
         }
     }
 

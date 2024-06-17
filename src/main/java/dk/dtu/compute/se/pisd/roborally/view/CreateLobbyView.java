@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -15,22 +14,24 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CreateLobbyView extends BaseView {
     private AppController appController;
     private GridPane boardSelection;
-    private Optional numberOfPlayers;
-    private String boardNumber;
+    private Integer numberOfPlayers = 1;
+    private Integer boardId = 0;
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(1, 2, 3, 4, 5, 6);
-    private static final double MIN_START_WIDTH = 600;
+
+    public CreateLobbyView(AppController appController){
+        this.appController = appController;
+    }
 
     @Override
     public void initialize() {
@@ -48,26 +49,21 @@ public class CreateLobbyView extends BaseView {
         Text numberOfPlayersText = new Text("Players: ");
         ComboBox<String> comboBox = new ComboBox<>();
         ObservableList<String> options = FXCollections.observableArrayList(
-                "1", "2", "3", "4", "5", "6"
+                PLAYER_NUMBER_OPTIONS.stream().map(Object::toString).collect(Collectors.toList())
         );
         comboBox.setItems(options);
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                String boardNumber = newValue;
+                numberOfPlayers = Integer.valueOf(newValue);
             }
         });
 
         Button startButton = new Button("Create");
         startButton.setOnAction(event -> {
-            if (boardSelection == null || numberOfPlayers.isEmpty()) {
-
-            } else {
-                appController.createLobby();
-                //appController.joinLobby(); //send gameinfo
-            }
+            appController.createLobby(boardId, numberOfPlayers);
         });
 
-        VBox mainLayout = new VBox(20, title, boardSelection, numberOfPlayersInfoText, numberOfPlayersText, comboBox);
+        VBox mainLayout = new VBox(20, title, boardSelection, numberOfPlayersInfoText, numberOfPlayersText, comboBox, startButton);
         getChildren().addAll(mainLayout);
     }
 
@@ -97,12 +93,8 @@ public class CreateLobbyView extends BaseView {
         }
     }
 
-    private void saveBoard(String name) {
-        AppConfig.setProperty("local.board.id", name);
-    }
-
     private void selectBoard(int id) {
-        AppConfig.setProperty("local.board.id", String.valueOf(boardNumber));
+        boardId = id;
     }
 
     private void highlightSelected(Button selectedButton) {

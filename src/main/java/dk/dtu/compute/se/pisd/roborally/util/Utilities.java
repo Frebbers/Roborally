@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.util;
 
+import javafx.scene.control.TextField;
+
 public class Utilities {
     public static <T extends Enum<T>> T toEnum(Class<T> enumType, String enumString) {
         try {
@@ -22,5 +24,13 @@ public class Utilities {
             throw new IllegalArgumentException("Enum " + enumType.getName() + " does not have a reachable getValue method or another reflection issue occurred.", e);
         }
         throw new IllegalArgumentException("Unknown enum value: " + enumValue);
+    }
+
+    public static void restrictToNumbersDotsAndColons(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9.:]*")) {
+                textField.setText(oldValue);
+            }
+        });
     }
 }

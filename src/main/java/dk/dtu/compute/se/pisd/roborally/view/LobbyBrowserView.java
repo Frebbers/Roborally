@@ -40,6 +40,16 @@ public class LobbyBrowserView extends BaseView {
             lobbyBrowserController.joinSelectedLobby(selectedGameName);
         });
 
+        // Add a listener to the lobby list view selection
+        lobbyListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                boolean isFull = lobbyBrowserController.isLobbyFull(newValue);
+                joinLobbyButton.setDisable(isFull);
+            } else {
+                joinLobbyButton.setDisable(true);
+            }
+        });
+
         // Layout for selecting local lobby
         VBox localLobbies = new VBox(10, foundLobbiesHeader, lobbyListView, joinLobbyButton);
 
@@ -54,7 +64,6 @@ public class LobbyBrowserView extends BaseView {
         // Add the buttons and spacer to a container
         HBox buttonContainer = new HBox(backButton, spacer, joinLobbyButton);
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.setPadding(new Insets(10));
 
         // Main layout
         VBox mainLayout = new VBox(20, localLobbies, buttonContainer);

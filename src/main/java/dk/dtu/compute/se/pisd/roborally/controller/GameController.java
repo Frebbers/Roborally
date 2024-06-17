@@ -133,10 +133,6 @@ public class GameController {
         // Upload the moves to the server
         apiServices.createMove(gameId, localPlayer.getId(), board.getMoveCount(), localMoveTypes);
 
-        // Make the cards invisible
-        makeProgramFieldsInvisible();
-        makeProgramFieldsVisible(0);
-
         // Poll to the server if all the players are ready
         startPollingForMoves(gameId, board.getMoveCount(), moves -> {
             // Ensure that any moves has been fetched

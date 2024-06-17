@@ -29,6 +29,8 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
+import dk.dtu.compute.se.pisd.roborally.view.CreateLobbyView;
+import dk.dtu.compute.se.pisd.roborally.view.StartView;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -58,6 +60,7 @@ public class AppController implements Observer {
     private GameController gameController;
 
     public static PlayerDTO localPlayer;
+    private StartView startView;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -69,11 +72,23 @@ public class AppController implements Observer {
         this.apiServices = new ApiServices();
     }
 
+    public void setStartView(StartView startView) {
+        this.startView = startView;
+    }
+    public String getLocalPlayerName() {
+        if (localPlayer != null) {
+            return localPlayer.getName();
+        } else {
+            return "Unknown Player";
+        }
+    }
     /**
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.
      */
     public void createLobby() {
+        new CreateLobbyView();
+
         ChoiceDialog<Integer> playerDialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         playerDialog.setTitle("Number of players");
         playerDialog.setHeaderText("Select number of players");

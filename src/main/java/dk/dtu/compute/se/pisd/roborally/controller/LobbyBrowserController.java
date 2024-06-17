@@ -52,7 +52,7 @@ public class LobbyBrowserController {
             List<PlayerDTO> players =apiServices.getPlayersInGame(game.id);
 
             // Display the name, players in the lobby and the max players
-            String displayText = String.format("%s (%d/%d players)", game.name, players.size(), game.maxPlayers);
+            String displayText = String.format("%s (%d / %d players)", game.name, players.size(), game.maxPlayers);
             items.add(displayText);
             lobbyMap.put(displayText, game.id);
         }
@@ -62,6 +62,14 @@ public class LobbyBrowserController {
         if (games.isEmpty()) {
             lobbyListView.setPlaceholder(new javafx.scene.text.Text("No games available to join."));
         }
+    }
+
+    public Game getGameByName(String gameName){
+        // Get the gameID from the map
+        Long gameId = lobbyMap.get(gameName);
+
+        // Get the lobby from the API
+        return apiServices.getGameById(gameId);
     }
 
     public boolean isLobbyFull(String gameName){

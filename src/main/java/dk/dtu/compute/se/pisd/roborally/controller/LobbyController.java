@@ -53,7 +53,7 @@ public class LobbyController {
         int readyPlayers = 0;
         for (PlayerDTO player : playerList) {
             if (player.getGameId().equals(game.id)) {
-                items.add(player.getId() + " " + player.getName() + " " + player.getState());
+                items.add(player.getName() + " (" + player.getState().toString() + ")");
 
                 if (player.getState() == PlayerState.READY) {
                     readyPlayers += 1;

@@ -15,13 +15,12 @@ import javafx.scene.text.Text;
 public class StartView extends BaseView {
 
     private AppController appController;
-    private static final double MIN_START_WIDTH = 300;
+    private static final double MIN_START_WIDTH = 600;
     private Text nameLabel;
 
     public StartView(AppController appController) {
         super();
         this.appController = appController;
-        initialize();
     }
 
     @Override

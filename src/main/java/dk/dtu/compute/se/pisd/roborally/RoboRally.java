@@ -69,7 +69,6 @@ public class RoboRally extends Application {
         // create the primary scene with the a menu bar and a pane for
         // the board view (which initially is empty); it will be filled
         // when the user creates a new game or loads a game
-        RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
         boardRoot = new BorderPane();
 
         VBox vbox = new VBox(boardRoot);
@@ -148,12 +147,32 @@ public class RoboRally extends Application {
     }
 
     /**
+     * Create a StartView with the given appController
+     *
+     * @param appController
+     */
+    public void createNewLobbyView(AppController appController) {
+        // if present, remove old view
+        boardRoot.getChildren().clear();
+
+        if (appController != null) {
+            // create and add view for create lobby screen
+            CreateLobbyView createLobbyView = new CreateLobbyView(appController);
+            createLobbyView.initialize();
+            boardRoot.setCenter(createLobbyView);
+        }
+
+        stage.sizeToScene();
+    }
+
+    /**
      * Create a LobbyView
      *
      */
     public void createLobbyView(AppController controller, Long gameId) {
         // if present, remove old view
         boardRoot.getChildren().clear();
+
         if(controller != null){
             LobbyView lobbyView = new LobbyView(controller, gameId);
             lobbyView.initialize();

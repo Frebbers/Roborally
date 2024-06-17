@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ public class StartView extends BaseView {
 
     private AppController appController;
     private static final double MIN_START_WIDTH = 600;
+    private Text nameLabel;
 
     public StartView(AppController appController) {
         super();
@@ -23,6 +25,9 @@ public class StartView extends BaseView {
 
     @Override
     public void initialize() {
+        nameLabel = new Text();
+        updatePlayerName();
+
         // Background image setup
         String imagePath = "/images/RoboLobbyBackground.png";
         Image backgroundImage = new Image(getClass().getResourceAsStream(imagePath));
@@ -38,7 +43,7 @@ public class StartView extends BaseView {
         Button modifyRobotButton = new Button("Modify Robot");
         Button exitButton = new Button("Exit");
 
-        startLobbyButton.setOnAction(e -> appController.createLobby());
+        startLobbyButton.setOnAction(e -> appController.getRoboRally().createNewLobbyView(appController));
         modifyRobotButton.setOnAction(e -> appController.getRoboRally().createRobotSettingsView(appController));
         joinLobbyButton.setOnAction(e -> appController.getRoboRally().createLobbyBrowserView(appController));
         exitButton.setOnAction(e -> appController.exit());
@@ -46,19 +51,15 @@ public class StartView extends BaseView {
         VBox buttonContainer = new VBox(10, startLobbyButton, modifyRobotButton, joinLobbyButton, exitButton);
         buttonContainer.setAlignment(Pos.CENTER);
 
-        // Information
-        Text nameLabel = new Text("Name: ");
-        Text statusLabel = new Text("Status: ");
+
         StackPane nameLabelContainer = new StackPane(nameLabel);
-        StackPane statusLabelContainer = new StackPane(statusLabel);
+        this.getChildren().add(nameLabelContainer);
 
         BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(45, 45, 45, 0.5), CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
 
         nameLabelContainer.setBackground(background);
-        statusLabelContainer.setBackground(background);
-
-        VBox infoContainer = new VBox(10, nameLabelContainer, statusLabelContainer);
+        VBox infoContainer = new VBox(10, nameLabelContainer);
         infoContainer.setAlignment(Pos.BOTTOM_CENTER);
         infoContainer.setPadding(new Insets(20));
 
@@ -67,5 +68,13 @@ public class StartView extends BaseView {
         mainLayout.setAlignment(Pos.CENTER);
 
         getChildren().add(mainLayout);
+    }
+    public void updatePlayerName() {
+        String name = AppConfig.getProperty("local.player.name");
+        if (name != null) {
+            nameLabel.setText("Character name: " + name);
+        } else {
+            nameLabel.setText("Character: None");
+        }
     }
 }

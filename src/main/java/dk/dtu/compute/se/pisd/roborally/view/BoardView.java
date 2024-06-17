@@ -65,13 +65,6 @@ public class BoardView extends BaseView implements ViewObserver {
             mainBoardPane.add(beltView, space.x, space.y);
         }
 
-        for (PriorityAntenna priorityAntenna : board.getData().priorityAntennas){
-            Space space = board.getSpace(priorityAntenna.getX(), priorityAntenna.getY());
-            space.setPriorityAntenna(priorityAntenna);
-            PriorityAntennaView priorityAntennaView = new PriorityAntennaView(priorityAntenna);
-            mainBoardPane.add(priorityAntennaView, space.x, space.y);
-        }
-
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
                 Space space = board.getSpace(x, y);
@@ -80,6 +73,13 @@ public class BoardView extends BaseView implements ViewObserver {
                 mainBoardPane.add(spaceView, x, y);
                 spaceView.setOnMouseClicked(spaceEventHandler);
             }
+        }
+
+        for (PriorityAntenna priorityAntenna : board.getData().priorityAntennas){
+            Space space = board.getSpace(priorityAntenna.getX(), priorityAntenna.getY());
+            space.setPriorityAntenna(priorityAntenna);
+            PriorityAntennaView priorityAntennaView = new PriorityAntennaView(priorityAntenna);
+            mainBoardPane.add(priorityAntennaView, space.x, space.y);
         }
 
         for (Wall wall : board.getData().walls) {

@@ -4,14 +4,15 @@ import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -77,7 +78,19 @@ public class CreateLobbyView extends BaseView {
             appController.createLobby(lobbyName, boardId, numberOfPlayers);
         });
 
-        VBox mainLayout = new VBox(20, title, lobbyNameText, lobbyNameField, numberOfPlayersText, comboBox, boardText, boardSelection,startButton);
+        // Add a button to go back
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
+
+        // Spacer to push buttons to each side
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Add the buttons and spacer to a container
+        HBox buttonContainer = new HBox(backButton, spacer, startButton);
+        buttonContainer.setAlignment(Pos.CENTER);
+
+        VBox mainLayout = new VBox(20, title, lobbyNameText, lobbyNameField, numberOfPlayersText, comboBox, boardText, boardSelection, buttonContainer);
         getChildren().addAll(mainLayout);
 
         // Highlight the first selected board

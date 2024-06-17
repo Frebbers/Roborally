@@ -54,7 +54,6 @@ public class LobbyBrowserView extends BaseView {
         // Add the buttons and spacer to a container
         HBox buttonContainer = new HBox(backButton, spacer, joinLobbyButton);
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.setPadding(new Insets(10));
 
         // Main layout
         VBox mainLayout = new VBox(20, localLobbies, buttonContainer);

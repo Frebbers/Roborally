@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -40,12 +41,21 @@ public class LobbyBrowserView extends BaseView {
     public void initialize() {
         BorderPane mainLayout = new BorderPane();
 
-        // Lobby list on the left
+        // Server and Lobby list on the left
+        Text serverHeader = new Text("Server");
+        TextField serverIPDialog = new TextField();
+        serverIPDialog.setPromptText("Enter server IP");
+        Button connectToServerButton = new Button("Connect");
+        connectToServerButton.setOnAction(event -> {
+            String ip = serverIPDialog.getText();
+            lobbyBrowserController.joinLobbyByIP(ip);
+        });
+
         lobbyListView = new ListView<>();
         lobbyListView.setPrefWidth(300);
         lobbyListView.setPrefHeight(400);
 
-        VBox leftContainer = new VBox(new Text("Lobbies:"), lobbyListView);
+        VBox leftContainer = new VBox(serverHeader, serverIPDialog, connectToServerButton,new Text("Lobbies:"), lobbyListView);
         leftContainer.setSpacing(10);
         mainLayout.setLeft(leftContainer);
 

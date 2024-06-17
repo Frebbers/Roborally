@@ -61,7 +61,6 @@ public class AppController implements Observer {
 
 
     public static PlayerDTO localPlayer;
-    private StartView startView;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -73,16 +72,7 @@ public class AppController implements Observer {
         this.apiServices = new ApiServices();
     }
 
-    public void setStartView(StartView startView) {
-        this.startView = startView;
-    }
-    public String getLocalPlayerName() {
-        if (localPlayer != null) {
-            return localPlayer.getName();
-        } else {
-            return "Unknown Player";
-        }
-    }
+
     /**
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.
      * The programming phase is then initialized.

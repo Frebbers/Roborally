@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
@@ -20,7 +21,6 @@ public class StartView extends BaseView {
     public StartView(AppController appController) {
         super();
         this.appController = appController;
-        this.appController.setStartView(this);
         initialize();
     }
 
@@ -71,8 +71,9 @@ public class StartView extends BaseView {
         getChildren().add(mainLayout);
     }
     public void updatePlayerName() {
-        if (AppController.localPlayer != null) {
-            nameLabel.setText("Character name: " + AppController.localPlayer.getName());
+        String name = AppConfig.getProperty("local.player.name");
+        if (name != null) {
+            nameLabel.setText("Character name: " + name);
         } else {
             nameLabel.setText("Character: None");
         }

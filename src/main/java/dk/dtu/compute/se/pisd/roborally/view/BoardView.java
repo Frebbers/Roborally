@@ -51,6 +51,14 @@ public class BoardView extends BaseView implements ViewObserver {
         spaces = new SpaceView[board.width][board.height];
         spaceEventHandler = new SpaceEventHandler(gameController);
 
+        for(int i = 0; i < board.getPlayers().size(); i++){
+            Spawn spawn = board.getData().spawns.get(i);
+            Space space = board.getSpace(spawn.x, spawn.y);
+            space.setSpawn(spawn);
+            SpawnView spawnView = new SpawnView(spawn);
+            mainBoardPane.add(spawnView, space.x, space.y);
+        }
+
         for (Checkpoint checkpoint : board.getData().checkpoints){
             Space space = board.getSpace(checkpoint.x, checkpoint.y);
             space.setCheckpoint(checkpoint);

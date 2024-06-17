@@ -4,76 +4,152 @@
   "width": 8,
   "spaces": [
     {
-    "conveyorBelts":
+      "spawns":
       {
+        "actions": {},
         "instances": [
           {
+            "x": 1,
+            "y": 1
+          },
+          {
             "x": 2,
-            "y": 7,
-            "heading": "north"
+            "y": 2
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 4,
+            "y": 2
           },
           {
             "x": 5,
+            "y": 1
+          },
+          {
+            "x": 6,
+            "y": 2
+          }
+        ]
+      }
+    },
+    {
+      "conveyorBelts":
+      {
+        "instances": [
+          {
+            "x": 5,
             "y": 3,
+            "heading": "north"
+          },
+          {
+            "x": 7,
+            "y": 3,
+            "heading": "east"
+          },
+          {
+            "x": 3,
+            "y": 5,
+            "heading": "west"
+          },
+          {
+            "x": 8,
+            "y": 4,
             "heading": "south"
+          },
+          {
+            "x": 7,
+            "y": 6,
+            "heading": "west"
           }
         ]
       }
     },
     {
       "walls":
-        {
-          "actions": {},
-          "instances": [
-            {
-              "x": 3,
-              "y": 3,
-              "heading": "north",
-              "offset": "west"
-            },
-            {
-              "x": 3,
-              "y": 4,
-              "heading": "north",
-              "offset": "west"
-            },
-            {
-              "x": 6,
-              "y": 6,
-              "heading": "west",
-              "offset": "south"
-            }
-          ]
-        }
+      {
+        "actions": {},
+        "instances": [
+          {
+            "x": 6,
+            "y": 2,
+            "heading": "north",
+            "offset": "west"
+          },
+          {
+            "x": 4,
+            "y": 4,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 3,
+            "y": 4,
+            "heading": "north",
+            "offset": "east"
+          },
+          {
+            "x": 6,
+            "y": 5,
+            "heading": "north",
+            "offset": "east"
+          },
+          {
+            "x": 6,
+            "y": 6,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 4,
+            "y": 7,
+            "heading": "north",
+            "offset": "west"
+          },
+          {
+            "x": 4,
+            "y": 8,
+            "heading": "north",
+            "offset": "west"
+          }
+        ]
+      }
     },
     {
       "priorityAntennas":
       {
         "instances": [
           {
-            "x": 4,
-            "y": 7
+            "x": 3,
+            "y": 3
           }
         ]
       }
     },
     {
       "checkpoints":
-        {
-          "actions": {},
-          "instances": [
-            {
-              "x": 6,
-              "y": 3,
-              "id": "1"
-            },
-            {
-              "x": 8,
-              "y": 5,
-              "id": "2"
-            }
-          ]
-        }
+      {
+        "actions": {},
+        "instances": [
+          {
+            "x": 7,
+            "y": 7,
+            "id": "1"
+          },
+          {
+            "x": 7,
+            "y": 2,
+            "id": "2"
+          },
+          {
+            "x": 2,
+            "y": 7,
+            "id": "3"
+          }
+        ]
+      }
     }
   ]
 }

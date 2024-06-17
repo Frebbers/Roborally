@@ -37,6 +37,7 @@ import java.util.List;
 public class Space extends Subject {
 
     private Player player;
+    private Spawn spawn;
     private Checkpoint checkpoint;
     private PriorityAntenna priorityAntenna;
 
@@ -95,6 +96,24 @@ public class Space extends Subject {
             }
             notifyChange();
         }
+    }
+
+    /**
+     * Return spawn object which is on this space.
+     *
+     * @return Spawn on this space
+     */
+    public Spawn getSpawn() {
+        return spawn;
+    }
+
+    /**
+     * Set a spawn object to be on this space.
+     *
+     * @param spawn spawn to be on this space
+     */
+    public void setSpawn(Spawn spawn) {
+        this.spawn = spawn;
     }
 
     /**

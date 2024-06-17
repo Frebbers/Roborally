@@ -43,6 +43,7 @@ public class JsonReader {
             int width = jsonObject.get("width").getAsInt();
             JsonArray spaces = jsonObject.getAsJsonArray("spaces");
 
+            List<Spawn> spawns = new ArrayList<>();
             List<Wall> walls = new ArrayList<>();
             List<Checkpoint> checkpoints = new ArrayList<>();
             List<ConveyorBelt> conveyorBelts = new ArrayList<>();
@@ -50,6 +51,21 @@ public class JsonReader {
 
             for (JsonElement spaceElement : spaces) {
                 JsonObject space = spaceElement.getAsJsonObject();
+
+                // Handling spawns
+                if (space.has("spawns")) {
+                    JsonObject spawnObject = space.getAsJsonObject("spawns");
+                    JsonArray spawnsArray = spawnObject.getAsJsonArray("instances");
+                    for (JsonElement spawnElement : spawnsArray) {
+                        JsonObject spawnO = spawnElement.getAsJsonObject();
+                        int x = spawnO.get("x").getAsInt() - 1;
+                        int y = spawnO.get("y").getAsInt() - 1;
+
+                        // Create a wall and add it to the walls
+                        Spawn spawn = new Spawn(x, y);
+                        spawns.add(spawn);
+                    }
+                }
 
                 // Handling walls
                 if (space.has("walls")) {
@@ -120,7 +136,7 @@ public class JsonReader {
                 }
             }
 
-            return new BoardData(name, width, height, walls, checkpoints, conveyorBelts, priorityAntennas);
+            return new BoardData(name, width, height, spawns, walls, checkpoints, conveyorBelts, priorityAntennas);
 
         } catch (Exception e) {
             e.printStackTrace();

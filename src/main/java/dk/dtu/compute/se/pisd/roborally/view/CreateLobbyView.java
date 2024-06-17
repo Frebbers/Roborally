@@ -27,10 +27,10 @@ public class CreateLobbyView extends BaseView {
     private AppController appController;
     private GridPane boardSelection;
     private String lobbyName;
-    private Integer numberOfPlayers = 2;
+    private Integer numberOfPlayers = 1;
     private Integer boardId = 1;
 
-    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
+    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(1, 2, 3, 4, 5, 6);
 
     public CreateLobbyView(AppController appController){
         super(appController);

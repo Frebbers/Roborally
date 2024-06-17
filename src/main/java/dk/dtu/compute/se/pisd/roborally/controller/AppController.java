@@ -30,6 +30,7 @@ import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import dk.dtu.compute.se.pisd.roborally.view.CreateLobbyView;
+import dk.dtu.compute.se.pisd.roborally.view.SpawnView;
 import dk.dtu.compute.se.pisd.roborally.view.StartView;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -121,7 +122,7 @@ public class AppController implements Observer {
         List<PlayerDTO> playersDTOs = apiServices.getPlayersInGame(gameId);
 
         for (int i = 0; i < playersDTOs.size(); i++) {
-            // Get he DTO of the player
+            // Get the DTO of the player
             PlayerDTO playerDTO = playersDTOs.get(i);
 
             // Create the actual player object for the local client
@@ -129,7 +130,9 @@ public class AppController implements Observer {
 
             // Update the required fields for the player
             player.setBoard(board);
-            player.setSpace(board.getSpace(i % board.width, i));
+            Spawn spawn = board.getData().spawns.get(i);
+            Space space = board.getSpace(spawn.x, spawn.y);
+            player.setSpace(space);
 
             // Add the player to the board
             board.addPlayer(player);

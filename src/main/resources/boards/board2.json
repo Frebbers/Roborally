@@ -1,36 +1,93 @@
 {
   "name": "Board 2",
-  "height": 8,
-  "width": 8,
+  "height": 12,
+  "width": 12,
   "spaces": [
+    {
+      "spawns":
+      {
+        "actions": {},
+        "instances": [
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 2,
+            "y": 2
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 4,
+            "y": 2
+          },
+          {
+            "x": 5,
+            "y": 1
+          },
+          {
+            "x": 6,
+            "y": 2
+          }
+        ]
+      }
+    },
     {
       "conveyorBelts":
       {
         "instances": [
           {
-            "x": 5,
-            "y": 3,
-            "heading": "north"
-          },
-          {
             "x": 7,
             "y": 3,
-            "heading": "east"
-          },
-          {
-            "x": 3,
-            "y": 5,
-            "heading": "west"
-          },
-          {
-            "x": 8,
-            "y": 4,
             "heading": "south"
           },
           {
             "x": 7,
+            "y": 4,
+            "heading": "south"
+          },
+          {
+            "x": 9,
+            "y": 5,
+            "heading": "north"
+          },
+          {
+            "x": 9,
             "y": 6,
+            "heading": "north"
+          },
+          {
+            "x": 3,
+            "y": 10,
+            "heading": "south"
+          },
+          {
+            "x": 4,
+            "y": 10,
             "heading": "west"
+          },
+          {
+            "x": 3,
+            "y": 12,
+            "heading": "east"
+          },
+          {
+            "x": 4,
+            "y": 12,
+            "heading": "east"
+          },
+          {
+            "x": 5,
+            "y": 12,
+            "heading": "east"
+          },
+          {
+            "x": 6,
+            "y": 12,
+            "heading": "east"
           }
         ]
       }
@@ -41,31 +98,37 @@
         "actions": {},
         "instances": [
           {
-            "x": 6,
-            "y": 2,
+            "x": 5,
+            "y": 4,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 5,
+            "y": 5,
             "heading": "north",
             "offset": "west"
           },
           {
             "x": 4,
-            "y": 4,
+            "y": 5,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 10,
+            "y": 5,
+            "heading": "north",
+            "offset": "west"
+          },
+          {
+            "x": 10,
+            "y": 6,
             "heading": "west",
             "offset": "north"
           },
           {
-            "x": 3,
-            "y": 4,
-            "heading": "north",
-            "offset": "east"
-          },
-          {
-            "x": 6,
-            "y": 5,
-            "heading": "north",
-            "offset": "east"
-          },
-          {
-            "x": 6,
+            "x": 11,
             "y": 6,
             "heading": "west",
             "offset": "north"
@@ -74,13 +137,85 @@
             "x": 4,
             "y": 7,
             "heading": "north",
-            "offset": "west"
+            "offset": "east"
           },
           {
-            "x": 4,
-            "y": 8,
+            "x": 5,
+            "y": 7,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 6,
+            "y": 7,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 7,
+            "y": 7,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 8,
+            "y": 7,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 9,
+            "y": 7,
+            "heading": "west",
+            "offset": "south"
+          },
+          {
+            "x": 8,
+            "y": 10,
             "heading": "north",
-            "offset": "west"
+            "offset": "east"
+          },
+          {
+            "x": 9,
+            "y": 10,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 10,
+            "y": 10,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 11,
+            "y": 10,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 12,
+            "y": 10,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 9,
+            "y": 12,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 5,
+            "y": 12,
+            "heading": "west",
+            "offset": "north"
+          },
+          {
+            "x": 6,
+            "y": 12,
+            "heading": "west",
+            "offset": "north"
           }
         ]
       }
@@ -90,8 +225,8 @@
       {
         "instances": [
           {
-            "x": 3,
-            "y": 3
+            "x": 7,
+            "y": 8
           }
         ]
       }
@@ -103,17 +238,17 @@
         "instances": [
           {
             "x": 7,
-            "y": 7,
+            "y": 10,
             "id": "1"
           },
           {
             "x": 7,
-            "y": 2,
+            "y": 5,
             "id": "2"
           },
           {
-            "x": 2,
-            "y": 7,
+            "x": 9,
+            "y": 10,
             "id": "3"
           }
         ]

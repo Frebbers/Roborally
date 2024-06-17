@@ -72,7 +72,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         playerImage.setFitHeight(SPACE_HEIGHT);
 
         // Add the image view as the first child of the stack pane
-        if (space.getCheckpoint() == null && space.getBelt() == null) {
+        if (space.getSpawn() == null && space.getCheckpoint() == null && space.getBelt() == null) {
             this.getChildren().addAll(backgroundImage);
         }
         this.getChildren().addAll(playerImage);

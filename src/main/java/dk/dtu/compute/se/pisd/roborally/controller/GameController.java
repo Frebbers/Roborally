@@ -193,14 +193,13 @@ public class GameController {
     public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
         ApiServices apiServices = appController.getApiServices();
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            System.out.println("Polling... Current Player State: " + currentPlayer.getState());
             PlayerDTO interactivePlayer = apiServices.getPlayerById(currentPlayer.getId());
             if (interactivePlayer.getState() == PlayerState.READY) {
             MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
                 if (interaction != null && interaction.getMoveTypes() != null && !interaction.getMoveTypes().isEmpty()) {
                     stopPollingForMoves();
                     callback.accept(interaction);
-                    finishPollingInteractionPhase(interaction.getMoveTypes()); // Ensuring the next steps are executed
+                    finishPollingInteractionPhase(interaction.getMoveTypes());
                 }
             }
         }), 0, 500, TimeUnit.MILLISECONDS);
@@ -326,7 +325,7 @@ public class GameController {
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep(); // Get current register number
             if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current player's program field at position for this register
+                CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     nextCommand = card.command; // get the card's command
                     if (nextCommand.isInteractive()) {

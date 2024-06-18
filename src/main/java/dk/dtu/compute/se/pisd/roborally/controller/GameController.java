@@ -195,7 +195,7 @@ public class GameController {
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
             PlayerDTO interactivePlayer = apiServices.getPlayerById(currentPlayer.getId());
             if (interactivePlayer.getState() == PlayerState.READY) {
-            MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
+                MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
                 if (interaction != null && interaction.getMoveTypes() != null && !interaction.getMoveTypes().isEmpty()) {
                     stopPollingForMoves();
                     callback.accept(interaction);
@@ -467,7 +467,6 @@ public class GameController {
         apiServices.updateMoves(currentPlayer.getGameId(), currentPlayer.getId(), board.getMoveCount(), moveTypes);
         apiServices.updatePlayerState(currentPlayer.getId());
         finishPollingInteractionPhase(moveTypes);
-        System.out.println("finishPlayerInteractionPhase END");
     }
 
 
@@ -479,7 +478,6 @@ public class GameController {
             currentPlayer.getProgramField(i).setCard(commandCard);
         }
         stopPollingForMoves();
-        System.out.println(currentPlayer.getPreviousCommand());
         board.setPhase(Phase.ACTIVATION);
         continuePrograms();
     }

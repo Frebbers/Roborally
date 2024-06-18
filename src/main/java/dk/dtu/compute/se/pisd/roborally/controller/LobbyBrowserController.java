@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
@@ -85,9 +86,24 @@ public class LobbyBrowserController {
         return players.size() >= game.maxPlayers;
     }
 
-    public void joinLobbyByIP(String ip) {
+    public boolean connectToServer(String ip) {
         System.out.println("Joining IP Address: " + ip);
-        // Additional logic to join lobby by IP could be implemented here
+
+        if (apiServices.testConnection(ip)) {
+            AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
+            AppConfig.setProperty("server.games.url", "http://" + ip + ":8080/api/games");
+            AppConfig.setProperty("server.moves.url", "http://" + ip + ":8080/api/moves");
+            AppConfig.setProperty("server.players.url", "http://" + ip + ":8080/api/players");
+
+            apiServices.updateURLs();
+
+            System.out.println("Successfully connected to server " + ip);
+            return true;
+        }
+        else {
+            System.out.println("Failed to connect to server " + ip);
+            return false;
+        }
     }
 
     public void joinSelectedLobby(String gameName) {

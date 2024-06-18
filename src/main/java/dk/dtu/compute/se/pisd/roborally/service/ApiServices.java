@@ -31,6 +31,10 @@ public class ApiServices {
    // private PlayerDTO localPlayer;
 
     public ApiServices(){
+        updateURLs();
+    }
+
+    public void updateURLs() {
         ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
 
         if(type == ApiType.LOCAL){
@@ -222,6 +226,7 @@ public class ApiServices {
         ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
+
     public boolean isReachable(){
         try {
             getAllGames();
@@ -229,5 +234,13 @@ public class ApiServices {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean testConnection(String ip) {
+        GAMES_URL = "http://" + ip + ":8080/api/games";
+
+        boolean verdict = isReachable();
+        updateURLs();
+        return verdict;
     }
 }

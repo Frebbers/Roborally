@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.io.File;
@@ -44,22 +45,36 @@ public class LobbyBrowserView extends BaseView {
 
         // Server and Lobby list on the left
         Text serverHeader = new Text("Server");
+
         TextField serverIPDialog = new TextField();
-        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
         serverIPDialog.setPromptText("Enter server IP");
         serverIPDialog.setText("4.180.19.186");
 
-        Button connectToServerButton = new Button("Connect");
+        // Server button and feedback
+        Text connectToServerFeedback = new Text();
+
+        Button connectToServerButton = new Button("Connect to server");
         connectToServerButton.setOnAction(event -> {
             String ip = serverIPDialog.getText();
-            lobbyBrowserController.joinLobbyByIP(ip);
+            if (lobbyBrowserController.connectToServer(ip)) {
+                connectToServerFeedback.setFill(Color.GREEN);
+                connectToServerFeedback.setText("Connected to " + ip);
+            } else {
+                connectToServerFeedback.setFill(Color.RED);
+                connectToServerFeedback.setText("Failed to connect to " + ip);
+            }
         });
 
+        HBox connectToServerBox = new HBox(connectToServerButton, connectToServerFeedback);
+        connectToServerBox.setSpacing(10);
+
+        // Lobby list view
         lobbyListView = new ListView<>();
         lobbyListView.setPrefWidth(300);
         lobbyListView.setPrefHeight(400);
 
-        VBox leftContainer = new VBox(serverHeader, serverIPDialog, connectToServerButton,new Text("Lobbies:"), lobbyListView);
+        // On the left
+        VBox leftContainer = new VBox(serverHeader, serverIPDialog, connectToServerBox,new Text("Lobbies in server:"), lobbyListView);
         leftContainer.setSpacing(10);
         mainLayout.setLeft(leftContainer);
 
@@ -83,7 +98,7 @@ public class LobbyBrowserView extends BaseView {
         lobbyBrowserController.startLobbyPolling(lobbyListView);
 
         // Join lobby button
-        Button joinLobbyButton = new Button("Join");
+        Button joinLobbyButton = new Button("Join lobby");
         joinLobbyButton.setOnAction(event -> {
             String selectedGameName = lobbyListView.getSelectionModel().getSelectedItem();
             lobbyBrowserController.joinSelectedLobby(selectedGameName);

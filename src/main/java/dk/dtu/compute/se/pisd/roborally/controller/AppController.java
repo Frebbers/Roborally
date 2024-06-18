@@ -59,8 +59,6 @@ public class AppController implements Observer {
     private ApiServices apiServices;
 
     private GameController gameController;
-
-
     public static PlayerDTO localPlayer;
 
     /**
@@ -71,6 +69,8 @@ public class AppController implements Observer {
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices();
+        //Will be null if the player does not exist on the server
+        localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
     }
 
 
@@ -80,7 +80,8 @@ public class AppController implements Observer {
      */
     public void createLobby(String name, int boardId, int players) {
         // Tell the server to create the player in the database
-        sendPlayerToServer();
+
+        onLobbyJoin();
 
         // Create the lobby
         Game game = apiServices.createGame(name, (long) boardId, players);
@@ -94,8 +95,7 @@ public class AppController implements Observer {
     }
 
     public void joinLobby(Long gameId) {
-        sendPlayerToServer();
-
+        onLobbyJoin();
         // Join the game
         localPlayer.setState(PlayerState.NOT_READY);
         apiServices.joinGame(gameId, localPlayer.getId());
@@ -283,13 +283,16 @@ public class AppController implements Observer {
         return apiServices;
     }
 
-    private void sendPlayerToServer() {
+    private void onLobbyJoin() {
+        //TODO test this thoroughly
         if (localPlayer != null) {
-            if (!apiServices.createPlayerOnServer(localPlayer)){System.out.println("Error posting player to server!");}
+            //LocalPlayer is not null and exists on the server
+            return;
         } else if (!(getProperty("local.player.name").isEmpty())) {
+            //Player does not exist on the server but the name is stored in the config file
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
         } else {
-            //If the player does not exist, create it
+            //No character exists and no name is stored in the config file
             createCharacter();
         }
     }

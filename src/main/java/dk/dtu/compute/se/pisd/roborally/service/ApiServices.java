@@ -162,8 +162,23 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
     }
 
-    public boolean createPlayerOnServer(PlayerDTO playerDTO){
-        return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
+    //public boolean createPlayerOnServer(PlayerDTO playerDTO){
+     //   return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
+    //}
+    /**
+     * Check if a player with the given name and ID already exists and return a new PlayerDTO object if it does
+     * @param name     name of the player
+     * @param playerID ID of the player
+     * @return null if the player does not exist, otherwise a new PlayerDTO object
+     */
+    public PlayerDTO playerExists(String name, String playerID){
+        List<PlayerDTO> players = getAllPlayers();
+        for (PlayerDTO player : players) {
+            if (player.getName().equals(name)) {
+                return new PlayerDTO();
+            }
+        }
+        return null;
     }
 
     public void updatePlayerInteractionState(Long id) {

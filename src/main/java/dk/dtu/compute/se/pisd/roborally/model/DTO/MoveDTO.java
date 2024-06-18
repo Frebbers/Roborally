@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MoveDTO {
+    private Long id;
     private Long gameId;
     private Long playerId;
     private Integer turnIndex;
@@ -42,4 +43,6 @@ public class MoveDTO {
     public void setMoveTypes(List<String> moves){
         this.moveTypes = moves;
     }
+    public void setId(Long id){ this.id = id; }
+    public Long getId() { return id; }
 }

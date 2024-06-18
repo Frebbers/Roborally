@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -37,8 +38,12 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static dk.dtu.compute.se.pisd.roborally.controller.AppController.localPlayer;
 
 /**
  * Handles the drawing of a player mat.
@@ -72,9 +77,9 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * Create a player view belonging to a certain player.
-     * 
+     *
      * @param gameController
-     * @param player the player whose player view this is
+     * @param player         the player whose player view this is
      */
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
@@ -83,7 +88,7 @@ public class PlayerView extends Tab implements ViewObserver {
         this.gameController = gameController;
         this.player = player;
 
-        isLocalPlayer = Objects.equals(AppController.localPlayer.getId(), player.getId());
+        isLocalPlayer = Objects.equals(localPlayer.getId(), player.getId());
 
         // Set up GUI components
         initializeGUIComponents();
@@ -157,7 +162,7 @@ public class PlayerView extends Tab implements ViewObserver {
         return cardsPane;
     }
 
-    private void onPlayerLeave(){
+    private void onPlayerLeave() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Leave the game");
         alert.setHeaderText("Are you sure you wish to leave the game?");
@@ -175,7 +180,6 @@ public class PlayerView extends Tab implements ViewObserver {
      * Return player this view belongs to.
      *
      * @return Player which this view belongs to
-     *
      * @author s214972@dtu.dk
      */
     public Player getPlayer() {
@@ -184,7 +188,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * Update player view as to include a recent change in state.
-     * 
+     *
      * @param subject
      */
     @Override
@@ -192,7 +196,7 @@ public class PlayerView extends Tab implements ViewObserver {
         if (subject == player.board) {
             updateProgramCards();
 
-            if(isLocalPlayer){
+            if (isLocalPlayer) {
                 updateControlPanel();
             }
         }
@@ -233,15 +237,12 @@ public class PlayerView extends Tab implements ViewObserver {
                 case INITIALISATION:
                     finishButton.setDisable(true);
                     break;
-
                 case PROGRAMMING:
                     finishButton.setDisable(false);
                     break;
-
                 case ACTIVATION:
                     finishButton.setDisable(true);
                     break;
-
                 default:
                     finishButton.setDisable(true);
             }
@@ -251,7 +252,6 @@ public class PlayerView extends Tab implements ViewObserver {
                 programPane.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
             }
             playerInteractionPanel.getChildren().clear();
-
             if (player.board.getCurrentPlayer() == player) {
                 for (Command currentCommand : gameController.getNextCommand().getOptions()) {
                     Button optionButton = new Button(currentCommand.displayName);
@@ -263,3 +263,4 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 }
+

@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.scene.control.ListView;
@@ -37,6 +38,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Phase.ACTIVATION;
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
 
 /**
@@ -188,6 +190,22 @@ public class GameController {
         }), 0, 500, TimeUnit.MILLISECONDS);
         scheduledTasks.add(future);
     }
+    public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
+        ApiServices apiServices = appController.getApiServices();
+        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            System.out.println("Polling... Current Player State: " + currentPlayer.getState());
+            PlayerDTO interactivePlayer = apiServices.getPlayerById(currentPlayer.getId());
+            if (interactivePlayer.getState() == PlayerState.READY) {
+            MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
+                if (interaction != null && interaction.getMoveTypes() != null && !interaction.getMoveTypes().isEmpty()) {
+                    stopPollingForMoves();
+                    callback.accept(interaction);
+                    finishPollingInteractionPhase(interaction.getMoveTypes()); // Ensuring the next steps are executed
+                }
+            }
+        }), 0, 500, TimeUnit.MILLISECONDS);
+        scheduledTasks.add(future);
+    }
 
 
     /**
@@ -286,8 +304,7 @@ public class GameController {
         int nextPlayerNumber = board.getPlayerNumberByTurnOrder(currentPlayer) + 1; // iterate player number
         if (nextPlayerNumber < board.getPlayersNumber()) { // if not every player has played this register
             board.setCurrentPlayer(board.getPlayerByTurnOrder(nextPlayerNumber)); // set player to next number
-        }
-        else { // if every player HAS played this register
+        } else { // if every player HAS played this register
             step++; // iterate register number
             if (step < Player.NO_REGISTERS) { // if not all registers are done
                 makeProgramFieldsVisible(step); // show next register's cards
@@ -295,7 +312,6 @@ public class GameController {
                 board.updatePlayerTurnOrder();  // update the priority antenna's player order
                 board.setCurrentPlayer(board.getPlayerByTurnOrder(0)); // set first player as current player
             } else { // if all registers are done
-                //TO-DO after players have had their turn logic
                 for (Player player : board.getPlayers()) {
                     executeFieldActions(player.getSpace()); // execute all field actions (traps etc.)
                 }
@@ -303,7 +319,6 @@ public class GameController {
                 startProgrammingPhase(); // call method for start of next phase
             }
         }
-
     }
     // XXX: implemented in the current version
     private void executeNextStep() {
@@ -311,22 +326,23 @@ public class GameController {
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep(); // Get current register number
             if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current players program field at position for this register
+                CommandCard card = currentPlayer.getProgramField(step).getCard(); // get the card in the current player's program field at position for this register
                 if (card != null) {
                     nextCommand = card.command; // get the card's command
                     if (nextCommand.isInteractive()) {
                         StartPlayerInteractionPhase(nextCommand.getOptions());
-                    }
-                    else {executeCommand(currentPlayer, nextCommand);
+                    } else {
+                        executeCommand(currentPlayer, nextCommand);
                         finishNextStep(currentPlayer);
                     } // execute the card's command
-                }
-                else{
+                } else {
                     finishNextStep(currentPlayer);
                 }
             }
         }
     }
+
+
 
     /**
      * Function to call when at the end of the activation phase.
@@ -419,16 +435,56 @@ public class GameController {
     }
     public void StartPlayerInteractionPhase(List<Command> options) {
         board.setPhase(PLAYER_INTERACTION);
+        Player currentPlayer = board.getCurrentPlayer();
+        currentPlayer.setState(PlayerState.INTERACTING);
+        ApiServices apiServices = appController.getApiServices();
+        apiServices.updatePlayerInteractionState(currentPlayer.getId());
 
-        //return Command;
+        for (Player player : board.getPlayers()) {
+            if (player != currentPlayer) {
+                startPollingForInteraction(currentPlayer.getGameId(), board.getMoveCount(), currentPlayer, move -> {
+                    if (move != null && move.getMoveTypes() != null && !move.getMoveTypes().isEmpty()) {
+                        if (currentPlayer.getState() == PlayerState.READY)
+                            finishPollingInteractionPhase(move.getMoveTypes());
+                    }
+                });
+            }
+        }
     }
-    public void finishPlayerInteractionPhase(Command command){
-        System.out.println("Executing command for Player:" + board.getCurrentPlayer().getName());
-        executeCommand(board.getCurrentPlayer(),command);
+
+
+
+    public void finishPlayerInteractionPhase(Command command) {
+        stopPollingForMoves();
+        Player currentPlayer = board.getCurrentPlayer();
+        List<String> moveTypes = currentPlayer.getAllProgramCardsFromCurrentPlayer();
+        int step = board.getStep();
+        moveTypes.set(step, command.displayName);
+        Command cmd = Command.fromString(command.displayName);
+        CommandCard commandCard = new CommandCard(cmd);
+        currentPlayer.getProgramField(step).setCard(commandCard);
+
+        ApiServices apiServices = appController.getApiServices();
+        apiServices.updateMoves(currentPlayer.getGameId(), currentPlayer.getId(), board.getMoveCount(), moveTypes);
+        apiServices.updatePlayerState(currentPlayer.getId());
+        finishPollingInteractionPhase(moveTypes);
+        System.out.println("finishPlayerInteractionPhase END");
+    }
+
+
+    public void finishPollingInteractionPhase(List<String> moveTypes) {
+        Player currentPlayer = board.getCurrentPlayer();
+        for (int i = 0; i < moveTypes.size(); i++) {
+            Command command = Command.fromString(moveTypes.get(i));
+            CommandCard commandCard = new CommandCard(command);
+            currentPlayer.getProgramField(i).setCard(commandCard);
+        }
+        stopPollingForMoves();
+        System.out.println(currentPlayer.getPreviousCommand());
         board.setPhase(Phase.ACTIVATION);
-        System.out.println("Activation phase continues, Current player is: " + board.getCurrentPlayer().getName());
-        finishNextStep(board.getCurrentPlayer());
+        continuePrograms();
     }
+
     // Task2
     /**
      * @author Adrian and Mathias
@@ -480,7 +536,7 @@ public class GameController {
     /**
      * Attempt to move a card from one field to another.
      * This is only done if the target card field is empty.
-     * 
+     *
      * @param source card field of the card being moved
      * @param target card field of the destination
      * @return true if the card was succesfully moved, false otherwise

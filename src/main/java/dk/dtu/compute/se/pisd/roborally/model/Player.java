@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dk.dtu.compute.se.pisd.roborally.controller.AppController.localPlayer;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
@@ -52,6 +53,7 @@ public class Player extends Subject {
 
     //The programming cards added during the programming phase
     private CommandCardField[] program;
+
     //The command cards that the player has in their hand
     private CommandCardField[] cards;
     private List<Checkpoint> checkpoints = new ArrayList<>();
@@ -174,7 +176,20 @@ public class Player extends Subject {
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
+    public List<String> getAllProgramCardsFromCurrentPlayer() {
+        List<String> moveTypes = new ArrayList<>();
+        Player currentPlayer = board.getCurrentPlayer();
+        for (int i = 0; i < currentPlayer.getProgramFieldCount(); i++) {
+            CommandCard programCard = currentPlayer.getProgramField(i).getCard();
 
+            if (programCard != null) {
+                moveTypes.add((programCard.getName()));
+            } else {
+                moveTypes.add("Empty");
+            }
+        }
+            return moveTypes;
+    }
     /**
      * Set the command card field at the given index of the player's register.
      *

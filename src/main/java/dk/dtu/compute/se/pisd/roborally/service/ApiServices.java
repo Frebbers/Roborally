@@ -166,19 +166,40 @@ public class ApiServices {
         return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
     }
 
-    public void updatePlayerState(Long id){
+    public void updatePlayerInteractionState(Long id) {
         PlayerDTO player = getPlayerById(id);
-        if (player.getState() == PlayerState.NOT_IN_LOBBY){
-            player.setState(PlayerState.NOT_READY);
-        }
-        else
         if (player != null) {
-            player.setState(player.getState() == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY);
-            String playerUrl = PLAYERS_URL + "/" + player.getId();
-            try {
-                restTemplate.put(playerUrl, player);
-            } catch (Exception e) {
-                e.getMessage();
+                player.setState(PlayerState.INTERACTING);
+                String playerUrl = PLAYERS_URL + "/" + player.getId();
+                try {
+                    restTemplate.put(playerUrl, player);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+    public void updatePlayerState(Long id) {
+        PlayerDTO player = getPlayerById(id);
+        if (player != null) {
+            if (player.getState() == PlayerState.READY) {
+                player.setState(PlayerState.INTERACTING);
+                String playerUrl = PLAYERS_URL + "/" + player.getId();
+                try {
+                    restTemplate.put(playerUrl, player);
+                } catch (Exception e) {
+
+                }
+            } else if (player.getState() == PlayerState.NOT_IN_LOBBY) {
+                player.setState(PlayerState.NOT_READY);
+            } else {
+                player.setState(player.getState() == PlayerState.READY ? PlayerState.NOT_READY : PlayerState.READY);
+                String playerUrl = PLAYERS_URL + "/" + player.getId();
+                try {
+                    restTemplate.put(playerUrl, player);
+                } catch (Exception e) {
+                    e.getMessage();
+                }
             }
         }
     }
@@ -230,6 +251,22 @@ public class ApiServices {
         String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex;
         ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
+    }
+
+    public MoveDTO getPlayerMoves(Long gameId, Long playerId, int turnIndex){
+        String url = MOVES_URL + "/game/" + gameId + "/player/" + playerId + "/turn/ " + turnIndex;
+        ResponseEntity<MoveDTO> response = restTemplate.getForEntity(url, MoveDTO.class);
+        return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+    }
+
+    public void updateMoves(Long gameId, Long playerId, int turnIndex, List<String> moveTypes) {
+        String url = MOVES_URL + "/update";
+        MoveDTO oldMove = getPlayerMoves(gameId, playerId, turnIndex);
+        if (oldMove == null) {
+            throw new RuntimeException("Moves not found");
+        }
+        oldMove.setMoveTypes(moveTypes);
+        restTemplate.put(url, oldMove);
     }
 
     public boolean isReachable(){

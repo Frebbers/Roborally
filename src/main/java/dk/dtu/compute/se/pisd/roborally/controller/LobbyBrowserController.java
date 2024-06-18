@@ -86,6 +86,12 @@ public class LobbyBrowserController {
         return players.size() >= game.maxPlayers;
     }
 
+    /**
+     * Test connection to and, if reachable, set API IP to the given IP address.
+     *
+     * @param ip IP-address to connect to
+     * @return true if successfully connected, false otherwise
+     */
     public boolean connectToServer(String ip) {
         System.out.println("Joining IP Address: " + ip);
 

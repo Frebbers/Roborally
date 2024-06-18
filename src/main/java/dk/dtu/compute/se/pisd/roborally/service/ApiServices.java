@@ -34,6 +34,11 @@ public class ApiServices {
         updateURLs();
     }
 
+    /**
+     * Update the local private fields {@link #BASE_URL}, {@link #GAMES_URL},
+     * {@link #PLAYERS_URL} and {@link #MOVES_URL} to the values of their
+     * respective properties in {@code resources/application.properties}.
+     */
     public void updateURLs() {
         ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
 
@@ -236,6 +241,13 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Determine whether the given IP address is responsive with a
+     * working API.
+     *
+     * @param ip IP-address to be tested
+     * @return true if connection succeeded, false otherwise
+     */
     public boolean testConnection(String ip) {
         GAMES_URL = "http://" + ip + ":8080/api/games";
 

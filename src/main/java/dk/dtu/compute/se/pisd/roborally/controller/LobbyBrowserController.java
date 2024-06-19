@@ -50,7 +50,7 @@ public class LobbyBrowserController {
 
         for (Game game : games) {
             // Get the list of players for each lobby
-            List<PlayerDTO> players =apiServices.getPlayersInGame(game.id);
+            List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
 
             // Display the name, players in the lobby and the max players
             String displayText = String.format("%s (%d / %d players)", game.name, players.size(), game.maxPlayers);
@@ -80,10 +80,13 @@ public class LobbyBrowserController {
         // Get the lobby from the API
         Game game = apiServices.getGameById(gameId);
 
-        // Get the list of players for the lobby
-        List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
+        if(game != null){
+            // Get the list of players for the lobby
+            List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
 
-        return players.size() >= game.maxPlayers;
+            return players.size() >= game.maxPlayers;
+        }
+        return false;
     }
 
     /**

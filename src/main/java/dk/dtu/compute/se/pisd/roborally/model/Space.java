@@ -78,25 +78,36 @@ public class Space extends Subject {
      * @param player player to be on this space
      */
     public void setPlayer(Player player) {
-        Player oldPlayer = this.player;
-        if (player != oldPlayer &&
-                (player == null || board == player.board)) {
-            this.player = player;
-            if (oldPlayer != null) {
-                // this should actually not happen
-                oldPlayer.setSpace(null);
-            }
-            if (player != null) {
-                player.setSpace(this);
+        // Only update if the player has changed
+        if (this.player != player) {
+            Player oldPlayer = this.player;
 
-                if(checkpoint != null){
-                    player.setCheckpoint(checkpoint);
+            // Validate the new player's board or if it's being set to null
+            if (player == null || board == player.board) {
+                // Clear the space on the old player, if it exists
+                if (oldPlayer != null) {
+                    oldPlayer.setSpace(null);
                 }
 
+                // Set the new player and its space
+                this.player = player;
+                if (player != null) {
+                    player.setSpace(this);
+
+                    // Set checkpoint for the player if it exists
+                    if (checkpoint != null) {
+                        player.setCheckpoint(checkpoint);
+                    }
+                }
+
+                // Notify others of the change
+                notifyChange();
+            } else {
+                System.out.println("Invalid player change attempted.");
             }
-            notifyChange();
         }
     }
+
 
     /**
      * Return spawn object which is on this space.
@@ -186,5 +197,4 @@ public class Space extends Subject {
         // notify the space of these changes by calling this method.
         notifyChange();
     }
-
 }

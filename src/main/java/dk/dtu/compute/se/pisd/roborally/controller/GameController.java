@@ -57,6 +57,7 @@ public class GameController {
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private List<ScheduledFuture<?>> scheduledTasks = new ArrayList<>();
+    private ScheduledFuture<?> playerStatusPollingTask;
 
 
     /**
@@ -243,8 +244,12 @@ public class GameController {
      *   Shutdown the scheduler carefully
      */
     public void shutdownScheduler() {
-        // Ensure all tasks are cancelled first
-        stopPollingForMoves();
+        // Cancel the player status polling task safely
+        if (playerStatusPollingTask != null && !playerStatusPollingTask.isCancelled()) {
+            playerStatusPollingTask.cancel(false);
+        }
+
+        // Now shutdown other tasks
         scheduler.shutdown();
         try {
             if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
@@ -254,6 +259,7 @@ public class GameController {
             scheduler.shutdownNow();
         }
     }
+
 
     private void finishNextStep(Player currentPlayer) {
         int step = board.getStep(); // get current register number
@@ -502,11 +508,13 @@ public class GameController {
      * This sets up a recurring task that checks if players have left the game and removes them from the board if necessary.
      */
     public void startPlayerStatusPolling() {
-        ScheduledFuture<?> playerStatusPollingTask = scheduler.scheduleAtFixedRate(() -> {
-            Platform.runLater(this::checkAndRemoveInactivePlayers);
-        }, 0, 1, TimeUnit.SECONDS);
-        scheduledTasks.add(playerStatusPollingTask);
+        if (playerStatusPollingTask == null || playerStatusPollingTask.isDone() || playerStatusPollingTask.isCancelled()) {
+            playerStatusPollingTask = scheduler.scheduleAtFixedRate(() -> {
+                Platform.runLater(this::checkAndRemoveInactivePlayers);
+            }, 0, 1, TimeUnit.SECONDS);
+        }
     }
+
 
     /**
      * Starts polling the game state at fixed intervals and updates the game based on the responses.
@@ -547,12 +555,13 @@ public class GameController {
      */
     public void stopPollingForMoves() {
         for (ScheduledFuture<?> task : scheduledTasks) {
-            if (!task.isDone()) {
-                task.cancel(false); // Cancel if not already done
+            if (!task.isDone() && task != playerStatusPollingTask) {
+                task.cancel(false);
             }
         }
-        scheduledTasks.clear();
+        scheduledTasks.removeIf(task -> task.isCancelled() || task.isDone());
     }
+
 
     public void StartPlayerInteractionPhase(List<Command> options) {
         board.setPhase(PLAYER_INTERACTION);
@@ -625,7 +634,8 @@ public class GameController {
      * This queries the game API for each player's current status and removes them from the board if they are no longer active.
      */
     private void checkAndRemoveInactivePlayers() {
-        List<Player> currentPlayers = new ArrayList<>(board.getPlayers()); // Snapshot of current players
+        List<Player> currentPlayers = new ArrayList<>(board.getPlayers());
+
         currentPlayers.forEach(player -> {
             PlayerDTO playerDTO = appController.getApiServices().getPlayerById(player.getId());
             if (playerDTO == null || playerDTO.getState() == PlayerState.NOT_IN_LOBBY) {

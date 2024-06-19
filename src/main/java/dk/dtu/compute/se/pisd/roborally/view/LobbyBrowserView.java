@@ -170,9 +170,4 @@ public class LobbyBrowserView extends BaseView {
         }
         return null; // Return null if the image cannot be loaded
     }
-
-    // Clean up resources when no longer in use
-    public void dispose() {
-        lobbyBrowserController.stopLobbyPolling();
-    }
 }

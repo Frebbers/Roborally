@@ -15,6 +15,7 @@ public class CheckpointView extends StackPane implements ViewObserver {
     final public static int SPACE_HEIGHT = 60;
     final public static int SPACE_WIDTH = 60;
     private final Checkpoint checkpoint;
+    private ImageView imageView;
 
     /**
      * Create a view for the given checkpoint.
@@ -23,8 +24,9 @@ public class CheckpointView extends StackPane implements ViewObserver {
      */
     public CheckpointView(Checkpoint checkpoint) {
         this.checkpoint = checkpoint;
-        ImageView imageView = new ImageView(new Image("/images/" + checkpoint.getCheckpointId() + ".png"));
+        checkpoint.setCheckpointView(this);
 
+        imageView = new ImageView(new Image("/images/checkpoints/" + checkpoint.getCheckpointId() + ".png"));
         imageView.setFitWidth(SPACE_WIDTH);
         imageView.setFitHeight(SPACE_HEIGHT);
 
@@ -34,6 +36,12 @@ public class CheckpointView extends StackPane implements ViewObserver {
         // Register as an observer to the checkpoint
         checkpoint.attach(this);
     }
+
+    public void setCheckpointAsReached(){
+        Image image = new Image("/images/collected_checkpoints/" + checkpoint.getCheckpointId() + ".png");
+        imageView.setImage(image);
+    }
+
     /**
      * Return the checkpoint for this view
      *
@@ -42,6 +50,7 @@ public class CheckpointView extends StackPane implements ViewObserver {
     public Checkpoint getCheckpoint(){
         return checkpoint;
     }
+
 
     /**
      * Update view to include a recent change in state.

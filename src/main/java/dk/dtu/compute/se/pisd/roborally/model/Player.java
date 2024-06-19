@@ -264,7 +264,7 @@ public class Player extends Subject {
 
             // Remove the CheckpointView on the Board if we are the local player
             if(Objects.equals(this.id, localPlayer.getId())){{
-                board.getBoardView().removeCheckpointView(checkpoint);
+                checkpoint.getCheckpointView().setCheckpointAsReached();
                 notifyChange();
             }}
         }

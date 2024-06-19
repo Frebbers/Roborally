@@ -30,6 +30,7 @@ public class RobotSettingsView extends BaseView {
     }
 
     @Override
+    //TODO implement a save button that saves the name and robot type to the configuration file.
     public void initialize(){
         // Name entry
         Text nameHeader = new Text("Enter your name:");
@@ -90,7 +91,7 @@ public class RobotSettingsView extends BaseView {
             // Handle errors (e.g., directory not found, no permission, etc.)
         }
     }
-
+//TODO make sure this is only called when the user clicks a save button.
     private void saveName(String name) {
         AppConfig.setProperty("local.player.name", name);
     }

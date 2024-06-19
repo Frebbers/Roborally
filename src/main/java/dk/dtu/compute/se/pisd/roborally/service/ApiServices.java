@@ -174,7 +174,7 @@ public class ApiServices {
         List<PlayerDTO> players = getAllPlayers();
         for (PlayerDTO player : players) {
             if (player.getName().equals(name)) {
-                return new PlayerDTO();
+                return new PlayerDTO(Long.parseLong(playerID));
             }
         }
         return null;

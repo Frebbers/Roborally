@@ -47,7 +47,7 @@ public class RoboRallyMenuBar extends MenuBar {
 
     /**
      * Create a menu bar tied to a certain app controller.
-     * 
+     * No longer used
      * @param appController
      */
     public RoboRallyMenuBar(AppController appController) {

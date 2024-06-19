@@ -60,8 +60,9 @@ public class AppController implements Observer {
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices();
-        //Will be null if the player does not exist on the server
+
         if (apiServices.isReachable()){
+            //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
         }
         notConnectedAlert = new Alert(AlertType.WARNING,
@@ -250,6 +251,7 @@ public class AppController implements Observer {
             result.ifPresent(name -> {
                 //Attempt to create player
                 localPlayer = apiServices.createPlayer(name);
+                updatePlayerID();
                 if (apiServices.createPlayer(name) == null) {
                     System.out.println("Error creating player");
                     Alert alert = new Alert(AlertType.ERROR,
@@ -285,7 +287,7 @@ public class AppController implements Observer {
     public ApiServices getApiServices() {
         return apiServices;
     }
-
+private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId().toString());}
     private void onLobbyJoin() {
         //TODO test this thoroughly
         if (localPlayer != null) {
@@ -295,6 +297,8 @@ public class AppController implements Observer {
             //Player does not exist on the server but the name is stored in the config file
            // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
+            updatePlayerID();
+
         } else {
             //No character exists and no name is stored in the config file
             createCharacter();

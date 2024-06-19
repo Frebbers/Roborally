@@ -108,7 +108,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
         if (isLocalPlayer) {
             finishButton = new Button("Finish Programming");
-            finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
+            finishButton.setOnAction(e -> {
+                gameController.finishProgrammingPhase();
+                finishButton.setDisable(true);
+            });
 
             Button leaveButton = new Button("Leave Game");
             leaveButton.setOnAction(e -> onPlayerLeave());

@@ -34,6 +34,14 @@ public class CheckpointView extends StackPane implements ViewObserver {
         // Register as an observer to the checkpoint
         checkpoint.attach(this);
     }
+    /**
+     * Return the checkpoint for this view
+     *
+     * @return Checkpoint return the checkpoint
+     */
+    public Checkpoint getCheckpoint(){
+        return checkpoint;
+    }
 
     /**
      * Update view to include a recent change in state.

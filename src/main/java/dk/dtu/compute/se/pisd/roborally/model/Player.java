@@ -22,10 +22,12 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static dk.dtu.compute.se.pisd.roborally.controller.AppController.localPlayer;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
@@ -257,8 +259,14 @@ public class Player extends Subject {
 
         // Add the checkpoint only if its ID matches the next expected ID
         if (checkpoint.getCheckpointId() == nextCheckpointId) {
+            // Add the checkpoint
             checkpoints.add(checkpoint);
-            notifyChange();
+
+            // Remove the CheckpointView on the Board if we are the local player
+            if(Objects.equals(this.id, localPlayer.getId())){{
+                board.getBoardView().removeCheckpointView(checkpoint);
+                notifyChange();
+            }}
         }
     }
 

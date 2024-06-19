@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
+import dk.dtu.compute.se.pisd.roborally.view.BoardView;
+import dk.dtu.compute.se.pisd.roborally.view.CheckpointView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  */
 public class Board extends Subject {
     private final BoardData data;
+    private BoardView boardView;
     public final String boardName;
 
     public final int width;
@@ -418,12 +421,6 @@ public class Board extends Subject {
 
     }
 
-    public int getHeight() {
-        return height;
-    }
-    public int getWidth() {
-        return width;
-    }
     public List<Player> getPlayers() { return players; }
 
     public BoardData getData() {
@@ -432,5 +429,13 @@ public class Board extends Subject {
 
     public Player getLocalPlayer(PlayerDTO playerDTO){
         return players.stream().filter(p -> Objects.equals(p.getId(), playerDTO.getId())).findFirst().orElse(null);
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
+    }
+
+    public void setBoardView(BoardView boardView){
+        this.boardView = boardView;
     }
 }

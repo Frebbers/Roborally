@@ -43,5 +43,12 @@ public class ApiServicesTest {
         AppConfig.setProperty(apiType + ".moves.url", resetMoves);
         AppConfig.setProperty(apiType + ".players.url", resetPlayers);
     }
+
+    @Test
+    public void testTestConnection() {
+        ApiServices apiServices = new ApiServices();
+
+        Assertions.assertTrue(apiServices.testConnection("localhost"));
+        Assertions.assertFalse(apiServices.testConnection("test123"));
     }
 }

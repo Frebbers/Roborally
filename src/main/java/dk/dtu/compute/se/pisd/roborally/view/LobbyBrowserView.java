@@ -20,6 +20,9 @@ import javafx.scene.text.Text;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
+
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
 
 public class LobbyBrowserView extends BaseView {
 
@@ -48,7 +51,8 @@ public class LobbyBrowserView extends BaseView {
 
         TextField serverIPDialog = new TextField();
         serverIPDialog.setPromptText("Enter server IP");
-        serverIPDialog.setText("4.180.19.186");
+
+        serverIPDialog.setText(getProperty("server.ip"));
         Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
 
         // Server button and feedback

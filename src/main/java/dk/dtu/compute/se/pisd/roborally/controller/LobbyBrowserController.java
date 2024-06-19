@@ -30,9 +30,14 @@ public class LobbyBrowserController {
     }
 
     public void startLobbyPolling(ListView<String> lobbyListView) {
-        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            updateLobbies(lobbyListView);
-        }), 0, 2000, TimeUnit.MILLISECONDS);
+
+            scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+                if (apiServices.isReachable()) {
+                    updateLobbies(lobbyListView);
+                }
+                //updateLobbies(lobbyListView);
+            }), 0, 2000, TimeUnit.MILLISECONDS);
+
     }
 
     public void stopLobbyPolling() {

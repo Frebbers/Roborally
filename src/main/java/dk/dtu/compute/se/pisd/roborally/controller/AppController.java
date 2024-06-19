@@ -23,19 +23,13 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import dk.dtu.compute.se.pisd.roborally.util.Utilities;
-import dk.dtu.compute.se.pisd.roborally.view.CreateLobbyView;
-import dk.dtu.compute.se.pisd.roborally.view.SpawnView;
-import dk.dtu.compute.se.pisd.roborally.view.StartView;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -56,6 +50,7 @@ public class AppController implements Observer {
 
     private GameController gameController;
     public static PlayerDTO localPlayer;
+    private Alert notConnectedAlert;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -66,7 +61,11 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices();
         //Will be null if the player does not exist on the server
-        localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+        if (apiServices.isReachable()){
+            localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+        }
+        notConnectedAlert = new Alert(AlertType.WARNING,
+                "Error connecting to the server. Check your connection to the server.", ButtonType.OK);
     }
 
 
@@ -75,10 +74,8 @@ public class AppController implements Observer {
      * The programming phase is then initialized.
      */
     public void createLobby(String name, int boardId, int players) {
-        // Tell the server to create the player in the database
-
+        if (apiServices.isReachable()){
         onLobbyJoin();
-
         // Create the lobby
         Game game = apiServices.createGame(name, (long) boardId, players);
 
@@ -88,16 +85,22 @@ public class AppController implements Observer {
 
         // Display the Lobby Window
         roboRally.createLobbyView(this, game.id);
+        }
+        else {
+            notConnectedAlert.showAndWait();
+        }
     }
 
     public void joinLobby(Long gameId) {
-        onLobbyJoin();
-        // Join the game
-        localPlayer.setState(PlayerState.NOT_READY);
-        apiServices.joinGame(gameId, localPlayer.getId());
+        if (apiServices.isReachable()) {
+            onLobbyJoin();
+            // Join the game
+            localPlayer.setState(PlayerState.NOT_READY);
+            apiServices.joinGame(gameId, localPlayer.getId());
 
-        // Display the Lobby Window
-        roboRally.createLobbyView(this, gameId);
+            // Display the Lobby Window
+            roboRally.createLobbyView(this, gameId);
+        }
     }
 
     public void loadGameScene(Long gameId, Long boardNumber) {
@@ -206,9 +209,7 @@ public class AppController implements Observer {
                 return; // return without exiting the application
             }
         }
-
-        // If the user did not cancel, the RoboRally application will exit
-        // after the option to save the game
+        // If the user did not cancel, the RoboRally application will exit after the option to save the game
         if (gameController == null || leave(false)) {
             Platform.exit();
             System.exit(0);
@@ -237,28 +238,34 @@ public class AppController implements Observer {
         return gameController != null;
     }
 
-
     public void createCharacter() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create Character");
-        dialog.setHeaderText("Enter your name");
-        dialog.setContentText("Name:");
-        //TODO maybe also store the player id in the config file
-        Optional<String> result = dialog.showAndWait();
+        if (apiServices.isReachable()) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Create Character");
+            dialog.setHeaderText("Enter your name");
+            dialog.setContentText("Name:");
+            //TODO maybe also store the player id in the config file
+            Optional<String> result = dialog.showAndWait();
 
-        result.ifPresent(name -> {
-            //Attempt to create player
-            localPlayer = apiServices.createPlayer(name);
-            if (apiServices.createPlayer(name) == null) {
-                System.out.println("Error creating player");
-                Alert alert = new Alert(AlertType.ERROR,
-                        "Error creating player. Check your connection to the server.", ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                System.out.println("Player created");
-                setProperty("local.player.name", name);
-            }
-        });
+            result.ifPresent(name -> {
+                //Attempt to create player
+                localPlayer = apiServices.createPlayer(name);
+                if (apiServices.createPlayer(name) == null) {
+                    System.out.println("Error creating player");
+                    Alert alert = new Alert(AlertType.ERROR,
+                            "Error creating player. Check your connection to the server.", ButtonType.OK);
+                    alert.showAndWait();
+                } else {
+                    System.out.println("Player created");
+                    setProperty("local.player.name", name);
+                }
+            });
+        }
+        else {
+            Alert alert = new Alert(AlertType.WARNING,
+                    "Error creating character. Check your connection to the server.", ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -286,6 +293,7 @@ public class AppController implements Observer {
             return;
         } else if (!(getProperty("local.player.name").isEmpty())) {
             //Player does not exist on the server but the name is stored in the config file
+           // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
         } else {
             //No character exists and no name is stored in the config file

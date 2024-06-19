@@ -69,6 +69,9 @@ public class GameController {
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
+
+        // Start to poll for the player status
+        startPlayerStatusPolling();
     }
 
     /**
@@ -171,52 +174,6 @@ public class GameController {
                 executePrograms();
             }
         });
-    }
-
-    /**
-     * Starts polling the game state at fixed intervals and updates the game based on the responses.
-     * Stores the ScheduledFuture for possible cancellation.
-     */
-    public void startPollingForMoves(Long gameId, Integer turnIndex, Consumer<List<MoveDTO>> callback) {
-        ApiServices apiServices = appController.getApiServices();
-        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            Integer readyPlayers = apiServices.getPlayerReadyCount(gameId, turnIndex);
-            if (readyPlayers == board.getPlayers().size()) {
-                List<MoveDTO> moveTypes = apiServices.getAllMoves(gameId, turnIndex);
-                stopPollingForMoves();
-                callback.accept(moveTypes);
-            }
-        }), 0, 500, TimeUnit.MILLISECONDS);
-        scheduledTasks.add(future);
-    }
-
-    public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
-        ApiServices apiServices = appController.getApiServices();
-        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            PlayerDTO interactivePlayer = apiServices.getPlayerById(currentPlayer.getId());
-            if (interactivePlayer.getState() == PlayerState.READY) {
-                MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
-                if (interaction != null && interaction.getMoveTypes() != null && !interaction.getMoveTypes().isEmpty()) {
-                    stopPollingForMoves();
-                    callback.accept(interaction);
-                    finishPollingInteractionPhase(interaction.getMoveTypes());
-                }
-            }
-        }), 0, 500, TimeUnit.MILLISECONDS);
-        scheduledTasks.add(future);
-    }
-
-
-    /**
-     * Stops all polling tasks and clears the list of ScheduledFuture.
-     */
-    public void stopPollingForMoves() {
-        for (ScheduledFuture<?> task : scheduledTasks) {
-            if (!task.isDone()) {
-                task.cancel(false); // Cancel if not already done
-            }
-        }
-        scheduledTasks.clear();
     }
 
     // XXX: implemented in the current version
@@ -340,8 +297,6 @@ public class GameController {
             }
         }
     }
-
-
 
     /**
      * Function to call when at the end of the activation phase.
@@ -473,55 +428,6 @@ public class GameController {
 
 
     }
-    public void StartPlayerInteractionPhase(List<Command> options) {
-        board.setPhase(PLAYER_INTERACTION);
-        Player currentPlayer = board.getCurrentPlayer();
-        currentPlayer.setState(PlayerState.INTERACTING);
-        ApiServices apiServices = appController.getApiServices();
-        apiServices.updatePlayerInteractionState(currentPlayer.getId());
-
-        for (Player player : board.getPlayers()) {
-            if (player != currentPlayer) {
-                startPollingForInteraction(currentPlayer.getGameId(), board.getMoveCount(), currentPlayer, move -> {
-                    if (move != null && move.getMoveTypes() != null && !move.getMoveTypes().isEmpty()) {
-                        if (currentPlayer.getState() == PlayerState.READY)
-                            finishPollingInteractionPhase(move.getMoveTypes());
-                    }
-                });
-            }
-        }
-    }
-
-
-
-    public void finishPlayerInteractionPhase(Command command) {
-        stopPollingForMoves();
-        Player currentPlayer = board.getCurrentPlayer();
-        List<String> moveTypes = currentPlayer.getAllProgramCardsFromCurrentPlayer();
-        int step = board.getStep();
-        moveTypes.set(step, command.displayName);
-        Command cmd = Command.fromString(command.displayName);
-        CommandCard commandCard = new CommandCard(cmd);
-        currentPlayer.getProgramField(step).setCard(commandCard);
-
-        ApiServices apiServices = appController.getApiServices();
-        apiServices.updateMoves(currentPlayer.getGameId(), currentPlayer.getId(), board.getMoveCount(), moveTypes);
-        apiServices.updatePlayerState(currentPlayer.getId());
-        finishPollingInteractionPhase(moveTypes);
-    }
-
-
-    public void finishPollingInteractionPhase(List<String> moveTypes) {
-        Player currentPlayer = board.getCurrentPlayer();
-        for (int i = 0; i < moveTypes.size(); i++) {
-            Command command = Command.fromString(moveTypes.get(i));
-            CommandCard commandCard = new CommandCard(command);
-            currentPlayer.getProgramField(i).setCard(commandCard);
-        }
-        stopPollingForMoves();
-        board.setPhase(Phase.ACTIVATION);
-        continuePrograms();
-    }
 
     // Task2
     /**
@@ -591,63 +497,109 @@ public class GameController {
         }
     }
 
-    public CommandCardField createCommandCardFieldFromString(String s, Player player){
-        // Create a CommandCardField from the String
-        Command command = Command.fromString(s);
-        CommandCard commandCard = new CommandCard(command);
-        CommandCardField commandCardField = new CommandCardField(player);
-        commandCardField.setCard(commandCard);
-
-        return commandCardField;
+    /**
+     * Starts a scheduled task that polls player statuses every second.
+     * This sets up a recurring task that checks if players have left the game and removes them from the board if necessary.
+     */
+    public void startPlayerStatusPolling() {
+        ScheduledFuture<?> playerStatusPollingTask = scheduler.scheduleAtFixedRate(() -> {
+            Platform.runLater(this::checkAndRemoveInactivePlayers);
+        }, 0, 1, TimeUnit.SECONDS);
+        scheduledTasks.add(playerStatusPollingTask);
     }
 
     /**
-     * A method called when no corresponding controller operation is implemented yet. This
-     * should eventually be removed.
+     * Starts polling the game state at fixed intervals and updates the game based on the responses.
+     * Stores the ScheduledFuture for possible cancellation.
      */
-    public void notImplemented() {
-        // XXX just for now to indicate that the actual method is not yet implemented
-        assert false;
+    public void startPollingForMoves(Long gameId, Integer turnIndex, Consumer<List<MoveDTO>> callback) {
+        ApiServices apiServices = appController.getApiServices();
+        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            Integer readyPlayers = apiServices.getPlayerReadyCount(gameId, turnIndex);
+            if (readyPlayers == board.getPlayers().size()) {
+                List<MoveDTO> moveTypes = apiServices.getAllMoves(gameId, turnIndex);
+                stopPollingForMoves();
+                callback.accept(moveTypes);
+            }
+        }), 0, 500, TimeUnit.MILLISECONDS);
+        scheduledTasks.add(future);
     }
 
-    public SaveGameState saveGameState() {
-       return null;
+    public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
+        ApiServices apiServices = appController.getApiServices();
+        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            PlayerDTO interactivePlayer = apiServices.getPlayerById(currentPlayer.getId());
+            if (interactivePlayer.getState() == PlayerState.READY) {
+                MoveDTO interaction = apiServices.getPlayerMoves(gameId, currentPlayer.getId(), turnIndex);
+                if (interaction != null && interaction.getMoveTypes() != null && !interaction.getMoveTypes().isEmpty()) {
+                    stopPollingForMoves();
+                    callback.accept(interaction);
+                    finishPollingInteractionPhase(interaction.getMoveTypes());
+                }
+            }
+        }), 0, 500, TimeUnit.MILLISECONDS);
+        scheduledTasks.add(future);
     }
+
 
     /**
-     * This method returns the ConveyorBeltController.
-     *
-     * @return the ConveyorBeltController instance
+     * Stops all polling tasks and clears the list of ScheduledFuture.
      */
-    public ConveyorBeltController getBeltCtrl() {
-        return beltCtrl;
+    public void stopPollingForMoves() {
+        for (ScheduledFuture<?> task : scheduledTasks) {
+            if (!task.isDone()) {
+                task.cancel(false); // Cancel if not already done
+            }
+        }
+        scheduledTasks.clear();
     }
 
-    class ImpossibleMoveException extends Exception {
+    public void StartPlayerInteractionPhase(List<Command> options) {
+        board.setPhase(PLAYER_INTERACTION);
+        Player currentPlayer = board.getCurrentPlayer();
+        currentPlayer.setState(PlayerState.INTERACTING);
+        ApiServices apiServices = appController.getApiServices();
+        apiServices.updatePlayerInteractionState(currentPlayer.getId());
 
-        private Player player;
-        private Space space;
-        private Heading heading;
-
-        public ImpossibleMoveException(Player player, Space space, Heading heading) {
-            super("Move impossible");
-            this.player = player;
-            this.space = space;
-            this.heading = heading;
+        for (Player player : board.getPlayers()) {
+            if (player != currentPlayer) {
+                startPollingForInteraction(currentPlayer.getGameId(), board.getMoveCount(), currentPlayer, move -> {
+                    if (move != null && move.getMoveTypes() != null && !move.getMoveTypes().isEmpty()) {
+                        if (currentPlayer.getState() == PlayerState.READY)
+                            finishPollingInteractionPhase(move.getMoveTypes());
+                    }
+                });
+            }
         }
     }
 
-    public Command getNextCommand() {
-        return nextCommand;
+    public void finishPlayerInteractionPhase(Command command) {
+        stopPollingForMoves();
+        Player currentPlayer = board.getCurrentPlayer();
+        List<String> moveTypes = currentPlayer.getAllProgramCardsFromCurrentPlayer();
+        int step = board.getStep();
+        moveTypes.set(step, command.displayName);
+        Command cmd = Command.fromString(command.displayName);
+        CommandCard commandCard = new CommandCard(cmd);
+        currentPlayer.getProgramField(step).setCard(commandCard);
+
+        ApiServices apiServices = appController.getApiServices();
+        apiServices.updateMoves(currentPlayer.getGameId(), currentPlayer.getId(), board.getMoveCount(), moveTypes);
+        apiServices.updatePlayerState(currentPlayer.getId());
+        finishPollingInteractionPhase(moveTypes);
     }
 
-    /**
-     * Returns the AppController used by this class
-     *
-     * @return the AppController
-     */
-    public AppController getAppController() {
-        return appController;
+
+    public void finishPollingInteractionPhase(List<String> moveTypes) {
+        Player currentPlayer = board.getCurrentPlayer();
+        for (int i = 0; i < moveTypes.size(); i++) {
+            Command command = Command.fromString(moveTypes.get(i));
+            CommandCard commandCard = new CommandCard(command);
+            currentPlayer.getProgramField(i).setCard(commandCard);
+        }
+        stopPollingForMoves();
+        board.setPhase(Phase.ACTIVATION);
+        continuePrograms();
     }
 
     /**
@@ -668,4 +620,30 @@ public class GameController {
         return readyPlayersCount;
     }
 
+    /**
+     * Checks the active status of all players currently in the game and removes any players who have left.
+     * This queries the game API for each player's current status and removes them from the board if they are no longer active.
+     */
+    private void checkAndRemoveInactivePlayers() {
+        List<Player> currentPlayers = new ArrayList<>(board.getPlayers()); // Snapshot of current players
+        currentPlayers.forEach(player -> {
+            PlayerDTO playerDTO = appController.getApiServices().getPlayerById(player.getId());
+            if (playerDTO == null || playerDTO.getState() == PlayerState.NOT_IN_LOBBY) {
+                board.removePlayer(player.getId());
+            }
+        });
+    }
+
+    public Command getNextCommand() {
+        return nextCommand;
+    }
+
+    /**
+     * Returns the AppController used by this class
+     *
+     * @return the AppController
+     */
+    public AppController getAppController() {
+        return appController;
+    }
 }

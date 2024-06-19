@@ -133,7 +133,6 @@ public class ApiServices {
         }
     }
 
-
     public List<PlayerDTO> getPlayersInGame(Long gameId){
         String lobbyUrl = GAMES_URL + "/" + gameId + "/players";
         ResponseEntity<PlayerDTO[]> response = restTemplate.getForEntity(lobbyUrl, PlayerDTO[].class);
@@ -220,13 +219,6 @@ public class ApiServices {
             System.err.println("Failed to leave the game, status code: " + response.getStatusCode());
         }
     }
-
-
- /*   public PlayerDTO getLocalPlayer(){
-        return localPlayer;
-    }
-*/
-
 
     public Integer getPlayerReadyCount(Long gameId, Integer turnIndex){
         String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex + "/player-count";

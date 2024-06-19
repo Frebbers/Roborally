@@ -154,6 +154,43 @@ public class Board extends Subject {
     }
 
     /**
+     * Removes the given player from the board's list of players.
+     * Also handles the necessary cleanup and state updates.
+     *
+     * @param playerId the ID of the player to be removed
+     */
+    public void removePlayer(Long playerId) {
+        Player playerToRemove = players.stream()
+                .filter(p -> Objects.equals(p.getId(), playerId))
+                .findFirst()
+                .orElse(null);
+
+        if (playerToRemove != null) {
+            // Get the index of the player
+            int indexToRemove = players.indexOf(playerToRemove);
+
+            // Remove the player from the list of players
+            players.remove(playerToRemove);
+
+            // Clear the space the player was on
+            playerToRemove.getSpace().setPlayer(null);
+            notifyChange();
+
+            // Handle what happens if the current player is the one who is removed
+            if (playerToRemove.equals(current)) {
+                if (!players.isEmpty()) {
+                    // Set the next player based on the removed player's index
+                    setCurrentPlayer(players.get(indexToRemove % players.size()));
+                } else {
+                    current = null;
+                }
+            }
+        } else {
+            System.err.println("Attempted to remove a non-existent player with ID: " + playerId);
+        }
+    }
+
+    /**
      * Return the Player object based on their index in the Board's Player list.
      *
      * @param i index of the Player in the list

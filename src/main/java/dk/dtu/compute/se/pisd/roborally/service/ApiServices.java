@@ -40,19 +40,19 @@ public class ApiServices {
      * respective properties in {@code resources/application.properties}.
      */
     public void updateURLs() {
-        ApiType type = Utilities.toEnum(ApiType.class, AppConfig.getProperty("api.type"));
+        ApiType type = Utilities.toEnum(ApiType.class, getProperty("api.type"));
 
         if(type == ApiType.LOCAL){
-            BASE_URL = AppConfig.getProperty("local.base.url");
-            GAMES_URL = AppConfig.getProperty("local.games.url");
-            PLAYERS_URL = AppConfig.getProperty("local.players.url");
-            MOVES_URL = AppConfig.getProperty("local.moves.url");
+            BASE_URL = getProperty("local.base.url");
+            GAMES_URL = getProperty("local.games.url");
+            PLAYERS_URL = getProperty("local.players.url");
+            MOVES_URL = getProperty("local.moves.url");
         }
         else if(type == ApiType.SERVER){
-            BASE_URL = AppConfig.getProperty("server.base.url");
-            GAMES_URL = AppConfig.getProperty("server.games.url");
-            PLAYERS_URL = AppConfig.getProperty("server.players.url");
-            MOVES_URL = AppConfig.getProperty("server.moves.url");
+            BASE_URL = getProperty("server.base.url");
+            GAMES_URL = getProperty("server.games.url");
+            PLAYERS_URL = getProperty("server.players.url");
+            MOVES_URL = getProperty("server.moves.url");
         }
     }
 
@@ -225,13 +225,16 @@ public class ApiServices {
     }
 
     public void onPlayerLeave(Long playerId) {
+        ResponseEntity<Void> response = null;
         String url = PLAYERS_URL + "/" + playerId + "/leave";
-        ResponseEntity<Void> response = restTemplate.getForEntity(url, Void.class);
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            AppController.localPlayer = null;
-        } else {
-            System.err.println("Failed to leave the game, status code: " + response.getStatusCode());
+        try {
+            response = restTemplate.getForEntity(url, Void.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                AppController.localPlayer = null;
+        }
+        } catch (Exception e) {
+            System.err.println("Failed to leave the game. " + e.getMessage());
+            if (response != null) System.out.println("HTTP response code: " + response.getStatusCode());
         }
     }
 

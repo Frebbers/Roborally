@@ -244,15 +244,22 @@ public class Player extends Subject {
     }
 
     /**
-     * Sets a checkpoint at a specified index.
+     * Sets a checkpoint at a specified index only if it is the next checkpoint in the order.
      *
      * @param checkpoint the checkpoint to set
      */
     public void setCheckpoint(Checkpoint checkpoint) {
-        if(checkpoints.contains(checkpoint)) return;
+        // Check if the checkpoint already exists in the list
+        if (checkpoints.contains(checkpoint)) return;
 
-        checkpoints.add(checkpoint);
-        notifyChange();
+        // Determine the ID of the next expected checkpoint in sequence
+        int nextCheckpointId = checkpoints.isEmpty() ? 1 : checkpoints.get(checkpoints.size() - 1).getCheckpointId() + 1;
+
+        // Add the checkpoint only if its ID matches the next expected ID
+        if (checkpoint.getCheckpointId() == nextCheckpointId) {
+            checkpoints.add(checkpoint);
+            notifyChange();
+        }
     }
 
     /**

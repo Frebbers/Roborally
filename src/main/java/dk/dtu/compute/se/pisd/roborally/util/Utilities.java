@@ -33,4 +33,12 @@ public class Utilities {
             }
         });
     }
+
+    public static void restrictTextLength(TextField textField, int amount) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > amount) {
+                textField.setText(oldValue);
+            }
+        });
+    }
 }

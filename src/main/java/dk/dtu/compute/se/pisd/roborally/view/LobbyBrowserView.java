@@ -49,6 +49,7 @@ public class LobbyBrowserView extends BaseView {
         TextField serverIPDialog = new TextField();
         serverIPDialog.setPromptText("Enter server IP");
         serverIPDialog.setText("4.180.19.186");
+        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
 
         // Server button and feedback
         Text connectToServerFeedback = new Text();
@@ -168,10 +169,5 @@ public class LobbyBrowserView extends BaseView {
             // Handle errors (e.g., directory not found, no permission, etc.)
         }
         return null; // Return null if the image cannot be loaded
-    }
-
-    // Clean up resources when no longer in use
-    public void dispose() {
-        lobbyBrowserController.stopLobbyPolling();
     }
 }

@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -51,6 +52,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     public final Space space;
     private ImageView backgroundImage;
     private ImageView playerImage;
+    private NameView nameView;
 
 
     /**
@@ -62,6 +64,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      */
     public SpaceView(@NotNull Space space) {
         this.space = space;
+        this.nameView = new NameView(space.getPlayer() != null ? space.getPlayer().getName() : "");
 
         backgroundImage = new ImageView(new Image("/images/empty.png"));
         backgroundImage.setFitWidth(SPACE_WIDTH);
@@ -73,9 +76,16 @@ public class SpaceView extends StackPane implements ViewObserver {
 
         // Add the image view as the first child of the stack pane
         if (space.getSpawn() == null && space.getCheckpoint() == null && space.getBelt() == null) {
-            this.getChildren().addAll(backgroundImage);
+            this.getChildren().add(backgroundImage);
         }
-        this.getChildren().addAll(playerImage);
+
+        // Add the player image next
+        this.getChildren().add(playerImage);
+
+        // Add the name view last to ensure it is on top
+        this.getChildren().add(nameView);
+        StackPane.setAlignment(nameView, Pos.TOP_CENTER);
+
 
         // Register as an observer to the checkpoint
         space.attach(this);
@@ -91,6 +101,9 @@ public class SpaceView extends StackPane implements ViewObserver {
 
         // Get the new player if there is one
         Player player = space.getPlayer();
+
+        // Update the name of the NameView
+        nameView.updateName(player != null ? player.getName() : "");
 
         if (player != null) {
             String imagePath = "images/robots/r" + (player.getRobotType().getValue()) + ".png";

@@ -68,13 +68,10 @@ public class LobbyView extends BaseView {
         // Server details
         List<PlayerDTO> players = apiServices.getPlayersInGame(gameId);
         Text serverNameText = new Text(game.name);
-        Text maxPlayersText = new Text(players.size() + " / " + game.maxPlayers + " players");
+        Text maxPlayersText = new Text();
 
         rightContainer.getChildren().addAll(mapView, serverNameText, maxPlayersText);
         mainLayout.setRight(rightContainer);
-
-        // Initial population of the ListView
-        lobbyController.updateLobby(playerListView, gameId);
 
         // Set up a button to leave the lobby
         Button leaveButton = new Button("Leave");
@@ -98,7 +95,7 @@ public class LobbyView extends BaseView {
         mainLayout.setBottom(buttonContainer);
 
         // Start polling to refresh the list periodically
-        lobbyController.startLobbyPolling(gameId, playerListView);
+        lobbyController.startLobbyPolling(gameId, maxPlayersText, playerListView);
 
         // Add the components to the VBox
         getChildren().addAll(mainLayout);

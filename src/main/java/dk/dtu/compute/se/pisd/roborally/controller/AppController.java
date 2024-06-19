@@ -51,10 +51,6 @@ import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
  */
 public class AppController implements Observer {
 
-    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(1, 2, 3, 4, 5, 6);
-    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey");
-    final private List<Integer> BOARD_NUMBER_OPTIONS = Arrays.asList(1);
-
     final private RoboRally roboRally;
     private ApiServices apiServices;
 
@@ -113,7 +109,7 @@ public class AppController implements Observer {
         BoardData data = loadJsonBoardFromNumber(Math.toIntExact(boardNumber));
 
         // Create a board from the data
-        Board board = new Board(data);
+        Board board = new Board(gameId, data);
 
         // Create a new controller for the game
         gameController = new GameController(this, board);

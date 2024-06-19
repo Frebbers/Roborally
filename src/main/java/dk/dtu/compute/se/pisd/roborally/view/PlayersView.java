@@ -110,6 +110,10 @@ public class PlayersView extends TabPane implements ViewObserver {
             }
             else if(board.getPhase() == Phase.PROGRAMMING) {
                 for(PlayerView view : playerViews){
+                    if(AppController.localPlayer == null){
+                        return;
+                    }
+
                     if(!Objects.equals(view.getPlayer().getId(), AppController.localPlayer.getId())){
                         TabPane tabPane = view.getTabPane();
 

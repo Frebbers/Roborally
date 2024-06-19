@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
+import dk.dtu.compute.se.pisd.roborally.view.BoardView;
+import dk.dtu.compute.se.pisd.roborally.view.CheckpointView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  */
 public class Board extends Subject {
     private final BoardData data;
+    private BoardView boardView;
     public final String boardName;
 
     public final int width;
@@ -71,7 +74,8 @@ public class Board extends Subject {
      *
      * @param data data of the board
      */
-    public Board(BoardData data) {
+    public Board(Long gameId, BoardData data) {
+        this.gameId = gameId;
         this.boardName = data.name;
         this.width = data.width;
         this.height = data.height;
@@ -149,6 +153,43 @@ public class Board extends Subject {
             players.add(player);
             priorityAntenna.updatePlayers();
             notifyChange();
+        }
+    }
+
+    /**
+     * Removes the given player from the board's list of players.
+     * Also handles the necessary cleanup and state updates.
+     *
+     * @param playerId the ID of the player to be removed
+     */
+    public void removePlayer(Long playerId) {
+        Player playerToRemove = players.stream()
+                .filter(p -> Objects.equals(p.getId(), playerId))
+                .findFirst()
+                .orElse(null);
+
+        if (playerToRemove != null) {
+            // Get the index of the player
+            int indexToRemove = players.indexOf(playerToRemove);
+
+            // Remove the player from the list of players
+            players.remove(playerToRemove);
+
+            // Clear the space the player was on
+            playerToRemove.getSpace().setPlayer(null);
+            notifyChange();
+
+            // Handle what happens if the current player is the one who is removed
+            if (playerToRemove.equals(current)) {
+                if (!players.isEmpty()) {
+                    // Set the next player based on the removed player's index
+                    setCurrentPlayer(players.get(indexToRemove % players.size()));
+                } else {
+                    current = null;
+                }
+            }
+        } else {
+            System.err.println("Attempted to remove a non-existent player with ID: " + playerId);
         }
     }
 
@@ -296,45 +337,45 @@ public class Board extends Subject {
      * Returns the neighbour of the given space of the board in the given heading.
      * The neighbour is returned only, if it can be reached from the given space
      * (no walls or obstacles in either of the involved spaces); otherwise,
-     * null will be returned.
+     * null will be returned. This version does not wrap around the board edges.
      *
      * @param space the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
-     * @return the space in the given direction; null if there is no (reachable) neighbour
+     * @return the space in the given direction; null if there is no (reachable) neighbour or it's out of bounds
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
         if (space.getWalls().contains(heading)) {
             return null;
         }
 
-        // XXX an other option (not for now) would be that null represents a hole
-        //     or the edge of the board in which the players can fall
-
         int x = space.x;
         int y = space.y;
         switch (heading) {
             case SOUTH:
-                y = (y + 1) % height;
+                y += 1;
+                if (y >= height) return null; // Check if out of bounds
                 break;
             case WEST:
-                x = (x + width - 1) % width;
+                x -= 1;
+                if (x < 0) return null; // Check if out of bounds
                 break;
             case NORTH:
-                y = (y + height - 1) % height;
+                y -= 1;
+                if (y < 0) return null; // Check if out of bounds
                 break;
             case EAST:
-                x = (x + 1) % width;
+                x += 1;
+                if (x >= width) return null; // Check if out of bounds
                 break;
         }
-        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
+        Heading reverse = Heading.values()[(heading.ordinal() + 2) % Heading.values().length];
         Space result = getSpace(x, y);
-        if (result != null) {
-            if (result.getWalls().contains(reverse)) {
-                return null;
-            }
+        if (result != null && result.getWalls().contains(reverse)) {
+            return null;
         }
         return result;
     }
+
 
     /**
      * @author s224308, s213364
@@ -380,12 +421,6 @@ public class Board extends Subject {
 
     }
 
-    public int getHeight() {
-        return height;
-    }
-    public int getWidth() {
-        return width;
-    }
     public List<Player> getPlayers() { return players; }
 
     public BoardData getData() {
@@ -394,5 +429,13 @@ public class Board extends Subject {
 
     public Player getLocalPlayer(PlayerDTO playerDTO){
         return players.stream().filter(p -> Objects.equals(p.getId(), playerDTO.getId())).findFirst().orElse(null);
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
+    }
+
+    public void setBoardView(BoardView boardView){
+        this.boardView = boardView;
     }
 }

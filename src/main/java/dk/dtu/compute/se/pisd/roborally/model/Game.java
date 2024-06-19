@@ -7,6 +7,5 @@ public class Game {
     public String name;
     public Long boardId;
     public int maxPlayers;
-
     public List<Long> playerIds;
 }

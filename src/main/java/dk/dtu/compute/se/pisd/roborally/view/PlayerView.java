@@ -22,26 +22,21 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
-import javafx.geometry.Insets;
+import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.sql.SQLOutput;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static dk.dtu.compute.se.pisd.roborally.controller.AppController.localPlayer;
 
@@ -69,11 +64,14 @@ public class PlayerView extends Tab implements ViewObserver {
     private VBox buttonPanel;
 
     private Button finishButton;
+    private Button leaveButton;
+    private Label readyPlayersLabel;
 
 
     private VBox playerInteractionPanel;
 
     private GameController gameController;
+    private ScheduledExecutorService scheduler;
 
     /**
      * Create a player view belonging to a certain player.
@@ -108,13 +106,21 @@ public class PlayerView extends Tab implements ViewObserver {
 
         if (isLocalPlayer) {
             finishButton = new Button("Finish Programming");
-            finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
+            finishButton.setOnAction(e -> {
+                gameController.finishProgrammingPhase();
+                readyPlayersLabel.setVisible(true);
+                setupScheduler();
+                finishButton.setDisable(true);
+            });
 
-            Button leaveButton = new Button("Leave Game");
+            leaveButton = new Button("Leave Game");
             leaveButton.setOnAction(e -> onPlayerLeave());
 
+            readyPlayersLabel = new Label();
+            readyPlayersLabel.setVisible(false);
+
             buttonPanel = new VBox(3);
-            buttonPanel.getChildren().addAll(finishButton, leaveButton);
+            buttonPanel.getChildren().addAll(finishButton, leaveButton, readyPlayersLabel);
 
             playerInteractionPanel = new VBox();
 
@@ -228,23 +234,22 @@ public class PlayerView extends Tab implements ViewObserver {
     }
 
     private void updateControlPanel() {
+        readyPlayersLabel.setVisible(false);
+        stopScheduler();
+
         if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
             if (!programPane.getChildren().contains(buttonPanel)) {
                 programPane.getChildren().remove(playerInteractionPanel);
                 programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
             }
             switch (player.board.getPhase()) {
-                case INITIALISATION:
-                    finishButton.setDisable(true);
-                    break;
                 case PROGRAMMING:
                     finishButton.setDisable(false);
-                    break;
-                case ACTIVATION:
-                    finishButton.setDisable(true);
+                    leaveButton.setDisable(false);
                     break;
                 default:
                     finishButton.setDisable(true);
+                    leaveButton.setDisable(true);
             }
         } else {
             if (!programPane.getChildren().contains(playerInteractionPanel)) {
@@ -262,5 +267,38 @@ public class PlayerView extends Tab implements ViewObserver {
             }
         }
     }
+
+    private void setupScheduler() {
+        if (scheduler != null) {
+            scheduler.shutdownNow();  // Ensure previous scheduler is stopped before creating a new one
+        }
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(this::updateReadyPlayersCount, 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    private void stopScheduler() {
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    private void updateReadyPlayersCount() {
+        if (Platform.isFxApplicationThread()) {
+            int readyPlayersCount = gameController.getReadyPlayersCount();
+            int maxPlayers = gameController.board.getPlayersNumber();
+            int count = maxPlayers - readyPlayersCount;
+            readyPlayersLabel.setText("(Waiting for " + count + (count == 1 ? " player)" : " players)"));
+        } else {
+            Platform.runLater(this::updateReadyPlayersCount);
+        }
+    }
+
 }
 

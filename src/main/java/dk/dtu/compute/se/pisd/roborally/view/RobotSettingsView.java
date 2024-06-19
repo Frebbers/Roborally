@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -35,6 +36,7 @@ public class RobotSettingsView extends BaseView {
         nameField = new TextField();
         nameField.setPromptText("Type your name here");
         nameField.setText(AppConfig.getProperty("local.player.name"));
+        Utilities.restrictTextLength(nameField, 8);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             saveName(newValue); // Method to save the name each time it is modified
         });

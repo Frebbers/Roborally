@@ -10,7 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,10 +27,10 @@ public class LobbyController {
         this.appController = appController;
     }
 
-    public void startLobbyPolling(Long gameId, ListView<String> playerListView) {
+    public void startLobbyPolling(Long gameId, Text players, ListView<String> playerListView) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-            Game game = updateLobby(playerListView, gameId);
+            Game game = updateLobby(playerListView, players, gameId);
             if (game != null && allPlayersReady(game)) {
                 stopLobbyPolling();
                 appController.loadGameScene(gameId, game.boardId);
@@ -42,13 +44,17 @@ public class LobbyController {
         }
     }
 
-    public Game updateLobby(ListView<String> listView, Long gameId) {
+    public Game updateLobby(ListView<String> listView, Text players, Long gameId) {
         // Get the API Services from the AppController
         ApiServices apiServices = appController.getApiServices();
 
+        // Get the Game and a player list from the API Services
         Game game = apiServices.getGameById(gameId);
         List<PlayerDTO> playerList = apiServices.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
+
+        // Update the players in game
+        players.setText(playerList.size() + " / " + game.maxPlayers + " players");
 
         int readyPlayers = 0;
         for (PlayerDTO player : playerList) {

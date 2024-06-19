@@ -22,10 +22,12 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static dk.dtu.compute.se.pisd.roborally.controller.AppController.localPlayer;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
@@ -244,15 +246,28 @@ public class Player extends Subject {
     }
 
     /**
-     * Sets a checkpoint at a specified index.
+     * Sets a checkpoint at a specified index only if it is the next checkpoint in the order.
      *
      * @param checkpoint the checkpoint to set
      */
     public void setCheckpoint(Checkpoint checkpoint) {
-        if(checkpoints.contains(checkpoint)) return;
+        // Check if the checkpoint already exists in the list
+        if (checkpoints.contains(checkpoint)) return;
 
-        checkpoints.add(checkpoint);
-        notifyChange();
+        // Determine the ID of the next expected checkpoint in sequence
+        int nextCheckpointId = checkpoints.isEmpty() ? 1 : checkpoints.get(checkpoints.size() - 1).getCheckpointId() + 1;
+
+        // Add the checkpoint only if its ID matches the next expected ID
+        if (checkpoint.getCheckpointId() == nextCheckpointId) {
+            // Add the checkpoint
+            checkpoints.add(checkpoint);
+
+            // Remove the CheckpointView on the Board if we are the local player
+            if(Objects.equals(this.id, localPlayer.getId())){{
+                board.getBoardView().removeCheckpointView(checkpoint);
+                notifyChange();
+            }}
+        }
     }
 
     /**

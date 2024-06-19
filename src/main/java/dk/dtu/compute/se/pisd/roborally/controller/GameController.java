@@ -360,10 +360,11 @@ public class GameController {
             result.append(winner.getName()).append(" has won!\n\n");
             for (Player player : board.getPlayers()) {
                 if (player != winner) {
+                    int checkpoints = player.getCheckpoints().size();
                     result.append(player.getName())
                             .append(" has ")
-                            .append(player.getCheckpoints().size())
-                            .append(" checkpoints.\n");
+                            .append(checkpoints)
+                            .append(checkpoints == 1 ? " checkpoint.\n" : " checkpoints.\n");
                 }
             }
 

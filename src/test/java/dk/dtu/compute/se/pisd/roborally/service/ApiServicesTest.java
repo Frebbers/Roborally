@@ -45,7 +45,7 @@ public class ApiServicesTest {
     }
 
     @Test
-    public void testTestConnection() {
+    public void testTestConnection() { // Must be running roboAPI for this test to pass
         ApiServices apiServices = new ApiServices();
 
         Assertions.assertTrue(apiServices.testConnection("localhost"));

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 
 public class LobbyBrowserControllerTest {
     @Test
-    public void testConnectToServer() {
+    public void testConnectToServer() { // Must be running roboAPI for this test to pass
         LobbyBrowserController lobbyBrowserController = new LobbyBrowserController(new AppController(new RoboRally()));
         String ip;
 

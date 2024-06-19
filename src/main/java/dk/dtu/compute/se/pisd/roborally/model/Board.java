@@ -71,7 +71,8 @@ public class Board extends Subject {
      *
      * @param data data of the board
      */
-    public Board(BoardData data) {
+    public Board(Long gameId, BoardData data) {
+        this.gameId = gameId;
         this.boardName = data.name;
         this.width = data.width;
         this.height = data.height;

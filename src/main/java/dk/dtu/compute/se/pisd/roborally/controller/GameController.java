@@ -50,7 +50,6 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
 public class GameController {
     private AppController appController;
 
-
     final public Board board;
     public ConveyorBeltController beltCtrl;
     public BoardController boardController;
@@ -190,6 +189,7 @@ public class GameController {
         }), 0, 500, TimeUnit.MILLISECONDS);
         scheduledTasks.add(future);
     }
+
     public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
         ApiServices apiServices = appController.getApiServices();
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
@@ -600,7 +600,31 @@ public class GameController {
         return nextCommand;
     }
 
+    /**
+     * Returns the AppController used by this class
+     *
+     * @return the AppController
+     */
     public AppController getAppController() {
         return appController;
     }
+
+    /**
+     * Retrieves the count of players who are currently marked as ready.
+     *
+     * @return the count of ready players
+     */
+    public int getReadyPlayersCount() {
+        int readyPlayersCount = 0;
+
+        try {
+            readyPlayersCount = appController.getApiServices().getPlayerReadyCount(this.board.getGameId(), this.board.getMoveCount());
+        } catch (Exception e) {
+            // Handle exceptions or errors in fetching the data
+            System.err.println("Error fetching ready players count: " + e.getMessage());
+        }
+
+        return readyPlayersCount;
+    }
+
 }

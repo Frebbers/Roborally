@@ -292,4 +292,32 @@ public class ApiServices {
         updateURLs();
         return verdict;
     }
+
+    /**
+     * @return private field {@link #BASE_URL}
+     */
+    public String getBASE_URL() {
+        return BASE_URL;
+    }
+
+    /**
+     * @return private field {@link #BASE_URL}
+     */
+    public String getGAMES_URL() {
+        return GAMES_URL;
+    }
+
+    /**
+     * @return private field {@link #BASE_URL}
+     */
+    public String getPLAYERS_URL() {
+        return PLAYERS_URL;
+    }
+
+    /**
+     * @return private field {@link #BASE_URL}
+     */
+    public String getMOVES_URL() {
+        return MOVES_URL;
+    }
 }

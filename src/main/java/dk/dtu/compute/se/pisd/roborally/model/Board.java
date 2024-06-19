@@ -334,45 +334,45 @@ public class Board extends Subject {
      * Returns the neighbour of the given space of the board in the given heading.
      * The neighbour is returned only, if it can be reached from the given space
      * (no walls or obstacles in either of the involved spaces); otherwise,
-     * null will be returned.
+     * null will be returned. This version does not wrap around the board edges.
      *
      * @param space the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
-     * @return the space in the given direction; null if there is no (reachable) neighbour
+     * @return the space in the given direction; null if there is no (reachable) neighbour or it's out of bounds
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
         if (space.getWalls().contains(heading)) {
             return null;
         }
 
-        // XXX an other option (not for now) would be that null represents a hole
-        //     or the edge of the board in which the players can fall
-
         int x = space.x;
         int y = space.y;
         switch (heading) {
             case SOUTH:
-                y = (y + 1) % height;
+                y += 1;
+                if (y >= height) return null; // Check if out of bounds
                 break;
             case WEST:
-                x = (x + width - 1) % width;
+                x -= 1;
+                if (x < 0) return null; // Check if out of bounds
                 break;
             case NORTH:
-                y = (y + height - 1) % height;
+                y -= 1;
+                if (y < 0) return null; // Check if out of bounds
                 break;
             case EAST:
-                x = (x + 1) % width;
+                x += 1;
+                if (x >= width) return null; // Check if out of bounds
                 break;
         }
-        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
+        Heading reverse = Heading.values()[(heading.ordinal() + 2) % Heading.values().length];
         Space result = getSpace(x, y);
-        if (result != null) {
-            if (result.getWalls().contains(reverse)) {
-                return null;
-            }
+        if (result != null && result.getWalls().contains(reverse)) {
+            return null;
         }
         return result;
     }
+
 
     /**
      * @author s224308, s213364

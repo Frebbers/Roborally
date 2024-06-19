@@ -49,6 +49,7 @@ public class LobbyBrowserView extends BaseView {
         TextField serverIPDialog = new TextField();
         serverIPDialog.setPromptText("Enter server IP");
         serverIPDialog.setText("4.180.19.186");
+        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
 
         // Server button and feedback
         Text connectToServerFeedback = new Text();

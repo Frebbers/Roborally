@@ -26,7 +26,7 @@ import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -349,13 +349,53 @@ public class GameController {
      */
     private void onActivationPhaseEnd(){
         board.incrementMoveCount();
+        Player winner;
+        StringBuilder result = new StringBuilder();
 
-        for(Player player : board.getPlayers()){
-            if(player.getCheckpoints().size() == board.getData().checkpoints.size()){
-                System.out.println(player.getName() + " has won!");
+        // Check if there is a winner
+        winner = board.getPlayers().stream().filter(player -> player.getCheckpoints().size() == board.getData().checkpoints.size()).findFirst().orElse(null);
+
+        // If there is a winner, prepare and display the results
+        if (winner != null) {
+            result.append(winner.getName()).append(" has won!\n\n");
+            for (Player player : board.getPlayers()) {
+                if (player != winner) {
+                    result.append(player.getName())
+                            .append(" has ")
+                            .append(player.getCheckpoints().size())
+                            .append(" checkpoints.\n");
+                }
             }
+
+            // Display the results in a popup window
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setTitle("Game Results");
+                alert.setHeaderText("Congratulations, " + winner.getName() + "!");
+
+                // Using a TextArea inside the alert to handle potentially large amounts of text
+                TextArea textArea = new TextArea(result.toString());
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+                textArea.setMaxWidth(Double.MAX_VALUE);
+                textArea.setMaxHeight(Double.MAX_VALUE);
+                alert.getDialogPane().setContent(textArea);
+
+                // Add a leave button manually
+                ButtonType leaveButton = new ButtonType("Leave Game", ButtonBar.ButtonData.OK_DONE);
+                alert.getDialogPane().getButtonTypes().add(leaveButton);
+
+                // Show the alert and wait for the user to close it
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == leaveButton) {
+                        appController.leave(true);
+                    }
+                });
+            });
+
         }
     }
+
 
     /**
      * Execute all field actions on a space.

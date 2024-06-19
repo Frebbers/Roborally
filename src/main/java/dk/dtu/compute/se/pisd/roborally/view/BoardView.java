@@ -107,42 +107,6 @@ public class BoardView extends BaseView implements ViewObserver {
         update(board);
     }
 
-    /**
-     * Removes the CheckpointView from the game board when a player reaches it.
-     *
-     * @param checkpoint the checkpoint to remove
-     */
-    public void removeCheckpointView(Checkpoint checkpoint) {
-        Platform.runLater(() -> {
-            Space space = board.getSpace(checkpoint.x, checkpoint.y);
-            if (space.getCheckpoint() != null && space.getCheckpoint().equals(checkpoint)) {
-                space.setCheckpoint(null);
-                Node toRemove = findNodeByCoordinates(checkpoint.x, checkpoint.y);
-                if (toRemove != null) {
-                    mainBoardPane.getChildren().remove(toRemove);
-                    SpaceView newSpaceView = new SpaceView(space);
-                    mainBoardPane.add(newSpaceView, checkpoint.x, checkpoint.y);
-                }
-            }
-        });
-    }
-
-    /**
-     * Helper method to find a node by their coordinates
-     *
-     * @param x x-coordination
-     * @param y y-coordination
-     */
-    private Node findNodeByCoordinates(int x, int y) {
-        for (Node node : mainBoardPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) != null && GridPane.getRowIndex(node) != null &&
-                    GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y) {
-                return node;
-            }
-        }
-        return null;
-    }
-
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {

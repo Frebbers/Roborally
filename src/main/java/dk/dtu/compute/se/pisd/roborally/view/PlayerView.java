@@ -64,6 +64,7 @@ public class PlayerView extends Tab implements ViewObserver {
     private VBox buttonPanel;
 
     private Button finishButton;
+    private Button leaveButton;
     private Label readyPlayersLabel;
 
 
@@ -112,7 +113,7 @@ public class PlayerView extends Tab implements ViewObserver {
                 finishButton.setDisable(true);
             });
 
-            Button leaveButton = new Button("Leave Game");
+            leaveButton = new Button("Leave Game");
             leaveButton.setOnAction(e -> onPlayerLeave());
 
             readyPlayersLabel = new Label();
@@ -244,9 +245,11 @@ public class PlayerView extends Tab implements ViewObserver {
             switch (player.board.getPhase()) {
                 case PROGRAMMING:
                     finishButton.setDisable(false);
+                    leaveButton.setDisable(false);
                     break;
                 default:
                     finishButton.setDisable(true);
+                    leaveButton.setDisable(true);
             }
         } else {
             if (!programPane.getChildren().contains(playerInteractionPanel)) {

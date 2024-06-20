@@ -297,7 +297,7 @@ public class AppController implements Observer {
      */
 private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId().toString());}
     private void onLobbyJoin() {
-        //TODO test this thoroughly
+        //TODO test this thoroughly: scenario where player does not exist on the server
         localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
         if (localPlayer != null || apiServices.playerExists
                 (localPlayer.getName(), localPlayer.getId().toString()) == localPlayer) {

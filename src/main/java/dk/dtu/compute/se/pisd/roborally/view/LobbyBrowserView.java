@@ -53,7 +53,6 @@ public class LobbyBrowserView extends BaseView {
         serverIPDialog.setPromptText("Enter server IP");
 
         serverIPDialog.setText(getProperty("server.ip"));
-        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
 
         // Server button and feedback
         Text connectToServerFeedback = new Text();

@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -191,5 +192,27 @@ public class MyStepdefs {
     @And("there is a wall at position \\({int}, {int}), {string}")
     public void thereIsAWallAtPosition(int x, int y, String heading) {
         Wall wall = new Wall(x, y, heading, "north");
+    }
+
+    @And("there are \\({int}) players in the game")
+    public void thereArePlayersInTheGame(int count) {
+        for (int i = 0; i < count; i++) {
+            gameController.board.addPlayer(new Player(
+                    (long) i,
+                    "Player" + i,
+                    RobotType.Gizmo,
+                    PlayerState.READY,
+                    gameController.board.getGameId()
+            ));
+        }
+    }
+
+    @Then("the player cannot see other players' cards")
+    public void thePlayerCannotSeeOtherPlayersCards() {
+        for (Player player : gameController.board.getPlayers()) {
+            for (int i = 0; i < Player.NO_REGISTERS; i++) {
+                Assertions.assertNull(player.getProgramField(i));
+            }
+        }
     }
 }

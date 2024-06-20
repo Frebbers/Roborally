@@ -101,7 +101,6 @@ public class LobbyBrowserController {
      * @return true if successfully connected, false otherwise
      */
     public boolean connectToServer(String ip) {
-        System.out.println("Joining IP Address: " + ip);
 
         if (apiServices.testConnection(ip)) {
             AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
@@ -111,11 +110,9 @@ public class LobbyBrowserController {
 
             apiServices.updateURLs();
 
-            System.out.println("Successfully connected to server " + ip);
             return true;
         }
         else {
-            System.out.println("Failed to connect to server " + ip);
             return false;
         }
     }

@@ -25,12 +25,13 @@ public class ApiServices {
     private String GAMES_URL;
     private String PLAYERS_URL;
     private String MOVES_URL;
+    private AppController appcontroller;
 
     private final RestTemplate restTemplate = new RestTemplate();
     //LocalPlayer is stored in AppController now
    // private PlayerDTO localPlayer;
 
-    public ApiServices(){
+    public ApiServices(AppController appcontroller) {
         updateURLs();
     }
 
@@ -147,9 +148,7 @@ public class ApiServices {
         player.setGameId(0L);
 
         // Set the Robot Type of the Player
-        int robotIndex = Integer.parseInt(getProperty("local.player.robotType"));
-        RobotType robotType = Utilities.toEnum(RobotType.class, robotIndex);
-        player.setRobotType(robotType);
+        appcontroller.loadPlayerProperties();
 
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response;

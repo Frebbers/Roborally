@@ -27,6 +27,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -59,11 +60,14 @@ public class AppController implements Observer {
      */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
-        this.apiServices = new ApiServices();
+        this.apiServices = new ApiServices(this);
 
         if (apiServices.isReachable()){
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+            if (localPlayer != null) {
+            loadPlayerProperties();
+            }
         }
         notConnectedAlert = new Alert(AlertType.WARNING,
                 "Error connecting to the server. Check your connection to the server.", ButtonType.OK);
@@ -287,10 +291,16 @@ public class AppController implements Observer {
     public ApiServices getApiServices() {
         return apiServices;
     }
+    /**
+     * Writes the ID of the playerDTO object into the properties file
+     * @author s224804
+     */
 private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId().toString());}
     private void onLobbyJoin() {
         //TODO test this thoroughly
-        if (localPlayer != null) {
+        localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+        if (localPlayer != null || apiServices.playerExists
+                (localPlayer.getName(), localPlayer.getId().toString()) == localPlayer) {
             //LocalPlayer is not null and exists on the server
             return;
         } else if (!(getProperty("local.player.name").isEmpty())) {
@@ -308,4 +318,16 @@ private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId(
     public void toggleReady() {apiServices.updatePlayerState(localPlayer.getId());}
 
     public void setLocalPlayer(PlayerDTO body) {}
+    /**
+     * Loads the player properties from the config file into the playerDTO object
+     * @author s224804
+     */
+    public void loadPlayerProperties() {
+    if (localPlayer.getId() == null && localPlayer.getId() != 0) {
+        updatePlayerID();
+    }
+        localPlayer.setName(getProperty("local.player.name"));
+        localPlayer.setId(Long.parseLong(getProperty("local.player.id")));
+        localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
+    }
 }

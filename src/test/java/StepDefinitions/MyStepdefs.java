@@ -3,6 +3,7 @@ package StepDefinitions;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -191,5 +192,25 @@ public class MyStepdefs {
     @And("there is a wall at position \\({int}, {int}), {string}")
     public void thereIsAWallAtPosition(int x, int y, String heading) {
         Wall wall = new Wall(x, y, heading, "north");
+    }
+
+    @Given("A game has been initialized online")
+    public void aGameHasBeenInitializedOnline() {
+        ApiServices apiServices = new ApiServices();
+        assertEquals(gameController.board.getGameId(),apiServices.getGameById(gameController.board.getGameId()));
+    }
+
+    @When("All players have finished their programming phase")
+    public void allPlayersHaveFinishedTheirProgrammingPhase() {
+        assertEquals(gameController.getReadyPlayersCount(),gameController.board.getPlayers().toArray().length);
+    }
+
+    @Then("All clients should display the moves in correct order")
+    public void allClientsShouldDisplayTheMovesInCorrectOrder() {
+        gameController.board.setMoveCount(gameController.board.getMoveCount());
+        for (int i = 0; i < gameController.board.getMoveCount(); i++) {
+            assert (gameController.getNextCommand().equals(gameController.board.getCurrentPlayer().getPreviousCommand()));
+        }
+
     }
 }

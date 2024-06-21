@@ -318,8 +318,20 @@ public class GameController {
         // Check if there is a winner
         winner = board.getPlayers().stream().filter(player -> player.getCheckpoints().size() == board.getData().checkpoints.size()).findFirst().orElse(null);
 
-        // If there is a winner, prepare and display the results
+        // If there is a winner, prepare and display the results and close the game
         if (winner != null) {
+            // Get the Player object from the board
+            PlayerDTO playerDTO = AppController.localPlayer;
+            Player localPlayer = board.getLocalPlayer(playerDTO);
+
+            // Get the gameId from the local player
+            Long gameId = localPlayer.getGameId();
+
+            // Update the GameState of the game if the player is the host of the game
+            if(apiServices.isPlayerHost(gameId, localPlayer.getId())) {
+                apiServices.updateGameState(gameId, GameState.FINISHED);
+            }
+
             result.append(winner.getName()).append(" has won!\n\n");
             for (Player player : board.getPlayers()) {
                 if (player != winner) {
@@ -352,18 +364,6 @@ public class GameController {
                 // Show the alert and wait for the user to close it
                 alert.showAndWait().ifPresent(response -> {
                     if (response == leaveButton) {
-                        // Get the Player object from the board
-                        PlayerDTO playerDTO = AppController.localPlayer;
-                        Player player = board.getLocalPlayer(playerDTO);
-
-                        // Get the gameId from the player
-                        Long gameId = player.getGameId();
-
-                        // Update the GameState of the game if local player is the host or the last player is
-                        if(apiServices.getPlayersInGame(gameId).size() == 1) {
-                            apiServices.updateGameState(gameId, GameState.FINISHED);
-                        }
-
                         appController.leave(true);
                     }
                 });

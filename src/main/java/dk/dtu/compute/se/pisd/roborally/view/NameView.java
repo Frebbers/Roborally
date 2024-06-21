@@ -41,5 +41,6 @@ public class NameView extends StackPane {
      */
     public void updateName(String playerName) {
         nameLabel.setText(playerName);
+        styleNameLabel(playerName);
     }
 }

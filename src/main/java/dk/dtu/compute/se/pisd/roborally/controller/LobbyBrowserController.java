@@ -106,6 +106,7 @@ public class LobbyBrowserController {
     }
 
     public void joinSelectedLobby(String gameName) {
+        appController.onLobbyJoin();
         Long gameId = lobbyMap.get(gameName);
         if (gameId != null) {
             PlayerDTO localPlayer = AppController.localPlayer;

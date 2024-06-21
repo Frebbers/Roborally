@@ -11,7 +11,6 @@ public class StartViewTest extends BaseView {
 
     private StartView startView;
     private AppController appController;
-    private SettingsView robotSettingsView;
     private PlayerDTO playerDTO;
     RoboRally roboRally;
 
@@ -21,18 +20,16 @@ public class StartViewTest extends BaseView {
 
     @BeforeEach
     void setUp() {
-        appController = new AppController(roboRally);  // Initialize your AppController here
+        appController = new AppController(roboRally); 
         startView = new StartView(appController);
         initialize();
     }
 
     @Test
     void testUpdatePlayerName() {
-        // Simulate setting a player name in AppConfig
+        // Simulate setting a player name
         playerDTO.setName("TestPlayer");
 
-
-        // Call updatePlayerName() method
         startView.updatePlayerName();
 
         // Verify the nameLabel text

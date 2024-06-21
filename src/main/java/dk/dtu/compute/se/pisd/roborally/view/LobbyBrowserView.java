@@ -6,25 +6,20 @@ import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 
-import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
 
 public class LobbyBrowserView extends BaseView {
 

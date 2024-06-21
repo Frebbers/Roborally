@@ -31,6 +31,6 @@ public class JsonReaderTest {
         assertEquals(12, board.height);
         assertEquals(12, board.width);
 
-        
+
     }
 }

@@ -342,5 +342,6 @@ public class AppController implements Observer {
         if (localPlayer.getRobotType() == null) {
             localPlayer.setRobotType(RobotType.Circuito);
         }
+        return localPlayer;
     }
 }

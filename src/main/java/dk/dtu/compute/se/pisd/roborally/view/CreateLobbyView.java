@@ -83,7 +83,7 @@ public class CreateLobbyView extends BaseView {
                 PLAYER_NUMBER_OPTIONS.stream().map(Object::toString).collect(Collectors.toList())
         );
         comboBox.setItems(options);
-        comboBox.getSelectionModel().select(0);
+        comboBox.getSelectionModel().select("2");
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 numberOfPlayers = Integer.valueOf(newValue);

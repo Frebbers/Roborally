@@ -57,7 +57,7 @@ public class CreateLobbyView extends BaseView {
         Text lobbyTypeText = new Text("Lobby Type: ");
         ComboBox<String> connectionTypeDropdown = new ComboBox<>();
         connectionTypeDropdown.getItems().addAll("Local", "Server");
-        connectionTypeDropdown.setValue("Local");  // Default selection
+        connectionTypeDropdown.setValue("Server");
 
         // Adding listener to connectionTypeDropdown
         connectionTypeDropdown.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {

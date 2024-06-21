@@ -18,8 +18,6 @@ public class GameControllerTest {
 
     private GameController gameController;
 
-
-
     @BeforeEach public void setUp() {
        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
        antennaList.add (new PriorityAntenna(2,2));
@@ -42,9 +40,6 @@ public class GameControllerTest {
     void tearDown() {
         gameController = null;
     }
-
-
-
 
     @Test
     void moveForward() {

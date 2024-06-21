@@ -57,7 +57,7 @@ public class LobbyBrowserView extends BaseView {
         // Dropdown for selecting connection type
         ComboBox<String> connectionTypeDropdown = new ComboBox<>();
         connectionTypeDropdown.getItems().addAll("Local", "Server");
-        connectionTypeDropdown.setValue("Local");  // Set default selection
+        connectionTypeDropdown.setValue("Server");
 
         // Adding listener to connectionTypeDropdown
         connectionTypeDropdown.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {

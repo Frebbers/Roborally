@@ -40,15 +40,15 @@ public class StartView extends BaseView {
         // Buttons
         Button startLobbyButton = new Button("Create lobby");
         Button joinLobbyButton = new Button("Join lobby");
-        Button modifyRobotButton = new Button("Modify Robot");
+        Button settingsButton = new Button("Settings");
         Button exitButton = new Button("Exit");
 
         startLobbyButton.setOnAction(e -> appController.getRoboRally().createNewLobbyView(appController));
-        modifyRobotButton.setOnAction(e -> appController.getRoboRally().createRobotSettingsView(appController));
         joinLobbyButton.setOnAction(e -> appController.getRoboRally().createLobbyBrowserView(appController));
+        settingsButton.setOnAction(e -> appController.getRoboRally().createRobotSettingsView(appController));
         exitButton.setOnAction(e -> appController.exit());
 
-        VBox buttonContainer = new VBox(10, startLobbyButton, modifyRobotButton, joinLobbyButton, exitButton);
+        VBox buttonContainer = new VBox(10, startLobbyButton, joinLobbyButton, settingsButton, exitButton);
         buttonContainer.setAlignment(Pos.CENTER);
 
 

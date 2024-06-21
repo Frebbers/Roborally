@@ -23,8 +23,6 @@ package dk.dtu.compute.se.pisd.roborally;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
-import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
 import dk.dtu.compute.se.pisd.roborally.view.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -120,7 +118,7 @@ public class RoboRally extends Application {
 
         if (appController != null) {
             // create and add view for new board
-            RobotSettingsView robotSettingsView = new RobotSettingsView(appController);
+            SettingsView robotSettingsView = new SettingsView(appController);
             robotSettingsView.initialize();
             boardRoot.setCenter(robotSettingsView);
         }

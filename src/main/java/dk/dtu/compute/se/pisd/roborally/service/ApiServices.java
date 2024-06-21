@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -152,10 +154,6 @@ public class ApiServices {
             player.setRobotType(RobotType.Circuito);
         }
 
-
-        // Set the Robot Type of the Player
-        appcontroller.loadPlayerProperties();
-
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response;
         try {
@@ -284,11 +282,49 @@ public class ApiServices {
         restTemplate.put(url, oldMove);
     }
 
+
+    public void setApiType(ApiType apiType){
+        AppConfig.setProperty("api.type", apiType.toString());
+    }
+
+    public String getServerIP(){
+        String s = AppConfig.getProperty("server.base.url");
+        try {
+            URL url = new URL(s);
+            return url.getHost();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean isReachable(){
         try {
             getAllGames();
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Test connection to and, if reachable, set API IP to the given IP address.
+     *
+     * @param ip IP-address to connect to
+     * @return true if successfully connected, false otherwise
+     */
+    public boolean connectToServer(String ip) {
+
+        if (testConnection(ip)) {
+            AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
+            AppConfig.setProperty("server.games.url", "http://" + ip + ":8080/api/games");
+            AppConfig.setProperty("server.moves.url", "http://" + ip + ":8080/api/moves");
+            AppConfig.setProperty("server.players.url", "http://" + ip + ":8080/api/players");
+
+            updateURLs();
+
+            return true;
+        }
+        else {
             return false;
         }
     }

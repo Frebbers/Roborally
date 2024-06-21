@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
+import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
@@ -9,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +49,7 @@ public class LobbyBrowserController {
         }
     }
 
-    private void updateLobbies(ListView<String> lobbyListView) {
+    public void updateLobbies(ListView<String> lobbyListView) {
         List<Game> games = appController.getApiServices().getAllGames();
         ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -92,29 +95,6 @@ public class LobbyBrowserController {
             return players.size() >= game.maxPlayers;
         }
         return false;
-    }
-
-    /**
-     * Test connection to and, if reachable, set API IP to the given IP address.
-     *
-     * @param ip IP-address to connect to
-     * @return true if successfully connected, false otherwise
-     */
-    public boolean connectToServer(String ip) {
-
-        if (apiServices.testConnection(ip)) {
-            AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
-            AppConfig.setProperty("server.games.url", "http://" + ip + ":8080/api/games");
-            AppConfig.setProperty("server.moves.url", "http://" + ip + ":8080/api/moves");
-            AppConfig.setProperty("server.players.url", "http://" + ip + ":8080/api/players");
-
-            apiServices.updateURLs();
-
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     public void joinSelectedLobby(String gameName) {

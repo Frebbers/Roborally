@@ -2,6 +2,9 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.model.ApiType;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -25,7 +28,10 @@ import java.util.stream.Collectors;
 
 public class CreateLobbyView extends BaseView {
     private AppController appController;
+    private ApiServices apiServices;
     private GridPane boardSelection;
+    private Text connectToServerFeedback;
+    private Button startButton;
     private String lobbyName;
     private Integer numberOfPlayers = 1;
     private Integer boardId = 1;
@@ -35,17 +41,31 @@ public class CreateLobbyView extends BaseView {
     public CreateLobbyView(AppController appController){
         super(appController);
         this.appController = appController;
+        this.apiServices = appController.getApiServices();
     }
 
     @Override
     public void initialize() {
         Text title = new Text("Create a new lobby");
-        Text errorMessage = new Text("You need to choose a board and number of players");
-        //errorMessage.setStyle( Color.rgb());
+        connectToServerFeedback = new Text();
 
         boardSelection = new GridPane();
         boardSelection.setHgap(10);
         boardSelection.setVgap(10);
+
+        // Setup for lobby type selection
+        Text lobbyTypeText = new Text("Lobby Type: ");
+        ComboBox<String> connectionTypeDropdown = new ComboBox<>();
+        connectionTypeDropdown.getItems().addAll("Local", "Server");
+        connectionTypeDropdown.setValue("Local");  // Default selection
+
+        // Adding listener to connectionTypeDropdown
+        connectionTypeDropdown.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            initializeConnection(newValue);
+        });
+
+        HBox connectToServerBox = new HBox(10, connectionTypeDropdown, connectToServerFeedback);
+        connectToServerBox.setAlignment(Pos.CENTER_LEFT);
 
         // for setting lobby name
         Text lobbyNameText = new Text("Lobby Name: ");
@@ -74,7 +94,7 @@ public class CreateLobbyView extends BaseView {
         Text boardText = new Text("Select a Board: ");
         loadBoardPictures();
 
-        Button startButton = new Button("Create");
+        startButton = new Button("Create");
         startButton.setOnAction(event -> {
             appController.createLobby(lobbyName, boardId, numberOfPlayers);
         });
@@ -91,13 +111,16 @@ public class CreateLobbyView extends BaseView {
         HBox buttonContainer = new HBox(backButton, spacer, startButton);
         buttonContainer.setAlignment(Pos.CENTER);
 
-        VBox mainLayout = new VBox(20, title, lobbyNameText, lobbyNameField, numberOfPlayersText, comboBox, boardText, boardSelection, buttonContainer);
-        getChildren().addAll(mainLayout);
-
         // Highlight the first selected board
         highlightSelected(boardId);
-    }
 
+        // Set the initial connection type on startup
+        initializeConnection(connectionTypeDropdown.getValue());
+
+        VBox mainLayout = new VBox(20, title, lobbyTypeText, connectToServerBox, lobbyNameText, lobbyNameField, numberOfPlayersText, comboBox, boardText, boardSelection, buttonContainer);
+        getChildren().addAll(mainLayout);
+
+    }
 
     private void loadBoardPictures() {
         try {
@@ -121,6 +144,31 @@ public class CreateLobbyView extends BaseView {
         } catch (Exception e) {
             e.printStackTrace();
             // Handle errors (e.g., directory not found, no permission, etc.)
+        }
+    }
+
+    private void initializeConnection(String connectionType) {
+        boolean isConnected;
+        if ("Server".equals(connectionType)) {
+            apiServices.setApiType(ApiType.SERVER);
+            isConnected = apiServices.testConnection(apiServices.getServerIP());
+        } else {
+            apiServices.setApiType(ApiType.LOCAL);
+            isConnected = apiServices.testConnection("localhost");
+        }
+
+        updateConnectionFeedback(isConnected, connectionType);
+    }
+
+    private void updateConnectionFeedback(boolean isConnected, String connectionType) {
+        if (isConnected) {
+            connectToServerFeedback.setFill(Color.GREEN);
+            connectToServerFeedback.setText("Connected successfully to " + connectionType);
+            startButton.setDisable(false);
+        } else {
+            connectToServerFeedback.setFill(Color.RED);
+            connectToServerFeedback.setText("Failed to connect to " + connectionType);
+            startButton.setDisable(true);
         }
     }
 

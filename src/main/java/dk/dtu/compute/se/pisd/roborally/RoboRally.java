@@ -64,7 +64,7 @@ public class RoboRally extends Application {
 
         AppController appController = new AppController(this);
 
-        // create the primary scene with the a menu bar and a pane for
+        // create the primary scene with the menu bar and a pane for
         // the board view (which initially is empty); it will be filled
         // when the user creates a new game or loads a game
         boardRoot = new BorderPane();
@@ -159,6 +159,7 @@ public class RoboRally extends Application {
             CreateLobbyView createLobbyView = new CreateLobbyView(appController);
             createLobbyView.initialize();
             boardRoot.setCenter(createLobbyView);
+            createLobbyView.setId("lobbyView");
         }
 
         stage.sizeToScene();

@@ -26,6 +26,7 @@ public class StartView extends BaseView {
     @Override
     public void initialize() {
         nameLabel = new Text();
+        nameLabel.setId("nameLabel");
         updatePlayerName();
 
         // Background image setup
@@ -39,9 +40,13 @@ public class StartView extends BaseView {
 
         // Buttons
         Button startLobbyButton = new Button("Create lobby");
+        startLobbyButton.setId("startLobbyButton");
         Button joinLobbyButton = new Button("Join lobby");
+        joinLobbyButton.setId("joinLobbyButton");
         Button settingsButton = new Button("Settings");
+        settingsButton.setId("settingsButton");
         Button exitButton = new Button("Exit");
+        exitButton.setId("exitButton");
 
         startLobbyButton.setOnAction(e -> appController.getRoboRally().createNewLobbyView(appController));
         joinLobbyButton.setOnAction(e -> appController.getRoboRally().createLobbyBrowserView(appController));
@@ -51,14 +56,10 @@ public class StartView extends BaseView {
         VBox buttonContainer = new VBox(10, startLobbyButton, joinLobbyButton, settingsButton, exitButton);
         buttonContainer.setAlignment(Pos.CENTER);
 
-
         StackPane nameLabelContainer = new StackPane(nameLabel);
-        this.getChildren().add(nameLabelContainer);
+        nameLabelContainer.setBackground(new Background(new BackgroundFill(Color.rgb(45, 45, 45, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        nameLabelContainer.setPadding(new Insets(20));
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(45, 45, 45, 0.5), CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(backgroundFill);
-
-        nameLabelContainer.setBackground(background);
         VBox infoContainer = new VBox(10, nameLabelContainer);
         infoContainer.setAlignment(Pos.BOTTOM_CENTER);
         infoContainer.setPadding(new Insets(20));
@@ -69,6 +70,7 @@ public class StartView extends BaseView {
 
         getChildren().add(mainLayout);
     }
+
     public void updatePlayerName() {
         String name = AppConfig.getProperty("local.player.name");
         if (name != null) {

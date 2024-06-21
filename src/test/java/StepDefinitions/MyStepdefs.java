@@ -1,7 +1,7 @@
 package StepDefinitions;
 
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import io.cucumber.java.en.And;
@@ -12,10 +12,13 @@ import org.junit.jupiter.api.Assertions;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class MyStepdefs {
     private GameController gameController;
+    private RoboRally testRoborally;
+
     @Given("the robot is facing {string}")
 
     /**
@@ -198,7 +201,7 @@ public class MyStepdefs {
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
         ApiServices apiServices = new ApiServices();
-        assertEquals(gameController.board.getGameId(),apiServices.getGameById(gameController.board.getGameId()));
+        assertEquals(apiServices.joinGame(gameController.board.getGameId(),1L),apiServices.getGameById(gameController.board.getGameId()));
     }
 
     @When("All players have finished their programming phase")
@@ -213,6 +216,12 @@ public class MyStepdefs {
             assert (gameController.getNextCommand().equals(gameController.board.getCurrentPlayer().getPreviousCommand()));
         }
 
+    }
+
+    @Given("a lobby has to be initialized")
+    public void aLobbyHasToBeInitialized() {
+        AppController testappController = new AppController(testRoborally);
+        testappController.createLobby("TestLobby", 1, 2);
     }
 
     @And("there are \\({int}) players in the game")
@@ -235,5 +244,23 @@ public class MyStepdefs {
                 Assertions.assertNull(player.getProgramField(i));
             }
         }
+    }
+
+    @And("A player needs to join the lobby")
+    public void aPlayerNeedsToJoinTheLobby() {
+        Player player = gameController.board.getCurrentPlayer();
+        aLobbyHasToBeInitialized();
+        gameController.getAppController().joinLobby(1L);
+        assertTrue(gameController.getAppController().isInLobby());
+    }
+
+    @When("All players are ready")
+    public void allPlayersAreReady() {
+        assertEquals(gameController.getReadyPlayersCount(),gameController.board.getPlayers().toArray().length);
+    }
+
+    @Then("All players are in the the Phase {string}")
+    public void allPlayersAreInTheThePhase(Phase phase) {
+        assertEquals(gameController.board.getPhase(), phase);
     }
 }

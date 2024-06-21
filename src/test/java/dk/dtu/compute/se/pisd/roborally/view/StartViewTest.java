@@ -11,7 +11,7 @@ public class StartViewTest extends BaseView {
 
     private StartView startView;
     private AppController appController;
-    private RobotSettingsView robotSettingsView;
+    private SettingsView robotSettingsView;
     private PlayerDTO playerDTO;
     RoboRally roboRally;
 

@@ -5,6 +5,7 @@ import java.util.List;
 public class Game {
     public Long id;
     public String name;
+    public GameState gameState;
     public Long boardId;
     public int maxPlayers;
     public List<Long> playerIds;

@@ -8,17 +8,11 @@ public enum PlayerState {
 
     @Override
     public String toString() {
-        switch(this) {
-            case NOT_READY:
-                return "Not Ready";
-            case READY:
-                return "Ready";
-            case INTERACTING:
-                return "Interacting";
-            case NOT_IN_LOBBY:
-                return "Not in Lobby";
-            default:
-                return super.toString();
-        }
+        return switch (this) {
+            case NOT_READY -> "Not Ready";
+            case READY -> "Ready";
+            case INTERACTING -> "Interacting";
+            case NOT_IN_LOBBY -> "Not in Lobby";
+        };
     }
 }

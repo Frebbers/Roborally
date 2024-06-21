@@ -49,6 +49,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
  */
 public class GameController {
     private AppController appController;
+    private ApiServices apiServices;
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
@@ -67,6 +68,7 @@ public class GameController {
      */
     public GameController(@NotNull AppController appController, @NotNull Board board) {
         this.appController = appController;
+        this.apiServices = appController.getApiServices();
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
@@ -350,11 +352,22 @@ public class GameController {
                 // Show the alert and wait for the user to close it
                 alert.showAndWait().ifPresent(response -> {
                     if (response == leaveButton) {
+                        // Get the Player object from the board
+                        PlayerDTO playerDTO = AppController.localPlayer;
+                        Player player = board.getLocalPlayer(playerDTO);
+
+                        // Get the gameId from the player
+                        Long gameId = player.getGameId();
+
+                        // Update the GameState of the game if local player is the host or the last player is
+                        if(apiServices.getPlayersInGame(gameId).size() == 1) {
+                            apiServices.updateGameState(gameId, GameState.FINISHED);
+                        }
+
                         appController.leave(true);
                     }
                 });
             });
-
         }
     }
 

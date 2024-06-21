@@ -184,6 +184,7 @@ public class AppController implements Observer {
      */
     public boolean leave(boolean lobbyLeaveRequested) {
         if (apiServices != null) {
+            // Remove the local player from the game
             apiServices.onPlayerLeave(localPlayer.getId());
 
             if (gameController != null) {
@@ -320,9 +321,6 @@ public class AppController implements Observer {
 
     public void toggleReady() {
         apiServices.updatePlayerState(localPlayer.getId());
-    }
-
-    public void setLocalPlayer(PlayerDTO body) {
     }
 
     /**

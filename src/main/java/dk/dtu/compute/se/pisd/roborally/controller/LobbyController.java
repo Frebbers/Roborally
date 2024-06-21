@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.GameState;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
@@ -22,9 +23,11 @@ public class LobbyController {
 
     private ScheduledExecutorService scheduler;
     private AppController appController;
+    private ApiServices apiServices;
 
     public LobbyController(AppController appController) {
         this.appController = appController;
+        this.apiServices = appController.getApiServices();
     }
 
     public void startLobbyPolling(Long gameId, Text players, ListView<String> playerListView) {
@@ -32,7 +35,18 @@ public class LobbyController {
         scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
             Game game = updateLobby(playerListView, players, gameId);
             if (game != null && allPlayersReady(game)) {
+                // Stop polling for lobby updates
                 stopLobbyPolling();
+
+                // Get the local player
+                Long localPlayerId = AppController.localPlayer.getId();
+
+                // Update the game state if the local player is the host
+                if(apiServices.isPlayerHost(gameId, localPlayerId)){
+                    apiServices.updateGameState(gameId, GameState.IN_PROGRESS);
+                }
+
+                // Load the Game Scene
                 appController.loadGameScene(gameId, game.boardId);
             }
         }), 0, 1000, TimeUnit.MILLISECONDS);

@@ -142,11 +142,16 @@ public class ApiServices {
     }
 
     public PlayerDTO createPlayer(String name){
-        // Create a new player on the client and set the name (Do not create a constructor for this)
-        PlayerDTO player = new PlayerDTO();
-        player.setName(name);
-        player.setState(PlayerState.NOT_IN_LOBBY);
-        player.setGameId(0L);
+        // Create a new player on the client and set the name
+        PlayerDTO player = appcontroller.loadPlayerProperties();
+        if (player == null) {
+            player = new PlayerDTO();
+            player.setName(name);
+            player.setState(PlayerState.NOT_IN_LOBBY);
+            player.setGameId(0L);
+            player.setRobotType(RobotType.Circuito);
+        }
+
 
         // Set the Robot Type of the Player
         appcontroller.loadPlayerProperties();

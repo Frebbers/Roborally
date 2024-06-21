@@ -330,8 +330,8 @@ public class AppController implements Observer {
      *
      * @author s224804
      */
-    public void loadPlayerProperties() {
-        if (localPlayer == null) return;
+    public PlayerDTO loadPlayerProperties() {
+        if (localPlayer == null) return null;
 
         if (localPlayer.getId() == null && localPlayer.getId() != 0) {
             updatePlayerID();

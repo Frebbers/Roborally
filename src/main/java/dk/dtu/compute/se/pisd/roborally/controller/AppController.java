@@ -62,11 +62,11 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices(this);
 
-        if (apiServices.isReachable()){
+        if (apiServices.isReachable()) {
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             if (localPlayer != null) {
-            loadPlayerProperties();
+                loadPlayerProperties();
             }
         }
         notConnectedAlert = new Alert(AlertType.WARNING,
@@ -79,19 +79,18 @@ public class AppController implements Observer {
      * The programming phase is then initialized.
      */
     public void createLobby(String name, int boardId, int players) {
-        if (apiServices.isReachable()){
-        onLobbyJoin();
-        // Create the lobby
-        Game game = apiServices.createGame(name, (long) boardId, players);
+        if (apiServices.isReachable()) {
+            onLobbyJoin();
+            // Create the lobby
+            Game game = apiServices.createGame(name, (long) boardId, players);
 
-        // Join the lobby that was just created
-        localPlayer.setState(PlayerState.NOT_READY);
-        apiServices.joinGame(game.id, localPlayer.getId());
+            // Join the lobby that was just created
+            localPlayer.setState(PlayerState.NOT_READY);
+            apiServices.joinGame(game.id, localPlayer.getId());
 
-        // Display the Lobby Window
-        roboRally.createLobbyView(this, game.id);
-        }
-        else {
+            // Display the Lobby Window
+            roboRally.createLobbyView(this, game.id);
+        } else {
             notConnectedAlert.showAndWait();
         }
     }
@@ -184,7 +183,7 @@ public class AppController implements Observer {
      * @return true if the current game was stopped, false otherwise
      */
     public boolean leave(boolean lobbyLeaveRequested) {
-        if(apiServices != null){
+        if (apiServices != null) {
             apiServices.onPlayerLeave(localPlayer.getId());
 
             if (gameController != null) {
@@ -266,8 +265,7 @@ public class AppController implements Observer {
                     setProperty("local.player.name", name);
                 }
             });
-        }
-        else {
+        } else {
             Alert alert = new Alert(AlertType.WARNING,
                     "Error creating character. Check your connection to the server.", ButtonType.OK);
             alert.showAndWait();
@@ -291,21 +289,26 @@ public class AppController implements Observer {
     public ApiServices getApiServices() {
         return apiServices;
     }
+
     /**
      * Writes the ID of the playerDTO object into the properties file
+     *
      * @author s224804
      */
-private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId().toString());}
+    private void updatePlayerID() {
+        setProperty("local.player.id", localPlayer.getId().toString());
+    }
+
     private void onLobbyJoin() {
         //TODO test this thoroughly: scenario where player does not exist on the server
         localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
-        if (localPlayer != null || apiServices.playerExists
+        if (localPlayer != null && apiServices.playerExists
                 (localPlayer.getName(), localPlayer.getId().toString()) == localPlayer) {
             //LocalPlayer is not null and exists on the server
             return;
         } else if (!(getProperty("local.player.name").isEmpty())) {
             //Player does not exist on the server but the name is stored in the config file
-           // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+            // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
             updatePlayerID();
 
@@ -315,17 +318,24 @@ private void updatePlayerID() {setProperty("local.player.id", localPlayer.getId(
         }
     }
 
-    public void toggleReady() {apiServices.updatePlayerState(localPlayer.getId());}
+    public void toggleReady() {
+        apiServices.updatePlayerState(localPlayer.getId());
+    }
 
-    public void setLocalPlayer(PlayerDTO body) {}
+    public void setLocalPlayer(PlayerDTO body) {
+    }
+
     /**
      * Loads the player properties from the config file into the playerDTO object
+     *
      * @author s224804
      */
     public void loadPlayerProperties() {
-    if (localPlayer.getId() == null && localPlayer.getId() != 0) {
-        updatePlayerID();
-    }
+        if (localPlayer == null) return;
+
+        if (localPlayer.getId() == null && localPlayer.getId() != 0) {
+            updatePlayerID();
+        }
         localPlayer.setName(getProperty("local.player.name"));
         localPlayer.setId(Long.parseLong(getProperty("local.player.id")));
         localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));

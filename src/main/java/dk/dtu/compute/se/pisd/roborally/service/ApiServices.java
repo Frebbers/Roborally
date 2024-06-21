@@ -32,6 +32,7 @@ public class ApiServices {
    // private PlayerDTO localPlayer;
 
     public ApiServices(AppController appcontroller) {
+        this.appcontroller = appcontroller;
         updateURLs();
     }
 

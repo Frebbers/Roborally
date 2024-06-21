@@ -292,7 +292,7 @@ public class GameController {
                 if (card != null) {
                     nextCommand = card.command; // get the card's command
                     if (nextCommand.isInteractive()) {
-                        StartPlayerInteractionPhase(nextCommand.getOptions());
+                        StartPlayerInteractionPhase();
                     } else {
                         executeCommand(currentPlayer, nextCommand);
                         finishNextStep(currentPlayer);
@@ -557,7 +557,12 @@ public class GameController {
     }
 
 
-    public void StartPlayerInteractionPhase(List<Command> options) {
+    /**
+     * Changes game state to interactive and initiates polling.
+     * Players are waiting for the "interactor" to make a choice.
+     *
+     */
+    public void StartPlayerInteractionPhase() {
         board.setPhase(PLAYER_INTERACTION);
         Player currentPlayer = board.getCurrentPlayer();
         currentPlayer.setState(PlayerState.INTERACTING);
@@ -576,6 +581,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Executes when a player makes a choice during the interaction phase.
+     * Updates the player moves and state while terminating the polling for the "interactor".
+     *
+     * @param command
+     */
     public void finishPlayerInteractionPhase(Command command) {
         stopPollingForMoves();
         Player currentPlayer = board.getCurrentPlayer();
@@ -592,7 +603,11 @@ public class GameController {
         finishPollingInteractionPhase(moveTypes);
     }
 
-
+    /**
+     * Executes for the pollers, when the "interactor" has made a choice.
+     * Terminates polling and continues activation phase.
+     * @param moveTypes
+     */
     public void finishPollingInteractionPhase(List<String> moveTypes) {
         Player currentPlayer = board.getCurrentPlayer();
         for (int i = 0; i < moveTypes.size(); i++) {

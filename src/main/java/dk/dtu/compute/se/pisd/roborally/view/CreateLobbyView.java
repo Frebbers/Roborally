@@ -33,7 +33,7 @@ public class CreateLobbyView extends BaseView {
     private Text connectToServerFeedback;
     private Button startButton;
     private String lobbyName;
-    private Integer numberOfPlayers = 1;
+    private Integer numberOfPlayers;
     private Integer boardId = 1;
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(1, 2, 3, 4, 5, 6);
@@ -84,6 +84,7 @@ public class CreateLobbyView extends BaseView {
         );
         comboBox.setItems(options);
         comboBox.getSelectionModel().select("2");
+        numberOfPlayers = Integer.valueOf(comboBox.getValue());
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 numberOfPlayers = Integer.valueOf(newValue);

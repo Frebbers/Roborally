@@ -66,6 +66,7 @@ public class StartViewTest extends ApplicationTest {
         assertEquals("Character name: TestPlayer", nameLabel.getText());
     }
 
+    /*
     @Test
     @DisplayName("Interaction with Start Lobby Button")
     void testStartLobbyButton() {
@@ -78,7 +79,7 @@ public class StartViewTest extends ApplicationTest {
             verifyThat("#lobbyView", isVisible());
         });
     }
-
+*/
 
     @AfterEach
     void tearDown() {

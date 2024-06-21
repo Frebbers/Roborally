@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.roborally.controller.BoardData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,13 @@ public class PriorityAntennaTest {
         JsonReader jsonReader = new JsonReader(1);
         boardData = jsonReader.readBoardJson();
         priorityAntenna = boardData.priorityAntennas.get(0);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        priorityAntenna = null;
+        boardData = null;
+        board = null;
     }
 
     @Test

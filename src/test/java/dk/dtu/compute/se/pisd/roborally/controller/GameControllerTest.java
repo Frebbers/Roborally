@@ -24,7 +24,7 @@ public class GameControllerTest {
        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
        antennaList.add (new PriorityAntenna(2,2));
        BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null,null, null, null, antennaList);
-        Board board = new Board(data);
+        Board board = new Board(1L, data);
         RoboRally roboRally = new RoboRally();
         AppController appController = new AppController(roboRally);
         gameController = new GameController(appController, board);

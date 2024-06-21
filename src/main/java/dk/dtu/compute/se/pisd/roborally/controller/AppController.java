@@ -339,5 +339,8 @@ public class AppController implements Observer {
         localPlayer.setName(getProperty("local.player.name"));
         localPlayer.setId(Long.parseLong(getProperty("local.player.id")));
         localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
+        if (localPlayer.getRobotType() == null) {
+            localPlayer.setRobotType(RobotType.Circuito);
+        }
     }
 }

@@ -145,7 +145,9 @@ public class LobbyBrowserView extends BaseView {
             apiServices.setApiType(ApiType.LOCAL);
             isConnected = apiServices.testConnection("localhost");
         }
-
+        if (isConnected) {
+            lobbyBrowserController.startLobbyPolling(lobbyListView);
+        }
         updateConnectionFeedback(isConnected, connectionType);
     }
 

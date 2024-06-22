@@ -38,13 +38,15 @@ public class LobbyBrowserController {
     }
 
     public void startLobbyPolling(ListView<String> lobbyListView) {
-
+        System.out.println("Start lobby polling called");
+        if (apiServices.isReachable()) {
             scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-                if (apiServices.isReachable()) {
-                    updateLobbies(lobbyListView, true);
-                }
-            }), 0, 2000, TimeUnit.MILLISECONDS);
 
+                System.out.println("Polling for lobbies");
+                updateLobbies(lobbyListView, true);
+
+            }), 0, 2000, TimeUnit.MILLISECONDS);
+        }
     }
 
     public void stopLobbyPolling() {

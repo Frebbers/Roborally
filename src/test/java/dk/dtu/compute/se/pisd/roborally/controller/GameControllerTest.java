@@ -28,6 +28,7 @@ public class GameControllerTest {
         gameController = new GameController(appController, board);
         for (long i = 0; i < 6; i++) {
             Player player = new Player(i, "Player " + i,RobotType.Boltz ,PlayerState.READY, null);
+            player.setBoard(board);
             board.addPlayer(player);
             player.setSpace(board.getSpace((int) i, (int) i));
             assertNotNull(player.getSpace());

@@ -201,7 +201,7 @@ public class MyStepdefs {
 
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
-        ApiServices apiServices = new ApiServices();
+        ApiServices apiServices = new ApiServices(gameController.getAppController());
 
         Game game = apiServices.createGame("Game1", 1L, 2);
         PlayerDTO player = apiServices.createPlayer("Player1");
@@ -217,7 +217,7 @@ public class MyStepdefs {
 
     @Then("another game can be initialized online")
     public void anotherGameCanBeInitializedOnline() {
-        ApiServices apiServices = new ApiServices();
+        ApiServices apiServices = new ApiServices(gameController.getAppController());
 
         Game game = apiServices.createGame("Game2", 1L, 3);
         PlayerDTO player = apiServices.createPlayer("Player2");

@@ -8,6 +8,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -183,10 +184,11 @@ public class LobbyBrowserView extends BaseView {
                     File selectedFile = files[boardIndex];
                     return new Image(selectedFile.toURI().toString());
                 } else {
-                    System.err.println("Board index out of range or no PNG files found.");
+                    showAlert(Alert.AlertType.ERROR, "Invalid file", "Board index out of range or no PNG files found.");
                 }
             } else {
-                System.err.println("Boards directory not found.");
+                showAlert(Alert.AlertType.ERROR, "Board directory not found.", "Board directory not found. Please check the resources folder.");
+                //System.err.println("Boards directory not found.");
             }
         } catch (Exception e) {
             e.printStackTrace();

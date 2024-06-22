@@ -30,7 +30,6 @@ import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.application.Platform;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -69,8 +68,6 @@ public class AppController implements Observer {
                 loadPlayerProperties();
             }
         }
-        notConnectedAlert = new Alert(AlertType.WARNING,
-                "Error connecting to the server. Check your connection to the server.", ButtonType.OK);
     }
 
 
@@ -205,6 +202,8 @@ public class AppController implements Observer {
      */
     public void exit() {
         if (gameController != null) {
+            //TODO test whether this works and delete commented code if it does
+            /*
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Exit RoboRally?");
             alert.setContentText("Are you sure you want to exit RoboRally?");
@@ -214,10 +213,14 @@ public class AppController implements Observer {
                 return; // return without exiting the application
             }
         }
-        // If the user did not cancel, the RoboRally application will exit after the option to save the game
-        if (gameController == null || leave(false)) {
-            Platform.exit();
-            System.exit(0);
+             */
+            if (roboRally.getActiveView().showExitConfirmationAlert()) {
+                // If the user did not cancel, the RoboRally application will exit after the option to save the game
+                if (gameController == null || leave(false)) {
+                    Platform.exit();
+                    System.exit(0);
+                }
+            }
         }
     }
 
@@ -258,18 +261,17 @@ public class AppController implements Observer {
                 updatePlayerID();
                 if (apiServices.createPlayer(name) == null) {
                     System.out.println("Error creating player");
-                    Alert alert = new Alert(AlertType.ERROR,
-                            "Error creating player. Check your connection to the server.", ButtonType.OK);
-                    alert.showAndWait();
+                    roboRally.getActiveView().showAlert(Alert.AlertType.ERROR,
+                            "Error creating player. Check your connection to the server.", "Error creating player.");
                 } else {
                     System.out.println("Player created");
                     setProperty("local.player.name", name);
                 }
             });
         } else {
-            Alert alert = new Alert(AlertType.WARNING,
-                    "Error creating character. Check your connection to the server.", ButtonType.OK);
-            alert.showAndWait();
+            roboRally.getActiveView().showAlert(Alert.AlertType.WARNING, "Failed to create character!",
+                    "Error creating character. Check your connection to the server.");
+
         }
     }
 

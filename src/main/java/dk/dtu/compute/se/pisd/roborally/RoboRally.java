@@ -216,6 +216,9 @@ public class RoboRally extends Application {
         return stage.getScene();
     }
     public Stage getStage(){return stage;}
+    public BaseView getActiveView(){
+        return (BaseView) boardRoot.getCenter();
+    }
 
     /**
      * Call the javafx method launch() with the given arguments. This automatically calls RoboRally.start().

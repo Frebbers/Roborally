@@ -241,7 +241,7 @@ public class MyStepdefs {
     public void thePlayerCannotSeeOtherPlayersCards() {
         for (Player player : gameController.board.getPlayers()) {
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
-                Assertions.assertNull(player.getProgramField(i));
+                Assertions.assertNull(player.getProgramField(i).getCard());
             }
         }
     }

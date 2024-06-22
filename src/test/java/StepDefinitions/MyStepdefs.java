@@ -3,6 +3,7 @@ package StepDefinitions;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -201,7 +202,33 @@ public class MyStepdefs {
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
         ApiServices apiServices = new ApiServices();
-        assertEquals(apiServices.joinGame(gameController.board.getGameId(),1L),apiServices.getGameById(gameController.board.getGameId()));
+
+        Game game = apiServices.createGame("Game1", 1L, 2);
+        PlayerDTO player = apiServices.createPlayer("Player1");
+
+        Game joinGame = apiServices.joinGame(game.id,player.getId());
+        Game getGame = apiServices.getGameById(game.id);
+
+        // Direct comparison of objects does not work as each method creates a new Game
+        // object but with the same properties. This does, however, still confirm that
+        // the games are the same.
+        assertEquals(joinGame.id, getGame.id);
+    }
+
+    @Then("another game can be initialized online")
+    public void anotherGameCanBeInitializedOnline() {
+        ApiServices apiServices = new ApiServices();
+
+        Game game = apiServices.createGame("Game2", 1L, 3);
+        PlayerDTO player = apiServices.createPlayer("Player2");
+
+        Game joinGame = apiServices.joinGame(game.id,player.getId());
+        Game getGame = apiServices.getGameById(game.id);
+
+        // Direct comparison of objects does not work as each method creates a new Game
+        // object but with the same properties. This does, however, still confirm that
+        // the games are the same.
+        assertEquals(joinGame.id, getGame.id);
     }
 
     @When("All players have finished their programming phase")

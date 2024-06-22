@@ -59,7 +59,7 @@ public class LobbyBrowserView extends BaseView {
         // Adding listener to connectionTypeDropdown
         connectionTypeDropdown.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             initializeConnection(newValue);
-
+            //TODO fix that if the connection is not successful, the thread is sinkholed
             if(apiServices.isReachable()){
                 lobbyBrowserController.updateLobbies(lobbyListView);
             }

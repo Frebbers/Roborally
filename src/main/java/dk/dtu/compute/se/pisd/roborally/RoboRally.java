@@ -216,6 +216,11 @@ public class RoboRally extends Application {
         return stage.getScene();
     }
     public Stage getStage(){return stage;}
+    /**
+     * Get the active view. Used to access BaseView methods.
+     * @return the active view
+     * @author s224804
+     */
     public BaseView getActiveView(){
         return (BaseView) boardRoot.getCenter();
     }

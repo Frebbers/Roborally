@@ -21,9 +21,9 @@ public class GameControllerTest {
 
 
     @BeforeEach public void setUp() {
-       List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
-       antennaList.add (new PriorityAntenna(2,2));
-       BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null,null, null, null, antennaList);
+        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
+        antennaList.add (new PriorityAntenna(2,2));
+        BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null,null, null, null, antennaList);
         Board board = new Board(null, data);
         RoboRally roboRally = new RoboRally();
         AppController appController = new AppController(roboRally);

@@ -24,12 +24,13 @@ public class GameControllerTest {
        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
        antennaList.add (new PriorityAntenna(2,2));
        BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null,null, null, null, antennaList);
-        Board board = new Board(data);
+        Board board = new Board((long)1, data);
         RoboRally roboRally = new RoboRally();
         AppController appController = new AppController(roboRally);
         gameController = new GameController(appController, board);
         for (long i = 0; i < 6; i++) {
             Player player = new Player(i, "Player " + i,RobotType.Boltz ,PlayerState.READY, null);
+            player.setBoard(board);
             board.addPlayer(player);
             player.setSpace(board.getSpace((int) i, (int) i));
             assertNotNull(player.getSpace());

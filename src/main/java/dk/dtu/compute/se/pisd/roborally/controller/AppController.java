@@ -64,8 +64,8 @@ public class AppController implements Observer {
         if (apiServices.isReachable()){
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
         }
-        notConnectedAlert = new Alert(AlertType.WARNING,
-                "Error connecting to the server. Check your connection to the server.", ButtonType.OK);
+        //notConnectedAlert = new Alert(AlertType.WARNING,
+        //        "Error connecting to the server. Check your connection to the server.", ButtonType.OK);
     }
 
 

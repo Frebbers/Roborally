@@ -3,15 +3,11 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
 
 public class LobbyBrowserViewTest extends ApplicationTest {
 
@@ -94,6 +90,6 @@ public class LobbyBrowserViewTest extends ApplicationTest {
             e.printStackTrace();
         }
     }
-    
+
  */
 }

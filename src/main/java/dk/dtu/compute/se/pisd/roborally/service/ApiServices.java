@@ -2,17 +2,16 @@ package dk.dtu.compute.se.pisd.roborally.service;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
-import dk.dtu.compute.se.pisd.roborally.model.ApiType;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.MoveDTO;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
-import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
-import dk.dtu.compute.se.pisd.roborally.model.RobotType;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +24,14 @@ public class ApiServices {
     private String GAMES_URL;
     private String PLAYERS_URL;
     private String MOVES_URL;
+    private AppController appcontroller;
 
     private final RestTemplate restTemplate = new RestTemplate();
     //LocalPlayer is stored in AppController now
    // private PlayerDTO localPlayer;
 
-    public ApiServices(){
+    public ApiServices(AppController appcontroller) {
+        this.appcontroller = appcontroller;
         updateURLs();
     }
 
@@ -93,6 +94,7 @@ public class ApiServices {
     public Game createGame(String name, Long boardId, int maxPlayers) {
         Game game = new Game();
         game.name = name;
+        game.gameState = GameState.LOBBY;
         game.boardId = boardId;
         game.maxPlayers = maxPlayers;
 
@@ -133,6 +135,27 @@ public class ApiServices {
         }
     }
 
+    public boolean updateGameState(Long gameId, GameState newState) {
+        String url = GAMES_URL + "/" + gameId;
+        Game game = getGameById(gameId);
+        if (game == null) {
+            // Game not found, return false
+            return false;
+        }
+        // Set the new state to the game object
+        game.gameState = newState;
+
+        try {
+            // Send the updated game object to the server
+            restTemplate.put(url, game);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Failed to update game state: " + e.getMessage());
+            return false;
+        }
+    }
+
+
     public List<PlayerDTO> getPlayersInGame(Long gameId){
         String lobbyUrl = GAMES_URL + "/" + gameId + "/players";
         ResponseEntity<PlayerDTO[]> response = restTemplate.getForEntity(lobbyUrl, PlayerDTO[].class);
@@ -140,16 +163,15 @@ public class ApiServices {
     }
 
     public PlayerDTO createPlayer(String name){
-        // Create a new player on the client and set the name (Do not create a constructor for this)
-        PlayerDTO player = new PlayerDTO();
-        player.setName(name);
-        player.setState(PlayerState.NOT_IN_LOBBY);
-        player.setGameId(0L);
-
-        // Set the Robot Type of the Player
-        int robotIndex = Integer.parseInt(getProperty("local.player.robotType"));
-        RobotType robotType = Utilities.toEnum(RobotType.class, robotIndex);
-        player.setRobotType(robotType);
+        // Create a new player on the client and set the name
+        PlayerDTO player = appcontroller.loadPlayerProperties();
+        if (player == null) {
+            player = new PlayerDTO();
+            player.setName(name);
+            player.setState(PlayerState.NOT_IN_LOBBY);
+            player.setGameId(0L);
+            player.setRobotType(RobotType.Circuito);
+        }
 
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response;
@@ -174,7 +196,7 @@ public class ApiServices {
         List<PlayerDTO> players = getAllPlayers();
         for (PlayerDTO player : players) {
             if (player.getName().equals(name)) {
-                return new PlayerDTO();
+                return new PlayerDTO(Long.parseLong(playerID));
             }
         }
         return null;
@@ -279,11 +301,49 @@ public class ApiServices {
         restTemplate.put(url, oldMove);
     }
 
+
+    public void setApiType(ApiType apiType){
+        AppConfig.setProperty("api.type", apiType.toString());
+    }
+
+    public String getServerIP(){
+        String s = AppConfig.getProperty("server.base.url");
+        try {
+            URL url = new URL(s);
+            return url.getHost();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean isReachable(){
         try {
             getAllGames();
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Test connection to and, if reachable, set API IP to the given IP address.
+     *
+     * @param ip IP-address to connect to
+     * @return true if successfully connected, false otherwise
+     */
+    public boolean connectToServer(String ip) {
+
+        if (testConnection(ip)) {
+            AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
+            AppConfig.setProperty("server.games.url", "http://" + ip + ":8080/api/games");
+            AppConfig.setProperty("server.moves.url", "http://" + ip + ":8080/api/moves");
+            AppConfig.setProperty("server.players.url", "http://" + ip + ":8080/api/players");
+
+            updateURLs();
+
+            return true;
+        }
+        else {
             return false;
         }
     }
@@ -301,6 +361,24 @@ public class ApiServices {
         boolean verdict = isReachable();
         updateURLs();
         return verdict;
+    }
+
+    /**
+     * Checks if the specified player is the host of the specified game.
+     *
+     * @param gameId the ID of the game to check
+     * @param playerId the ID of the player to check
+     * @return true if the player is the host, false otherwise
+     */
+    public boolean isPlayerHost(Long gameId, Long playerId) {
+        Game game = getGameById(gameId);
+        if (game != null && !getPlayersInGame(gameId).isEmpty()) {
+            // Check if the first player in the list is the one who is checking
+            Long hostId = getPlayersInGame(gameId).get(0).getId();
+            return Objects.equals(hostId, playerId);
+        }
+        // Return false if the game is not found or there are no players
+        return false;
     }
 
     /**

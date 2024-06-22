@@ -49,6 +49,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.PLAYER_INTERACTION;
  */
 public class GameController {
     private AppController appController;
+    private ApiServices apiServices;
 
     final public Board board;
     public ConveyorBeltController beltCtrl;
@@ -67,6 +68,7 @@ public class GameController {
      */
     public GameController(@NotNull AppController appController, @NotNull Board board) {
         this.appController = appController;
+        this.apiServices = appController.getApiServices();
         this.board = board;
         this.boardController = new BoardController(this);
         this.beltCtrl = new ConveyorBeltController();
@@ -292,7 +294,7 @@ public class GameController {
                 if (card != null) {
                     nextCommand = card.command; // get the card's command
                     if (nextCommand.isInteractive()) {
-                        StartPlayerInteractionPhase(nextCommand.getOptions());
+                        StartPlayerInteractionPhase();
                     } else {
                         executeCommand(currentPlayer, nextCommand);
                         finishNextStep(currentPlayer);
@@ -316,8 +318,20 @@ public class GameController {
         // Check if there is a winner
         winner = board.getPlayers().stream().filter(player -> player.getCheckpoints().size() == board.getData().checkpoints.size()).findFirst().orElse(null);
 
-        // If there is a winner, prepare and display the results
+        // If there is a winner, prepare and display the results and close the game
         if (winner != null) {
+            // Get the Player object from the board
+            PlayerDTO playerDTO = AppController.localPlayer;
+            Player localPlayer = board.getLocalPlayer(playerDTO);
+
+            // Get the gameId from the local player
+            Long gameId = localPlayer.getGameId();
+
+            // Update the GameState of the game if the player is the host of the game
+            if(apiServices.isPlayerHost(gameId, localPlayer.getId())) {
+                apiServices.updateGameState(gameId, GameState.FINISHED);
+            }
+
             result.append(winner.getName()).append(" has won!\n\n");
             for (Player player : board.getPlayers()) {
                 if (player != winner) {
@@ -354,7 +368,6 @@ public class GameController {
                     }
                 });
             });
-
         }
     }
 
@@ -557,7 +570,12 @@ public class GameController {
     }
 
 
-    public void StartPlayerInteractionPhase(List<Command> options) {
+    /**
+     * Changes game state to interactive and initiates polling.
+     * Players are waiting for the "interactor" to make a choice.
+     *
+     */
+    public void StartPlayerInteractionPhase() {
         board.setPhase(PLAYER_INTERACTION);
         Player currentPlayer = board.getCurrentPlayer();
         currentPlayer.setState(PlayerState.INTERACTING);
@@ -576,6 +594,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Executes when a player makes a choice during the interaction phase.
+     * Updates the player moves and state while terminating the polling for the "interactor".
+     *
+     * @param command
+     */
     public void finishPlayerInteractionPhase(Command command) {
         stopPollingForMoves();
         Player currentPlayer = board.getCurrentPlayer();
@@ -592,7 +616,11 @@ public class GameController {
         finishPollingInteractionPhase(moveTypes);
     }
 
-
+    /**
+     * Executes for the pollers, when the "interactor" has made a choice.
+     * Terminates polling and continues activation phase.
+     * @param moveTypes
+     */
     public void finishPollingInteractionPhase(List<String> moveTypes) {
         Player currentPlayer = board.getCurrentPlayer();
         for (int i = 0; i < moveTypes.size(); i++) {

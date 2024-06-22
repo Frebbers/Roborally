@@ -1,5 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.service;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
+import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -7,12 +10,14 @@ public class ApiServicesTest {
     @Test
     public void testIsReachable() {
         // Test if the server is reachable
-        assert new ApiServices().isReachable();
+        AppController appController = new AppController(new RoboRally());
+        assert new ApiServices(appController).isReachable();
     }
 
     @Test
     public void testUpdateURLs() {
-        ApiServices apiServices = new ApiServices();
+        AppController appController = new AppController(new RoboRally());
+        ApiServices apiServices = new ApiServices(appController);
         String apiType = AppConfig.getProperty("api.type");
 
         // Store current properties in application.properties (because this test changes them
@@ -46,9 +51,33 @@ public class ApiServicesTest {
 
     @Test
     public void testTestConnection() { // Must be running roboAPI for this test to pass
-        ApiServices apiServices = new ApiServices();
+        AppController appController = new AppController(new RoboRally());
+        ApiServices apiServices = new ApiServices(appController);
 
         Assertions.assertTrue(apiServices.testConnection("localhost"));
         Assertions.assertFalse(apiServices.testConnection("test123"));
+    }
+
+    @Test
+    public void testConnectToServer() { // Must be running roboAPI for this test to pass
+        AppController appController = new AppController(new RoboRally());
+        ApiServices apiServices = new ApiServices(appController);
+        String ip;
+
+        // Test positive scenario
+        ip = "localhost";
+        Assertions.assertTrue(apiServices.connectToServer(ip));
+        Assertions.assertEquals(AppConfig.getProperty("server.base.url"), "http://" + ip + ":8080/api");
+        Assertions.assertEquals(AppConfig.getProperty("server.games.url"), "http://" + ip + ":8080/api/games");
+        Assertions.assertEquals(AppConfig.getProperty("server.moves.url"), "http://" + ip + ":8080/api/moves");
+        Assertions.assertEquals(AppConfig.getProperty("server.players.url"), "http://" + ip + ":8080/api/players");
+
+        // Test negative scenario
+        ip = "test123";
+        Assertions.assertFalse(apiServices.connectToServer(ip));
+        Assertions.assertNotEquals(AppConfig.getProperty("server.base.url"), "http://" + ip + ":8080/api");
+        Assertions.assertNotEquals(AppConfig.getProperty("server.games.url"), "http://" + ip + ":8080/api/games");
+        Assertions.assertNotEquals(AppConfig.getProperty("server.moves.url"), "http://" + ip + ":8080/api/moves");
+        Assertions.assertNotEquals(AppConfig.getProperty("server.players.url"), "http://" + ip + ":8080/api/players");
     }
 }

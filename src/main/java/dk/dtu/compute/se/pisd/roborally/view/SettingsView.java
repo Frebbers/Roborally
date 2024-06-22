@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import dk.dtu.compute.se.pisd.roborally.util.Utilities;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,29 +21,60 @@ import java.io.File;
 import java.net.URL;
 import java.util.Objects;
 
-public class RobotSettingsView extends BaseView {
+public class SettingsView extends BaseView {
     private AppController appController;
+    private ApiServices apiServices;
     private TextField nameField;
     private GridPane robotsSelection;
 
-    public RobotSettingsView(AppController appController) {
+    public SettingsView(AppController appController) {
         super(appController);
         this.appController = appController;
+        this.apiServices = appController.getApiServices();
     }
 
     @Override
+    //TODO implement a save button that saves the name and robot type to the configuration file.
     public void initialize(){
+
+        // Server and Lobby list on the left
+        Text serverHeader = new Text("Server:");
+
+        TextField serverIPDialog = new TextField();
+        serverIPDialog.setPromptText("Enter server IP");
+        serverIPDialog.setText(apiServices.getServerIP());
+        Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
+
+        // Server button and feedback
+        Text connectToServerFeedback = new Text();
+
+        Button connectToServerButton = new Button("Connect to server");
+        connectToServerButton.setOnAction(event -> {
+            String ip = serverIPDialog.getText();
+            if (apiServices.connectToServer(ip)) {
+                connectToServerFeedback.setFill(Color.GREEN);
+                connectToServerFeedback.setText("Connected to " + ip);
+            } else {
+                connectToServerFeedback.setFill(Color.RED);
+                connectToServerFeedback.setText("Failed to connect to " + ip);
+            }
+        });
+
+        HBox connectToServerBox = new HBox(connectToServerButton, connectToServerFeedback);
+        connectToServerBox.setSpacing(10);
+
         // Name entry
-        Text nameHeader = new Text("Enter your name:");
+        Text nameHeader = new Text("Name:");
         nameField = new TextField();
         nameField.setPromptText("Type your name here");
         nameField.setText(AppConfig.getProperty("local.player.name"));
         Utilities.restrictTextLength(nameField, 8);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            saveName(newValue); // Method to save the name each time it is modified
+            saveName(newValue);
         });
 
         // Robots selection grid
+        Text robotHeader = new Text("Robot:");
         robotsSelection = new GridPane();
         robotsSelection.setHgap(10);
         robotsSelection.setVgap(10);
@@ -55,7 +88,7 @@ public class RobotSettingsView extends BaseView {
         bottomContainer.setPadding(new Insets(10));
 
         // Layout arrangement
-        VBox mainLayout = new VBox(20, nameHeader, nameField, robotsSelection, backButton);
+        VBox mainLayout = new VBox(20, serverHeader, serverIPDialog, connectToServerBox, nameHeader, nameField, robotHeader, robotsSelection, backButton);
         getChildren().addAll(mainLayout);
 
         // Highlight the selected robot from the configuration
@@ -90,7 +123,7 @@ public class RobotSettingsView extends BaseView {
             // Handle errors (e.g., directory not found, no permission, etc.)
         }
     }
-
+//TODO make sure this is only called when the user clicks a save button.
     private void saveName(String name) {
         AppConfig.setProperty("local.player.name", name);
     }

@@ -1,30 +1,76 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import com.mysql.cj.util.TestUtils;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
+
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Checkpoint;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import dk.dtu.compute.se.pisd.roborally.view.CheckpointView;
-import dk.dtu.compute.se.pisd.roborally.view.SpaceView;
-import javafx.scene.image.ImageView;
-import org.junit.jupiter.api.Assertions;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.RobotType;
+import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@RunWith(TestUtils.class)
 public class CheckPointTest {
 
+
+    private Player player;
+
+    @BeforeEach
+    public void setUp() {
+        player = new Player(1L, "Test Player", RobotType.Circuito, PlayerState.READY, 100L);
+    }
+
     @Test
-    public void TestGetCheckpointId() {
+    public void testAddAndGetCheckpoint() {
+        Checkpoint cp1 = new Checkpoint(0, 0, 1);
+        player.setCheckpoint(cp1);
+        assertNotNull(player.getCheckpoint(0), "Checkpoint should be added to the list");
+        assertEquals(cp1, player.getCheckpoint(0), "Retrieved checkpoint should match the added checkpoint");
+    }
+
+    @Test
+    public void testAddCheckpointInOrder() {
+        Checkpoint cp1 = new Checkpoint(0, 0, 1);
+        Checkpoint cp2 = new Checkpoint(1, 1, 2);
+        player.setCheckpoint(cp1);
+        player.setCheckpoint(cp2);
+        assertEquals(2, player.getCheckpoints().size(), "Both checkpoints should be added in order");
+    }
+
+    @Test
+    public void testAddCheckpointOutOfOrder() {
+        Checkpoint cp1 = new Checkpoint(0, 0, 2);
+        player.setCheckpoint(cp1);
+        assertTrue(player.getCheckpoints().isEmpty(), "Checkpoint should not be added if it does not follow the order");
+    }
+
+    @Test
+    public void testAddDuplicateCheckpoint() {
+        Checkpoint cp1 = new Checkpoint(0, 0, 1);
+        player.setCheckpoint(cp1);
+        player.setCheckpoint(cp1);
+        assertEquals(1, player.getCheckpoints().size(), "Duplicate checkpoints should not be added");
+    }
+
+    @Test
+    public void testGetAllCheckpoints() {
+        Checkpoint cp1 = new Checkpoint(0, 0, 1);
+        Checkpoint cp2 = new Checkpoint(1, 1, 2);
+        player.setCheckpoint(cp1);
+        player.setCheckpoint(cp2);
+        List<Checkpoint> checkpoints = player.getCheckpoints();
+        assertEquals(2, checkpoints.size(), "Should retrieve all checkpoints");
+        assertTrue(checkpoints.contains(cp1) && checkpoints.contains(cp2), "All checkpoints should be correct");
+    }
+
+    @Test
+    public void testGetCheckpointId() {
         // Arrange, acting and asserts ID, x and y. Testing data. Test for view are underneath.
         int checkpointId = 1;
         Checkpoint checkpoint = new Checkpoint(0, 0, checkpointId);
@@ -33,7 +79,7 @@ public class CheckPointTest {
     }
 
     @Test
-    public void TestGetXCoordinate() {
+    public void testGetXCoordinate() {
         int x = 5;
         Checkpoint checkpoint = new Checkpoint(x, 0, 1);
         int retrievedX = checkpoint.x;
@@ -41,7 +87,7 @@ public class CheckPointTest {
     }
 
     @Test
-    public void TestGetYCoordinate() {
+    public void testGetYCoordinate() {
         int y = 10;
         Checkpoint checkpoint = new Checkpoint(0, y, 1);
         int retrievedY = checkpoint.y;

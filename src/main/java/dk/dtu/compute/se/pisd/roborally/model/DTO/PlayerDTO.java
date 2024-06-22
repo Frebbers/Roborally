@@ -18,6 +18,7 @@ public class PlayerDTO {
         this.state = state;
     }
     public PlayerDTO(){}
+    public PlayerDTO(long id){this.id = id;}
 
     public Long getId() {
         return id;

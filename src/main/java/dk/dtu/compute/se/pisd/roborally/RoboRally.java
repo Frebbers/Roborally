@@ -23,8 +23,6 @@ package dk.dtu.compute.se.pisd.roborally;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
-import dk.dtu.compute.se.pisd.roborally.controller.LobbyController;
 import dk.dtu.compute.se.pisd.roborally.view.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -66,7 +64,7 @@ public class RoboRally extends Application {
 
         AppController appController = new AppController(this);
 
-        // create the primary scene with the a menu bar and a pane for
+        // create the primary scene with the menu bar and a pane for
         // the board view (which initially is empty); it will be filled
         // when the user creates a new game or loads a game
         boardRoot = new BorderPane();
@@ -120,7 +118,7 @@ public class RoboRally extends Application {
 
         if (appController != null) {
             // create and add view for new board
-            RobotSettingsView robotSettingsView = new RobotSettingsView(appController);
+            SettingsView robotSettingsView = new SettingsView(appController);
             robotSettingsView.initialize();
             boardRoot.setCenter(robotSettingsView);
         }
@@ -161,6 +159,7 @@ public class RoboRally extends Application {
             CreateLobbyView createLobbyView = new CreateLobbyView(appController);
             createLobbyView.initialize();
             boardRoot.setCenter(createLobbyView);
+            createLobbyView.setId("lobbyView");
         }
 
         stage.sizeToScene();
@@ -217,6 +216,9 @@ public class RoboRally extends Application {
         return stage.getScene();
     }
     public Stage getStage(){return stage;}
+    public BaseView getActiveView(){
+        return (BaseView) boardRoot.getCenter();
+    }
 
     /**
      * Call the javafx method launch() with the given arguments. This automatically calls RoboRally.start().

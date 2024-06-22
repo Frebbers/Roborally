@@ -1,14 +1,21 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
+import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.GameState;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 
+import javax.swing.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +53,7 @@ public class LobbyBrowserController {
         }
     }
 
-    private void updateLobbies(ListView<String> lobbyListView) {
+    public void updateLobbies(ListView<String> lobbyListView) {
         List<Game> games = appController.getApiServices().getAllGames();
         ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -54,6 +61,10 @@ public class LobbyBrowserController {
         lobbyMap.clear();
 
         for (Game game : games) {
+            if(game.gameState == GameState.IN_PROGRESS || game.gameState == GameState.FINISHED) {
+                continue;
+            }
+
             // Get the list of players for each lobby
             List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
 
@@ -94,38 +105,30 @@ public class LobbyBrowserController {
         return false;
     }
 
-    /**
-     * Test connection to and, if reachable, set API IP to the given IP address.
-     *
-     * @param ip IP-address to connect to
-     * @return true if successfully connected, false otherwise
-     */
-    public boolean connectToServer(String ip) {
-        System.out.println("Joining IP Address: " + ip);
-
-        if (apiServices.testConnection(ip)) {
-            AppConfig.setProperty("server.base.url", "http://" + ip + ":8080/api");
-            AppConfig.setProperty("server.games.url", "http://" + ip + ":8080/api/games");
-            AppConfig.setProperty("server.moves.url", "http://" + ip + ":8080/api/moves");
-            AppConfig.setProperty("server.players.url", "http://" + ip + ":8080/api/players");
-
-            apiServices.updateURLs();
-
-            System.out.println("Successfully connected to server " + ip);
-            return true;
-        }
-        else {
-            System.out.println("Failed to connect to server " + ip);
-            return false;
-        }
-    }
-
     public void joinSelectedLobby(String gameName) {
+        appController.onLobbyJoin();
         Long gameId = lobbyMap.get(gameName);
         if (gameId != null) {
+            PlayerDTO localPlayer = AppController.localPlayer;
+
+            // Get the list of players for the lobby
+            List<PlayerDTO> players = apiServices.getPlayersInGame(gameId);
+
+            // Check if localPlayer is already in the list of players
+            for (PlayerDTO player : players) {
+                if (player.getId().equals(localPlayer.getId())) {
+                    // Use Alert class to display that localPlayer is already in the game
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "You are already within this game");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+
+            // If localPlayer is not found in the list, join the lobby
             appController.joinLobby(gameId);
         } else {
             System.out.println("No game selected.");
         }
     }
+
 }

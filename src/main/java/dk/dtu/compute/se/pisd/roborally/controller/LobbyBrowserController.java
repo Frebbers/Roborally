@@ -42,7 +42,6 @@ public class LobbyBrowserController {
                 if (apiServices.isReachable()) {
                     updateLobbies(lobbyListView);
                 }
-                //updateLobbies(lobbyListView);
             }), 0, 2000, TimeUnit.MILLISECONDS);
 
     }
@@ -84,7 +83,6 @@ public class LobbyBrowserController {
     public Game getGameByName(String gameName){
         // Get the gameID from the map
         Long gameId = lobbyMap.get(gameName);
-
         // Get the lobby from the API
         return apiServices.getGameById(gameId);
     }

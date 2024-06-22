@@ -51,6 +51,8 @@ public class LobbyBrowserView extends BaseView {
 
         // Dropdown for selecting connection type
         ComboBox<String> connectionTypeDropdown = new ComboBox<>();
+        connectionTypeDropdown.setId("connectionTypeDropdown");
+
         connectionTypeDropdown.getItems().addAll("Local", "Server");
         connectionTypeDropdown.setValue("Server");
 
@@ -70,6 +72,7 @@ public class LobbyBrowserView extends BaseView {
         lobbyListView = new ListView<>();
         lobbyListView.setPrefWidth(300);
         lobbyListView.setPrefHeight(400);
+        lobbyListView.setId("lobbyListView");
 
         // On the left
         VBox leftContainer = new VBox(10, serverHeader, connectToServerBox, new Text("Lobbies:"), lobbyListView);

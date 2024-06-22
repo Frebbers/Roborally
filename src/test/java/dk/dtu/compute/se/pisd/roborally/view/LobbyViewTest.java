@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -10,9 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-public class CreateLobbyViewTest extends ApplicationTest {
+import static javafx.scene.input.KeyCode.L;
 
-    private CreateLobbyView createLobbyView;
+public class LobbyViewTest extends ApplicationTest {
+
+    private SettingsView settingsView;
+    private LobbyView lobbyView;
     private AppController appController;
     private Stage testStage;
 
@@ -24,11 +28,12 @@ public class CreateLobbyViewTest extends ApplicationTest {
         appController = new AppController(roboRally);
 
         roboRally.start(stage);
-        createLobbyView = new CreateLobbyView(appController);
-        createLobbyView.initialize();
+        Long gameId = createGameId();
+        lobbyView = new LobbyView(appController, gameId);
+        lobbyView.initialize();
 
         // Set up scene
-        Scene scene = new Scene(new StackPane(createLobbyView), 600, 600);
+        Scene scene = new Scene(new StackPane(lobbyView), 600, 600);
         stage.setScene(scene);
         stage.show();
     }
@@ -45,5 +50,10 @@ public class CreateLobbyViewTest extends ApplicationTest {
     void initialize() {
         // Add assertions to verify initialization
     }
+    
+    private Long createGameId() {
+        Game game = new Game();
+        Long gameId = game.id;
+        return gameId;
+    }
 }
-

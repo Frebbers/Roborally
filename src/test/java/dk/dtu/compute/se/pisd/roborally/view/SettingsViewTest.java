@@ -22,14 +22,12 @@ public class SettingsViewTest extends ApplicationTest {
 
         RoboRally roboRally = new RoboRally();
         appController = new AppController(roboRally);
-        
-        roboRally.start(stage);
 
-        // Initialize and set up the SettingsView
+        roboRally.start(stage);
         settingsView = new SettingsView(appController);
         settingsView.initialize();
 
-        // Set up the scene and show the stage
+        // Set up scene
         Scene scene = new Scene(new StackPane(settingsView), 600, 600);
         stage.setScene(scene);
         stage.show();

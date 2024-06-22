@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.net.MalformedURLException;
@@ -40,7 +41,7 @@ public class LobbyBrowserController {
 
             scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
                 if (apiServices.isReachable()) {
-                    updateLobbies(lobbyListView);
+                    updateLobbies(lobbyListView, true);
                 }
             }), 0, 2000, TimeUnit.MILLISECONDS);
 
@@ -52,31 +53,33 @@ public class LobbyBrowserController {
         }
     }
 
-    public void updateLobbies(ListView<String> lobbyListView) {
-        List<Game> games = appController.getApiServices().getAllGames();
-        ObservableList<String> items = FXCollections.observableArrayList();
+    public void updateLobbies(ListView<String> lobbyListView, boolean serverIsReachable) {
+        List<Game> games = null;
+        if (serverIsReachable) {
+            games = appController.getApiServices().getAllGames();
+            ObservableList<String> items = FXCollections.observableArrayList();
 
-        // Clear the previous entries in the map
-        lobbyMap.clear();
+            // Clear the previous entries in the map
+            lobbyMap.clear();
 
-        for (Game game : games) {
-            if(game.gameState == GameState.IN_PROGRESS || game.gameState == GameState.FINISHED) {
-                continue;
+            for (Game game : games) {
+                if (game.gameState == GameState.IN_PROGRESS || game.gameState == GameState.FINISHED) {
+                    continue;
+                }
+
+                // Get the list of players for each lobby
+                List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
+
+                // Display the name, players in the lobby and the max players
+                String displayText = String.format("%s (%d / %d players)", game.name, players.size(), game.maxPlayers);
+                items.add(displayText);
+                lobbyMap.put(displayText, game.id);
             }
 
-            // Get the list of players for each lobby
-            List<PlayerDTO> players = apiServices.getPlayersInGame(game.id);
-
-            // Display the name, players in the lobby and the max players
-            String displayText = String.format("%s (%d / %d players)", game.name, players.size(), game.maxPlayers);
-            items.add(displayText);
-            lobbyMap.put(displayText, game.id);
+            lobbyListView.setItems(items);
         }
-
-        lobbyListView.setItems(items);
-
-        if (games.isEmpty()) {
-            lobbyListView.setPlaceholder(new javafx.scene.text.Text("No games available to join."));
+        if ((games == null) || games.isEmpty()) {
+            lobbyListView.setPlaceholder(new Text("No games available to join."));
         }
     }
 

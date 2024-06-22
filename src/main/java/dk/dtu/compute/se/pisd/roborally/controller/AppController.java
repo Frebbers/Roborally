@@ -176,7 +176,8 @@ public class AppController implements Observer {
      * if the game was successfully stopped (with or without saving the
      * game); returns false, if the current game was not stopped. In case
      * there is no current game, false is returned.
-     *
+     * @param lobbyLeaveRequested true if the user requested to leave the lobby,
+     *                             false if the user requested to exit the application
      * @return true if the current game was stopped, false otherwise
      */
     public boolean leave(boolean lobbyLeaveRequested) {
@@ -201,28 +202,17 @@ public class AppController implements Observer {
      * close the game using Platform.exit().
      */
     public void exit() {
-        if (gameController != null) {
-            //TODO test whether this works and delete commented code if it does
-            /*
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Exit RoboRally?");
-            alert.setContentText("Are you sure you want to exit RoboRally?");
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.isEmpty() || result.get() != ButtonType.OK) {
-                return; // return without exiting the application
-            }
-        }
-             */
-            if (roboRally.getActiveView().showExitConfirmationAlert()) {
-                // If the user did not cancel, the RoboRally application will exit after the option to save the game
+        //if the user is in a game, ask if they want to leave the game before exiting
+            if ((gameController != null) && !roboRally.getActiveView().showExitConfirmationAlert()) {return;}
+                // If the user did not cancel, or is not in a game, exit any lobbies and close the application
                 if (gameController == null || leave(false)) {
                     Platform.exit();
                     System.exit(0);
+
                 }
             }
-        }
-    }
+
+
 
 
     /**

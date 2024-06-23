@@ -133,5 +133,4 @@ public class LobbyBrowserController {
             System.out.println("No game selected.");
         }
     }
-
 }

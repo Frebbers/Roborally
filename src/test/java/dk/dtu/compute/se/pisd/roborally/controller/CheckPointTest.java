@@ -2,28 +2,31 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.model.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.RobotType;
-import dk.dtu.compute.se.pisd.roborally.model.PlayerState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@RunWith(TestUtils.class)
 public class CheckPointTest {
-
 
     private Player player;
 
-    @BeforeEach
-    public void setUp() {
-        player = new Player(1L, "Test Player", RobotType.Circuito, PlayerState.READY, 100L);
+    @BeforeEach public void setUp() {
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setId(1L);
+        playerDTO.setName("Test Player");
+        playerDTO.setRobotType(RobotType.Circuito);
+        playerDTO.setState(PlayerState.READY);
+        playerDTO.setGameId(1L);
+
+        AppController.localPlayer = playerDTO;
+        player = new Player(playerDTO.getId(), playerDTO.getName(), playerDTO.getRobotType(), PlayerState.READY, playerDTO.getGameId());
     }
 
     @Test
@@ -94,23 +97,3 @@ public class CheckPointTest {
         assertEquals(y, retrievedY);
     }
 }
-    //Testing CheckPoint view **********
-
-    /*    @Test
-    public void testCheckpointViewAppearance(TestUtils utils) {
-        // Create a mock Checkpoint object (you may need to adjust this based on your actual Checkpoint class)
-        Checkpoint checkpoint = new Checkpoint(0, 0, 1);
-
-        // Create a CheckpointView instance
-        CheckpointView checkpointView = new CheckpointView(checkpoint);
-
-        // Verify the appearance of the CheckpointView using assertions or visual inspection
-        assertEquals(CheckpointView.SPACE_WIDTH, checkpointView.getWidth(), 0);
-        assertEquals(CheckpointView.SPACE_HEIGHT, checkpointView.getHeight(), 0);
-
-        // Save the appearance of the CheckpointView as a golden image
-        TestUtils.goldenTest(checkpointView);
-    }
-}
-*/
-//Only setting up if group want it

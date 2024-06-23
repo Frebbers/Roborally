@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
+import dk.dtu.compute.se.pisd.roborally.view.CheckpointView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -264,8 +265,12 @@ public class Player extends Subject {
 
             // Remove the CheckpointView on the Board if we are the local player
             if(Objects.equals(this.id, localPlayer.getId())){{
-                checkpoint.getCheckpointView().setCheckpointAsReached();
-                notifyChange();
+                CheckpointView view = checkpoint.getCheckpointView();
+
+                if(view != null){
+                    checkpoint.getCheckpointView().setCheckpointAsReached();
+                    notifyChange();
+                }
             }}
         }
     }

@@ -192,4 +192,50 @@ public class MyStepdefs {
     public void thereIsAWallAtPosition(int x, int y, String heading) {
         Wall wall = new Wall(x, y, heading, "north");
     }
+
+    @Given("the server is offline")
+    public void theServerIsOffline() {
+        
+    }
+
+
+    @And("the player opens the {string}")
+    public void thePlayerOpensThe(String arg0) {
+        
+    }
+
+    @Then("the {string} should be shown")
+    public void theShouldBeShown(String arg0) {
+        
+    }
+
+    @Then("the lobby browser should show a message that the server is offline")
+    public void theLobbyBrowserShouldShowAMessageThatTheServerIsOffline() {
+        
+    }
+
+
+    @Given("the server is {string} offline")
+    public void theServerIsOffline(String arg0) {
+        
+    }
+
+    @When("a lobby has been created on the server")
+    public void aLobbyHasBeenCreatedOnTheServer() {
+        
+    }
+
+    @And("another player is in the lobby")
+    public void anotherPlayerIsInTheLobby() {
+        
+    }
+
+    @And("the player joins the lobby")
+    public void thePlayerJoinsTheLobby() {
+        
+    }
+
+    @And("the other player should be in the lobby")
+    public void theOtherPlayerShouldBeInTheLobby() {
+    }
 }

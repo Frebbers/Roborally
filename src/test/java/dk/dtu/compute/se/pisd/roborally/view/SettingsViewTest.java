@@ -46,13 +46,13 @@ public class SettingsViewTest extends ApplicationTest {
 
     @Test
     public void uiVisibility(){
-        verifyThat("settings-header", isVisible());
-        verifyThat("settings-ip-dialog", isVisible());
-        verifyThat("settings-connect-button", isVisible());
-        verifyThat("settings-name-header", isVisible());
-        verifyThat("settings-name-field", isVisible());
-        verifyThat("settings-robot-header", isVisible());
-        verifyThat("settings-back-button", isVisible());
+        verifyThat("#settings-header", isVisible());
+        verifyThat("#settings-ip-dialog", isVisible());
+        verifyThat("#settings-connect-button", isVisible());
+        verifyThat("#settings-name-header", isVisible());
+        verifyThat("#settings-name-field", isVisible());
+        verifyThat("#settings-robot-header", isVisible());
+        verifyThat("#settings-back-button", isVisible());
     }
 
     @Test

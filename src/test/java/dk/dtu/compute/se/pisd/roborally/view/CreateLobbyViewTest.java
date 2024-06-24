@@ -42,15 +42,14 @@ public class CreateLobbyViewTest extends ApplicationTest {
 
     @Test
     public void uiVisibility(){
-        verifyThat("titleText", isVisible());
-        verifyThat("lobbyTypeText", isVisible());
-        verifyThat("connectionTypeDropdown", isVisible());
-        verifyThat("lobbyNameText", isVisible());
-        verifyThat("lobbyNameField", isVisible());
-        verifyThat("numberOfPlayersText", isVisible());
-        verifyThat("boardText", isVisible());
-        verifyThat("startButton", isVisible());
-        verifyThat("backButton", isVisible());
+        verifyThat("#lobbyTypeText", isVisible());
+        verifyThat("#connectionTypeDropdown", isVisible());
+        verifyThat("#lobbyNameText", isVisible());
+        verifyThat("#lobbyNameField", isVisible());
+        verifyThat("#numberOfPlayersText", isVisible());
+        verifyThat("#boardText", isVisible());
+        verifyThat("#startButton", isVisible());
+        verifyThat("#backButton", isVisible());
     }
 
     @AfterEach

@@ -42,7 +42,7 @@ public class LobbyBrowserViewTest extends ApplicationTest {
     @Test
     public void uiVisibility(){
         verifyThat("#joinLobbyButton", isVisible());
-        verifyThat("backButton", isVisible());
+        verifyThat("#backButton", isVisible());
 
         //verify board images?
     }

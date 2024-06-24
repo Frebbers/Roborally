@@ -7,7 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 public class LobbyBrowserViewTest extends ApplicationTest {
 
@@ -33,6 +37,14 @@ public class LobbyBrowserViewTest extends ApplicationTest {
     @BeforeEach
     public void setUp() {
         String connectionTypeDropdown = "local";
+    }
+
+    @Test
+    public void uiVisibility(){
+        verifyThat("#joinLobbyButton", isVisible());
+        verifyThat("backButton", isVisible());
+
+        //verify board images?
     }
 /*
     @Test

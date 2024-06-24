@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
+
 public class SettingsViewTest extends ApplicationTest {
 
     private SettingsView settingsView;
@@ -39,6 +42,17 @@ public class SettingsViewTest extends ApplicationTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    public void uiVisibility(){
+        verifyThat("settings-header", isVisible());
+        verifyThat("settings-ip-dialog", isVisible());
+        verifyThat("settings-connect-button", isVisible());
+        verifyThat("settings-name-header", isVisible());
+        verifyThat("settings-name-field", isVisible());
+        verifyThat("settings-robot-header", isVisible());
+        verifyThat("settings-back-button", isVisible());
     }
 
     @Test

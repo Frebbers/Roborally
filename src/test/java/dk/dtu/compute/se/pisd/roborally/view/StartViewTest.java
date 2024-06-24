@@ -3,7 +3,6 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -47,15 +46,14 @@ public class StartViewTest extends ApplicationTest {
     @DisplayName("Verify UI Initialization")
     void testInitialize() {
         // Verify initial state of UI components
-        verifyThat("#startLobbyButton", isVisible()); // Example assertion for a button
-        verifyThat("#joinLobbyButton", isVisible()); // Example assertion for another button
-        verifyThat("#nameLabel", isVisible()); // Verify that nameLabel is visible
+        verifyThat("#startLobbyButton", isVisible());
+        verifyThat("#joinLobbyButton", isVisible());
+        verifyThat("#nameLabel", isVisible()); // Verify visibility
     }
 
     @Test
     @DisplayName("Update Player Name")
     void testUpdatePlayerName() {
-        // Simulate setting a player name in AppConfig
         AppConfig.setProperty("local.player.name", "TestPlayer");
 
         // Call updatePlayerName() method in StartView
@@ -83,11 +81,9 @@ public class StartViewTest extends ApplicationTest {
 
     @AfterEach
     void tearDown() {
-        // Clean up after each test if needed
     }
 
     @AfterAll
     static void tearDownAll() {
-        // Clean up any resources after all tests if needed
     }
 }

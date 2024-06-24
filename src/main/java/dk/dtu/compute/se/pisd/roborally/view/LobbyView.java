@@ -7,7 +7,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -75,6 +74,7 @@ public class LobbyView extends BaseView {
 
         // Set up a button to leave the lobby
         Button leaveButton = new Button("Leave");
+        leaveButton.setId("leaveButton");
         leaveButton.setOnAction(event -> {
             appController.leave(true);
             lobbyController.stopLobbyPolling();
@@ -82,6 +82,7 @@ public class LobbyView extends BaseView {
 
         // Set up button to set the players ready state
         Button readyButton = new Button("Ready");
+        readyButton.setId("readyButton");
         readyButton.setOnAction(e -> appController.toggleReady());
 
         // Spacer to push buttons to each side

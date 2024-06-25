@@ -159,6 +159,7 @@ public class AppController {
      * @param lobbyLeaveRequested true if the user requested to leave the lobby,
      *                             false if the user requested to exit the application
      * @return true if the current game was stopped, false otherwise
+     * @author s224804
      */
     public boolean leave(boolean lobbyLeaveRequested) {
         if (apiServices != null) {

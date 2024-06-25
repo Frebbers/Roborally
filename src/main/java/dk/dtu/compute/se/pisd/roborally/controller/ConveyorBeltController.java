@@ -54,10 +54,8 @@ public class ConveyorBeltController extends FieldAction {
 
         // Attempt to the player in the direction of the conveyor belt
         if (player != null || space.getBelt() != null) {
-            if (gameController.boardController.handleMovement
-                    (space, board.getNeighbour(space, space.getBelt().heading), space.getBelt().heading)) {
-                return true;
-            }
+            return gameController.boardController.handleMovement
+                    (space, board.getNeighbour(space, space.getBelt().heading), space.getBelt().heading);
 
         }
         //No player on the conveyor belt

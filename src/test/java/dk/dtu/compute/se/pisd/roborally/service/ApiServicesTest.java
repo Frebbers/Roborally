@@ -3,10 +3,54 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyBrowserController;
+import dk.dtu.compute.se.pisd.roborally.model.ApiType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ApiServicesTest {
+@Test
+    public void startApiInstance() {
+        try {
+            // Define the command to start the application
+
+            String command = "mvn spring-boot:run";
+
+            // Define the directory of the application
+            File directory = new File("../roboAPI");
+
+            // Create a new process builder
+            ProcessBuilder processBuilder = new ProcessBuilder();
+
+            // Get the name of the operating system
+            String osName = System.getProperty("os.name").toLowerCase();
+
+            // Set the command and directory based on the operating system
+            if (osName.contains("win")) { // Windows
+                processBuilder.command("C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.2.4\\plugins\\maven\\lib\\maven3\\bin\\mvn.cmd", "/c", command);
+            } else if (osName.contains("nix") || osName.contains("nux") || osName.contains("mac")) { // Unix/Linux/MacOS
+                processBuilder.command("/bin/bash", "-c", command);
+            }
+
+            processBuilder.directory(directory);
+
+            // Start the process
+
+                Process process = processBuilder.start();
+
+                // Wait for the process to finish
+                // int exitCode = process.waitFor();
+                //assert exitCode == 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    AppController appController = new AppController(new RoboRally());
+        ApiServices apiServices = new ApiServices(appController);
+        apiServices.setApiType(ApiType.LOCAL);
+    assert apiServices.isReachable();
+    }
     @Test
     public void testIsReachable() {
         // Test if the server is reachable

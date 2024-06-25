@@ -1,19 +1,27 @@
 package StepDefinitions;
 
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.GameControllerTest;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.Objects;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class MyStepdefs {
     private GameController gameController;
+    private RoboRally testRoborally;
+
     @Given("the robot is facing {string}")
 
     /**
@@ -56,7 +64,7 @@ public class MyStepdefs {
      */
     @And("the robot is at position \\({int}, {int})")
     public void theRobotIsAtPosition(int x, int y) {
-        gameController.board.getCurrentPlayer().setSpace(gameController.board.getSpace(x, y));
+        gameController.board.getSpace(x, y).setPlayer(gameController.board.getCurrentPlayer());
     }
     /**
      * Method to set the turn counter of the game
@@ -192,4 +200,123 @@ public class MyStepdefs {
     public void thereIsAWallAtPosition(int x, int y, String heading) {
         Wall wall = new Wall(x, y, heading, "north");
     }
+
+    @Given("A game has been initialized online")
+    public void aGameHasBeenInitializedOnline() {
+        testRoborally = new RoboRally();
+        theGameIsInitialized();
+        ApiServices apiServices = new ApiServices(gameController.getAppController());
+
+        Game game = apiServices.createGame("Game1", 1L, 2);
+        PlayerDTO player = apiServices.createPlayer("Player1");
+
+        Game joinGame = apiServices.joinGame(game.id,player.getId());
+        Game getGame = apiServices.getGameById(game.id);
+
+        // Direct comparison of objects does not work as each method creates a new Game
+        // object but with the same properties. This does, however, still confirm that
+        // the games are the same.
+        assertEquals(joinGame.id, getGame.id);
+    }
+
+    @Then("another game can be initialized online")
+    public void anotherGameCanBeInitializedOnline() {
+        ApiServices apiServices = new ApiServices(gameController.getAppController());
+
+        Game game = apiServices.createGame("Game2", 1L, 3);
+        PlayerDTO player = apiServices.createPlayer("Player2");
+
+        Game joinGame = apiServices.joinGame(game.id,player.getId());
+        Game getGame = apiServices.getGameById(game.id);
+
+        // Direct comparison of objects does not work as each method creates a new Game
+        // object but with the same properties. This does, however, still confirm that
+        // the games are the same.
+        assertEquals(joinGame.id, getGame.id);
+    }
+
+    @When("All players have finished their programming phase")
+    public void allPlayersHaveFinishedTheirProgrammingPhase() {
+        assertEquals(gameController.getReadyPlayersCount(),gameController.board.getPlayers().toArray().length);
+    }
+
+    @Then("All clients should display the moves in correct order")
+    public void allClientsShouldDisplayTheMovesInCorrectOrder() {
+        gameController.board.setMoveCount(gameController.board.getMoveCount());
+        for (int i = 0; i < gameController.board.getMoveCount(); i++) {
+            assert (gameController.getNextCommand().equals(gameController.board.getCurrentPlayer().getPreviousCommand()));
+        }
+
+    }
+
+    @Given("a lobby has to be initialized")
+    public void aLobbyHasToBeInitialized() {
+        AppController testappController = new AppController(testRoborally);
+        testappController.createLobby("TestLobby", 1, 2);
+    }
+
+    @And("there are \\({int}) players in the game")
+    public void thereArePlayersInTheGame(int count) {
+        for (int i = 0; i < count; i++) {
+            gameController.board.addPlayer(new Player(
+                    (long) i,
+                    "Player" + i,
+                    RobotType.Gizmo,
+                    PlayerState.READY,
+                    gameController.board.getGameId()
+            ));
+        }
+    }
+
+    @Then("the player cannot see other players' cards")
+    public void thePlayerCannotSeeOtherPlayersCards() {
+        for (Player player : gameController.board.getPlayers()) {
+            for (int i = 0; i < Player.NO_REGISTERS; i++) {
+                Assertions.assertNull(player.getProgramField(i).getCard());
+            }
+        }
+    }
+
+    @And("A player needs to join the lobby")
+    public void aPlayerNeedsToJoinTheLobby() {
+        Player player = gameController.board.getCurrentPlayer();
+        aLobbyHasToBeInitialized();
+        gameController.getAppController().joinLobby(1L);
+        assertTrue(gameController.getAppController().isInLobby());
+    }
+
+    @When("All players are ready")
+    public void allPlayersAreReady() {
+        assertEquals(gameController.getReadyPlayersCount(),gameController.board.getPlayers().toArray().length);
+    }
+
+    @Then("All players should be in the the Phase {string}")
+    public void allPlayersAreInTheThePhase(String phase) {
+
+        assertEquals(gameController.board.getPhase(), Phase.fromString(phase));
+    }
+
+    @When("A player ends on a checkpoint")
+    public void aPlayerEndsOnACheckpoint(int Index) {
+
+    }
+
+    @And("There is a checkpoint in coordinate \\({int}, {int}, {int})")
+    public void thereIsACheckpointInCoordinate(int x, int y, int testId) {
+        Checkpoint testcheckpoint = new Checkpoint(x, y, testId);
+        gameController.board.getSpace(x, y).setCheckpoint(testcheckpoint);
+    }
+
+
+
+    @Then("Checkpoints passed increments with \\({int})")
+    public void checkpointsPassedIncrementsWith(int increment) {
+        assertEquals (gameController.board.getCurrentPlayer().getCheckpoints().size(), increment);
+    }
+
+    @When("A player ends on a checkpoint with the index \\({int})")
+    public void aPlayerEndsOnACheckpointWithTheIndex(int testId) {
+        assert (gameController.board.getCurrentPlayer().getSpace().getCheckpoint() == gameController.board.getCurrentPlayer().getCheckpoints().get(testId));
+    }
+
 }

@@ -8,10 +8,12 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static javafx.scene.input.KeyCode.L;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 public class LobbyViewTest extends ApplicationTest {
 
@@ -47,10 +49,18 @@ public class LobbyViewTest extends ApplicationTest {
     }
 
     @Test
-    void initialize() {
+    @DisplayName("Verify UI Initialization")
+    void isUIVisible(){
+        verifyThat("#leaveButton", isVisible());
+        verifyThat("#readyButton", isVisible());
+    }
+
+
+    @Test
+    void testInitialize() {
         // Add assertions to verify initialization
     }
-    
+
     private Long createGameId() {
         Game game = new Game();
         Long gameId = game.id;

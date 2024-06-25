@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
+
 public class CreateLobbyViewTest extends ApplicationTest {
 
     private CreateLobbyView createLobbyView;
@@ -35,6 +38,18 @@ public class CreateLobbyViewTest extends ApplicationTest {
 
     @BeforeEach
     void setUp() {
+    }
+
+    @Test
+    public void uiVisibility(){
+        verifyThat("#lobbyTypeText", isVisible());
+        verifyThat("#connectionTypeDropdown", isVisible());
+        verifyThat("#lobbyNameText", isVisible());
+        verifyThat("#lobbyNameField", isVisible());
+        verifyThat("#numberOfPlayersText", isVisible());
+        verifyThat("#boardText", isVisible());
+        verifyThat("#startButton", isVisible());
+        verifyThat("#backButton", isVisible());
     }
 
     @AfterEach

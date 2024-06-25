@@ -45,6 +45,7 @@ public class CreateLobbyView extends BaseView {
     @Override
     public void initialize() {
         Text title = new Text("Create a new lobby");
+        title.setId("titleText");
         connectToServerFeedback = new Text();
 
         boardSelection = new GridPane();
@@ -53,7 +54,9 @@ public class CreateLobbyView extends BaseView {
 
         // Setup for lobby type selection
         Text lobbyTypeText = new Text("Lobby Type: ");
+        lobbyTypeText.setId("lobbyTypeText");
         ComboBox<String> connectionTypeDropdown = new ComboBox<>();
+        connectionTypeDropdown.setId("connectionTypeDropdown");
         connectionTypeDropdown.getItems().addAll("Local", "Server");
         connectionTypeDropdown.setValue("Server");
 
@@ -67,8 +70,10 @@ public class CreateLobbyView extends BaseView {
 
         // for setting lobby name
         Text lobbyNameText = new Text("Lobby Name: ");
+        lobbyNameText.setId("lobbyNameText");
         TextField lobbyNameField = new TextField();
         lobbyNameField.setPromptText("Enter lobby name");
+        lobbyNameField.setId("lobbyNameField");
         lobbyNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             lobbyName = newValue;
         });
@@ -76,6 +81,7 @@ public class CreateLobbyView extends BaseView {
 
         //for selecting number of players
         Text numberOfPlayersText = new Text("Players: ");
+        numberOfPlayersText.setId("numberOfPlayersText");
         ComboBox<String> comboBox = new ComboBox<>();
         ObservableList<String> options = FXCollections.observableArrayList(
                 PLAYER_NUMBER_OPTIONS.stream().map(Object::toString).collect(Collectors.toList())
@@ -91,15 +97,18 @@ public class CreateLobbyView extends BaseView {
 
         // Load the pictures of the boards
         Text boardText = new Text("Select a Board: ");
+        boardText.setId("boardText");
         loadBoardPictures();
 
         startButton = new Button("Create");
+        startButton.setId("startButton");
         startButton.setOnAction(event -> {
             appController.createLobby(lobbyName, boardId, numberOfPlayers);
         });
 
         // Add a button to go back
         Button backButton = new Button("Back");
+        backButton.setId("backButton");
         backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
 
         // Spacer to push buttons to each side

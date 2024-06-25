@@ -96,6 +96,7 @@ public class LobbyBrowserView extends BaseView {
 
         // Join lobby button
         joinLobbyButton = new Button("Join lobby");
+        joinLobbyButton.setId("joinLobbyButton");
         joinLobbyButton.setOnAction(event -> {
             lobbyBrowserController.stopLobbyPolling();
             String selectedGameName = lobbyListView.getSelectionModel().getSelectedItem();
@@ -115,6 +116,7 @@ public class LobbyBrowserView extends BaseView {
 
         // Add a button to go back
         Button backButton = new Button("Back");
+        backButton.setId("backButton");
         backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
 
         // Spacer to push buttons to each side

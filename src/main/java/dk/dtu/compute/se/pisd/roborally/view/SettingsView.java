@@ -39,8 +39,10 @@ public class SettingsView extends BaseView {
 
         // Server and Lobby list on the left
         Text serverHeader = new Text("Server:");
+        serverHeader.setId("settings-header");
 
         TextField serverIPDialog = new TextField();
+        serverIPDialog.setId("settings-ip-dialog");
         serverIPDialog.setPromptText("Enter server IP");
         serverIPDialog.setText(apiServices.getServerIP());
         Utilities.restrictToNumbersDotsAndColons(serverIPDialog);
@@ -49,6 +51,7 @@ public class SettingsView extends BaseView {
         Text connectToServerFeedback = new Text();
 
         Button connectToServerButton = new Button("Connect to server");
+        connectToServerButton.setId("settings-connect-button");
         connectToServerButton.setOnAction(event -> {
             String ip = serverIPDialog.getText();
             if (apiServices.connectToServer(ip)) {
@@ -65,8 +68,10 @@ public class SettingsView extends BaseView {
 
         // Name entry
         Text nameHeader = new Text("Name:");
+        nameHeader.setId("settings-name-header");
         nameField = new TextField();
         nameField.setPromptText("Type your name here");
+        nameField.setId("settings-name-field");
         nameField.setText(AppConfig.getProperty("local.player.name"));
         Utilities.restrictTextLength(nameField, 8);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -75,6 +80,7 @@ public class SettingsView extends BaseView {
 
         // Robots selection grid
         Text robotHeader = new Text("Robot:");
+        robotHeader.setId("settings-robot-header");
         robotsSelection = new GridPane();
         robotsSelection.setHgap(10);
         robotsSelection.setVgap(10);
@@ -82,6 +88,7 @@ public class SettingsView extends BaseView {
 
         // Add a button to go back
         Button backButton = new Button("Back");
+        backButton.setId("settings-back-button");
         backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
         HBox bottomContainer = new HBox(backButton);
         bottomContainer.setAlignment(Pos.BOTTOM_LEFT);

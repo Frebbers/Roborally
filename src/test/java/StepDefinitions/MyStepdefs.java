@@ -203,6 +203,7 @@ public class MyStepdefs {
 
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
+        testRoborally = new RoboRally();
         theGameIsInitialized();
         ApiServices apiServices = new ApiServices(gameController.getAppController());
 
@@ -289,9 +290,10 @@ public class MyStepdefs {
         assertEquals(gameController.getReadyPlayersCount(),gameController.board.getPlayers().toArray().length);
     }
 
-    @Then("All players are in the the Phase {string}")
-    public void allPlayersAreInTheThePhase(Phase phase) {
-        assertEquals(gameController.board.getPhase(), phase);
+    @Then("All players should be in the the Phase {string}")
+    public void allPlayersAreInTheThePhase(String phase) {
+
+        assertEquals(gameController.board.getPhase(), Phase.fromString(phase));
     }
 
     @When("A player ends on a checkpoint")
@@ -316,4 +318,5 @@ public class MyStepdefs {
     public void aPlayerEndsOnACheckpointWithTheIndex(int testId) {
         assert (gameController.board.getCurrentPlayer().getSpace().getCheckpoint() == gameController.board.getCurrentPlayer().getCheckpoints().get(testId));
     }
+
 }

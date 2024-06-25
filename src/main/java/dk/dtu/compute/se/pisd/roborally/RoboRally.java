@@ -170,6 +170,8 @@ public class RoboRally extends Application {
      *
      */
     public void createLobbyView(AppController controller, Long gameId) {
+        if (boardRoot == null) return;
+
         // if present, remove old view
         boardRoot.getChildren().clear();
 

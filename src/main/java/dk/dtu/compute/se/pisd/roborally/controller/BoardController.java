@@ -22,6 +22,7 @@ public class BoardController {
      * @param destination the destination of the moving player
      * @param heading the direction the player is moving
      * @return true if the movement was successful, false otherwise
+     * @author s224804
      */
     public boolean handleMovement(Space origin, Space destination, Heading heading) {
         // Check if the destination is null

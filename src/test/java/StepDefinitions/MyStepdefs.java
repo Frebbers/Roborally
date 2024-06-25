@@ -11,6 +11,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 
+import java.util.Objects;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,7 +64,7 @@ public class MyStepdefs {
      */
     @And("the robot is at position \\({int}, {int})")
     public void theRobotIsAtPosition(int x, int y) {
-        gameController.board.getCurrentPlayer().setSpace(gameController.board.getSpace(x, y));
+        gameController.board.getSpace(x, y).setPlayer(gameController.board.getCurrentPlayer());
     }
     /**
      * Method to set the turn counter of the game
@@ -201,6 +203,7 @@ public class MyStepdefs {
 
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
+        theGameIsInitialized();
         ApiServices apiServices = new ApiServices(gameController.getAppController());
 
         Game game = apiServices.createGame("Game1", 1L, 2);
@@ -289,5 +292,28 @@ public class MyStepdefs {
     @Then("All players are in the the Phase {string}")
     public void allPlayersAreInTheThePhase(Phase phase) {
         assertEquals(gameController.board.getPhase(), phase);
+    }
+
+    @When("A player ends on a checkpoint")
+    public void aPlayerEndsOnACheckpoint(int Index) {
+
+    }
+
+    @And("There is a checkpoint in coordinate \\({int}, {int}, {int})")
+    public void thereIsACheckpointInCoordinate(int x, int y, int testId) {
+        Checkpoint testcheckpoint = new Checkpoint(x, y, testId);
+        gameController.board.getSpace(x, y).setCheckpoint(testcheckpoint);
+    }
+
+
+
+    @Then("Checkpoints passed increments with \\({int})")
+    public void checkpointsPassedIncrementsWith(int increment) {
+        assertEquals (gameController.board.getCurrentPlayer().getCheckpoints().size(), increment);
+    }
+
+    @When("A player ends on a checkpoint with the index \\({int})")
+    public void aPlayerEndsOnACheckpointWithTheIndex(int testId) {
+        assert (gameController.board.getCurrentPlayer().getSpace().getCheckpoint() == gameController.board.getCurrentPlayer().getCheckpoints().get(testId));
     }
 }

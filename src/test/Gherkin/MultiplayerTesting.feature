@@ -18,10 +18,9 @@
           When All players are ready
           Then All players are in the the Phase "Setup"
 
-
-
        Scenario: Test if checkpoints are registered
-         Given A game has been initialized online
-         When A player lands on a checkpoint
-         Then A Player ends the activation phase on a checkpoint
+         And There is a checkpoint in coordinate (0, 1, 1)
+         And the robot is at position (0, 1)
+         When A player ends on a checkpoint with the index (1)
+         Then Checkpoints passed increments with (1)
 

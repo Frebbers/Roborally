@@ -323,6 +323,8 @@ public class AppController implements Observer {
             updatePlayerID();
 
         }
+        //This should not happen. The player name should be set before this point
+        assert localPlayer != null;
     }
 
     /**
@@ -345,8 +347,19 @@ public class AppController implements Observer {
             updatePlayerID();
         }
         localPlayer.setName(getProperty("local.player.name"));
-        localPlayer.setId(Long.parseLong(getProperty("local.player.id")));
-        localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
+
+        try {
+            localPlayer.setId(Long.parseLong(getProperty("local.player.id")));}
+        catch (NumberFormatException e) {
+            //we don't need to do anything here
+        }
+
+        try {
+            localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
+        } catch (NumberFormatException e) {
+            localPlayer.setRobotType(RobotType.Circuito);
+        }
+
 
         return localPlayer;
     }

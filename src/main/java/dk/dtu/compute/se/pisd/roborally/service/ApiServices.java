@@ -199,7 +199,7 @@ public class ApiServices {
             player.setName(name);
             player.setState(PlayerState.NOT_IN_LOBBY);
             player.setGameId(0L);
-            player.setRobotType(RobotType.Circuito);
+            //player.setRobotType(RobotType.Circuito);
         }
 
         // Upload the player to the server

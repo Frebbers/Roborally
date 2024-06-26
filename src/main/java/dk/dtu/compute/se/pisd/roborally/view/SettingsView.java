@@ -33,8 +33,10 @@ public class SettingsView extends BaseView {
         this.apiServices = appController.getApiServices();
     }
 
+    /**
+     * Initializes the SettingsView by setting up the UI components and their event handlers.
+     */
     @Override
-    //TODO implement a save button that saves the name and robot type to the configuration file.
     public void initialize(){
 
         // Server and Lobby list on the left
@@ -130,15 +132,30 @@ public class SettingsView extends BaseView {
             // Handle errors (e.g., directory not found, no permission, etc.)
         }
     }
-//TODO make sure this is only called when the user clicks a save button.
+
+    /**
+     * Saves the user's name to the application configuration.
+     *
+     * @param name the user's name to save.
+     */
     private void saveName(String name) {
         AppConfig.setProperty("local.player.name", name);
     }
 
+    /**
+     * Sets the selected robot ID in the application configuration.
+     *
+     * @param id the ID of the selected robot.
+     */
     private void selectRobot(int id) {
         AppConfig.setProperty("local.player.robotType", String.valueOf(id));
     }
 
+    /**
+     * Highlights the selected robot button.
+     *
+     * @param id the ID of the selected robot.
+     */
     private void highlightSelected(int id) {
         for (Node child : robotsSelection.getChildren()) {
             if (child instanceof Button) {

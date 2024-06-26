@@ -34,11 +34,17 @@ public class LobbyView extends BaseView {
         this.lobbyController = new LobbyController(appController);
     }
 
+    /**
+     * Initializes the LobbyView by setting up the UI components and their event handlers.
+     */
     @Override
     public void initialize(){
         setupLobbyView();
     }
 
+    /**
+     * Sets up the lobby view, including player list, map display, server details, and control buttons.
+     */
     public void setupLobbyView() {
         BorderPane mainLayout = new BorderPane();
 
@@ -104,6 +110,12 @@ public class LobbyView extends BaseView {
         // Ensure that the scheduler is closed if the scene is switched
     }
 
+    /**
+     * Loads and returns the image of the game board corresponding to the given index.
+     *
+     * @param boardIndex the index of the board image to load.
+     * @return the Image object of the selected board, or null if the image cannot be loaded.
+     */
     private Image getBoardImageByIndex(int boardIndex) {
         try {
             // Get the resource URL for the images directory

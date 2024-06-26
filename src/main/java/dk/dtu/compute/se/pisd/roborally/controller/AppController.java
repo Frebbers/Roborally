@@ -43,7 +43,7 @@ import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class AppController {
+public class AppController implements Observer {
 
     final private RoboRally roboRally;
     private ApiServices apiServices;
@@ -92,6 +92,11 @@ public class AppController {
         }
     }
 
+    /**
+     * Joins a lobby for the specified game.
+     *
+     * @param gameId the ID of the game to join
+     */
     public void joinLobby(Long gameId) {
         if (apiServices.isReachable()) {
             onLobbyJoin();
@@ -104,6 +109,12 @@ public class AppController {
         }
     }
 
+    /**
+     * Loads the game scene for the specified game and board number.
+     *
+     * @param gameId the ID of the game to load
+     * @param boardNumber the number of the board to load
+     */
     public void loadGameScene(Long gameId, Long boardNumber) {
         if (gameController != null && !leave(true)) {
             return;
@@ -145,6 +156,12 @@ public class AppController {
         roboRally.createBoardView(gameController);
     }
 
+    /**
+     * Loads the board data from a JSON file based on the board number.
+     *
+     * @param boardNumber the number of the board to load
+     * @return the board data loaded from the JSON file
+     */
     private BoardData loadJsonBoardFromNumber(int boardNumber) {
         JsonReader jsonReader = new JsonReader(boardNumber);
         return jsonReader.readBoardJson();
@@ -159,7 +176,6 @@ public class AppController {
      * @param lobbyLeaveRequested true if the user requested to leave the lobby,
      *                             false if the user requested to exit the application
      * @return true if the current game was stopped, false otherwise
-     * @author s224804
      */
     public boolean leave(boolean lobbyLeaveRequested) {
         if (apiServices != null) {
@@ -208,7 +224,6 @@ public class AppController {
         return (!(localPlayer.getState().equals(PlayerState.NOT_IN_LOBBY)));
     }
 
-
     /**
      * Set the name of the player and create a new player object if none exists.
      * This method is currently only used as a fallback if the player does not exist on the server or locally.
@@ -242,6 +257,15 @@ public class AppController {
         }
     }
 
+    /**
+     * NOT IMPLEMENTED
+     *
+     * @param subject
+     */
+    @Override
+    public void update(Subject subject) {
+        // XXX do nothing for now
+    }
 
     public RoboRally getRoboRally() {
         return roboRally;
@@ -253,6 +277,7 @@ public class AppController {
 
     /**
      * Writes the ID of the playerDTO object into the properties file
+     *
      * @author s224804
      */
     private void updatePlayerID() {
@@ -265,7 +290,6 @@ public class AppController {
      * @author s224804
      */
     public void onLobbyJoin() {
-        //TODO test this thoroughly: scenario where player does not exist on the server
         localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
         if (localPlayer != null && apiServices.playerExists
                 (localPlayer.getName(), localPlayer.getId().toString()) == localPlayer) {
@@ -276,18 +300,24 @@ public class AppController {
             // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
             updatePlayerID();
+
         } else {
             //No character exists and no name is stored in the config file
             createCharacter();
         }
     }
 
+    /**
+     * Toggles the ready state of the local player by updating the player's state
+     * using the API services.
+     */
     public void toggleReady() {
         apiServices.updatePlayerState(localPlayer.getId());
     }
 
     /**
      * Loads the player properties from the config file into the playerDTO object
+     *
      * @author s224804
      */
     public PlayerDTO loadPlayerProperties() {
@@ -302,5 +332,4 @@ public class AppController {
 
         return localPlayer;
     }
-
 }

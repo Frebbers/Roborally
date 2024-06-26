@@ -431,10 +431,6 @@ public class Board extends Subject {
         return players.stream().filter(p -> Objects.equals(p.getId(), playerDTO.getId())).findFirst().orElse(null);
     }
 
-    public BoardView getBoardView() {
-        return boardView;
-    }
-
     public void setBoardView(BoardView boardView){
         this.boardView = boardView;
     }

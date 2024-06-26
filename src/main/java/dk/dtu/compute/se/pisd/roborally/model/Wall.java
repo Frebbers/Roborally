@@ -42,8 +42,4 @@ public class Wall extends Subject {
     public Heading getOffset() {
         return offset;
     }
-
-    public void setOffset(String offset) {
-        this.offset = Heading.fromString(offset);
-    }
 }

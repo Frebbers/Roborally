@@ -356,16 +356,21 @@ public class ApiServices {
      * @return true if connection succeeded, false otherwise
      */
     public boolean testConnection(String ip) {
+       String tempGamesUrl = GAMES_URL;
         GAMES_URL = "http://" + ip + ":8080/api/games";
 
-        boolean verdict = isReachable();
-        updateURLs();
-        return verdict;
+        if (isReachable()) {
+            updateURLs();
+            return true;
+        }
+        else {
+            GAMES_URL = tempGamesUrl;
+            return false;
+        }
     }
 
     /**
      * Checks if the specified player is the host of the specified game.
-     *
      * @param gameId the ID of the game to check
      * @param playerId the ID of the player to check
      * @return true if the player is the host, false otherwise

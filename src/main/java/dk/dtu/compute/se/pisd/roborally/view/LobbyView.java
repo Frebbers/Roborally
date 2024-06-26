@@ -102,7 +102,6 @@ public class LobbyView extends BaseView {
         getChildren().addAll(mainLayout);
 
         // Ensure that the scheduler is closed if the scene is switched
-        appController.getRoboRally().getActiveScene().getWindow().setOnCloseRequest(event -> lobbyController.stopLobbyPolling());
     }
 
     private Image getBoardImageByIndex(int boardIndex) {

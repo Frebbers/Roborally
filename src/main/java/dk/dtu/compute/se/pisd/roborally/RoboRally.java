@@ -89,13 +89,23 @@ public class RoboRally extends Application {
     }
 
     /**
+     * Method to call when starting a view. Clears any existing views and makes sure the boardRoot is not null
+     */
+    private void onCreateView() {
+        // Create the boardRoot if it does not exist
+        if (boardRoot == null) {boardRoot = new BorderPane();}
+        // if present, remove old view
+        boardRoot.getChildren().clear();
+    }
+    /**
      * Create a StartView with the given appController
      *
      * @param appController
      */
+
     public void createStartView(AppController appController) {
         // if present, remove old view
-        boardRoot.getChildren().clear();
+        onCreateView();
 
         if (appController != null) {
             // create and add view for start screen
@@ -114,7 +124,7 @@ public class RoboRally extends Application {
      */
     public void createRobotSettingsView(AppController appController) {
         // if present, remove old view
-        boardRoot.getChildren().clear();
+        onCreateView();
 
         if (appController != null) {
             // create and add view for new board
@@ -132,8 +142,8 @@ public class RoboRally extends Application {
      * @param gameController
      */
     public void createBoardView(GameController gameController) {
-        // if present, remove old view
-        boardRoot.getChildren().clear();
+
+        onCreateView();
 
         if (gameController != null) {
             // create and add view for new board
@@ -151,8 +161,7 @@ public class RoboRally extends Application {
      * @param appController
      */
     public void createNewLobbyView(AppController appController) {
-        // if present, remove old view
-        boardRoot.getChildren().clear();
+        onCreateView();
 
         if (appController != null) {
             // create and add view for create lobby screen
@@ -170,10 +179,9 @@ public class RoboRally extends Application {
      *
      */
     public void createLobbyView(AppController controller, Long gameId) {
-        if (boardRoot == null) return;
-
-        // if present, remove old view
-        boardRoot.getChildren().clear();
+       // if (boardRoot == null) return; this line was added to enable certain functions in stepdefs to work.
+        // Those need to work with the below instead
+        onCreateView();
 
         if(controller != null){
             LobbyView lobbyView = new LobbyView(controller, gameId);
@@ -189,8 +197,7 @@ public class RoboRally extends Application {
      *
      */
     public void createLobbyBrowserView(AppController controller) {
-        // if present, remove old view
-        boardRoot.getChildren().clear();
+        onCreateView();
 
         if(controller != null){
             LobbyBrowserView lobbyBrowserView = new LobbyBrowserView(controller);

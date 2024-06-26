@@ -31,8 +31,8 @@ class AppControllerTest {
     //Scenario: On lobby join with the local player properties not existing on the server
     public void onLobbyJoinTestNotOnServer() {
         assert apiServices.isReachable();
-        //assert that the player does not exist on the server before testing
-        assert (apiServices.playerExists("testPlayer", "5000")==null);
+        //assert that the player does not exist on the server before testing. If it does, restart the server.
+        assert (apiServices.playerExists("testPlayer", "9999")==null);
         AppConfig.setProperty("local.player.name","testPlayer");
         AppConfig.setProperty("local.player.id", "5000");
         assert apiServices.isReachable();

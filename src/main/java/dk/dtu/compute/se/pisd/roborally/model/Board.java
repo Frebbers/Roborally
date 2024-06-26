@@ -71,7 +71,6 @@ public class Board extends Subject {
 
     /**
      * Initialize a Board object with certain dimensions of empty spaces as well as a name.
-     *
      * @param data data of the board
      */
     public Board(Long gameId, BoardData data) {

@@ -66,6 +66,7 @@ public class AppController implements Observer {
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             if (localPlayer != null) {
                 loadPlayerProperties();
+                onLobbyJoin();
             }
         }
     }

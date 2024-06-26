@@ -66,16 +66,22 @@ public class AppController implements Observer {
             dialog.setTitle("Create Robot");
             dialog.setHeaderText("Enter a name for your robot");
             dialog.setContentText("Name:");
-            // Show the dialog and wait for a response
-            Optional<String> result = dialog.showAndWait();
+            dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
 
-            // Check if result is present and set property accordingly
-            if (result.isPresent()) {
-                // Use result.get() to retrieve the actual string value
-                String playerName = result.get();
-                setProperty("local.player.name", playerName);
-            } else {
-            }
+            // Modify the OK button behavior to validate input
+            final ButtonType okButton = ButtonType.OK;
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.lookupButton(okButton).addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                String input = dialog.getEditor().getText();
+                if (input.trim().isEmpty()) {
+                    event.consume();
+                }
+            });
+
+            // Show the dialog and wait for the result
+            dialog.showAndWait().ifPresent(result -> {
+                setProperty("local.player.name", result);
+            });
         }
 
         if (apiServices.isReachable()) {

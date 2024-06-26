@@ -1,3 +1,14 @@
+# Installation
+Clone the two repositories:
+
+```git clone https://github.com/Frebbers/Roborally.git```
+
+```git clone https://github.com/Frebbers/roboAPI.git```
+
+Run the main method in the RoboApiApplication class in roboAPI in IntelliJ
+
+and afterwards run the main method in the StartRoboRally class in Roborally project.
+
 #  Project description
 This software project is a part of the Advanced Programming course at DTU and is being developed by group 7. 
 It is an attempt to create a version of Roborally in Java which can be run on a PC. 

@@ -202,8 +202,14 @@ public class ApiServices {
             player.setName(name);
             player.setState(PlayerState.NOT_IN_LOBBY);
             player.setGameId(0L);
-            //player.setRobotType(RobotType.Circuito);
+            if (!AppConfig.getProperty("local.player.robotType").isEmpty()) {
+                player.setRobotType(RobotType.Circuito);
+            } else {
+                AppConfig.setProperty("local.player.robotType", "1");
+                player.setRobotType(RobotType.Circuito);
+            }
         }
+
 
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response;

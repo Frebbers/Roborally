@@ -315,7 +315,7 @@ public class AppController implements Observer {
      * @author s224804
      */
     public PlayerDTO loadPlayerProperties() {
-        if (localPlayer == null) localPlayer = new PlayerDTO();
+        if (localPlayer == null) return null;
 
         if (localPlayer.getId() == null && localPlayer.getId() != 0) {
             updatePlayerID();

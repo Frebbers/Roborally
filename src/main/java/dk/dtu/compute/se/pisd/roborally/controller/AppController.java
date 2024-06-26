@@ -357,7 +357,7 @@ public class AppController implements Observer {
         try {
             localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
         } catch (NumberFormatException e) {
-            AppConfig.setProperty("local.player.robotType", "0");
+            AppConfig.setProperty("local.player.robotType", "1");
             localPlayer.setRobotType(RobotType.Circuito);
         }
 

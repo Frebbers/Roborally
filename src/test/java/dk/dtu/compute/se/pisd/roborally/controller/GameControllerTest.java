@@ -17,15 +17,14 @@ public class GameControllerTest {
     private final int TEST_HEIGHT = 8;
 
     private GameController gameController;
-
-
+    private RoboRally roboRally;
 
     @BeforeEach public void setUp() {
        List <PriorityAntenna> antennaList = new ArrayList<PriorityAntenna>();
        antennaList.add (new PriorityAntenna(2,2));
        BoardData data = new BoardData("Testboard", TEST_WIDTH, TEST_HEIGHT, null,null, null, null, antennaList);
         Board board = new Board(1L, data);
-        RoboRally roboRally = new RoboRally();
+        roboRally = new RoboRally(true);
         AppController appController = new AppController(roboRally);
         gameController = new GameController(appController, board);
         for (long i = 0; i < 6; i++) {
@@ -44,8 +43,9 @@ public class GameControllerTest {
         gameController = null;
     }
 
-
-
+    public RoboRally getRoboRally() {
+        return roboRally;
+    }
 
     @Test
     void moveForward() {

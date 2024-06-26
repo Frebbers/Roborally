@@ -51,6 +51,7 @@ public class AppController implements Observer {
     private GameController gameController;
     public static PlayerDTO localPlayer;
     private Alert notConnectedAlert;
+    private LobbyController lobbyController;
 
     /**
      * Create an AppController object tied to the given RoboRally object.
@@ -71,6 +72,9 @@ public class AppController implements Observer {
         }
     }
 
+    public LobbyController getLobbyController() {return lobbyController;}
+
+    public void setLobbyController(LobbyController lobbyController) {this.lobbyController = lobbyController;}
 
     /**
      * Ask the user for a number of players, thereafter which map they want and initializes the board with the given amount of players.

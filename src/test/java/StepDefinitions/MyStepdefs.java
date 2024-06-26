@@ -1,6 +1,7 @@
 package StepDefinitions;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -343,8 +344,16 @@ public class MyStepdefs {
 
 
     @Given("the server is {string} offline")
-    public void theServerIsOffline(String arg0) {
-
+    public void theServerIsOffline(String not) {
+        boolean offline = !(not.equals("not"));
+        if (offline) {
+            gameController.getAppController().getApiServices().setApiType(ApiType.SERVER);
+            gameController.getAppController().getApiServices().connectToServer("0.0.0.0");
+            assert !gameController.getAppController().getApiServices().isReachable();
+        } else {
+            gameController.getAppController().getApiServices().setApiType(ApiType.LOCAL);
+            assert gameController.getAppController().getApiServices().isReachable();
+        }
     }
 
     @When("a lobby has been created on the server")

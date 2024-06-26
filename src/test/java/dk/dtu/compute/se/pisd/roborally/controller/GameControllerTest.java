@@ -97,7 +97,7 @@ public class GameControllerTest {
             gameController.moveForward(gameController.board.getCurrentPlayer());
             assertEquals("Phase: INITIALISATION, Player = Player 1, Step: 0, Move: 1", gameController.board.getStatusMessage());
         }
-        //@Test TODO FIX THIS
+        //@Test TODO FIX THIS TEST
      /*   public void testExecuteCommand() {
             // Set up testing environment
            // GameController gameController = configureTestEnvironment();

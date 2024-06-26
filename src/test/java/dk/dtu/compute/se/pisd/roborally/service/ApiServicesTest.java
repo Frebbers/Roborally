@@ -63,9 +63,9 @@ public class ApiServicesTest {
         AppController appController = new AppController(new RoboRally());
         ApiServices apiServices = new ApiServices(appController);
         String apiType = AppConfig.getProperty("api.type");
+        apiType = apiType.toLowerCase();
 
-        // Store current properties in application.properties (because this test changes them
-        String resetApiType = AppConfig.getProperty("api.type");
+        // Store current properties in application.properties (because this test changes them)
         String resetBase = AppConfig.getProperty(apiType + ".base.url");
         String resetGames = AppConfig.getProperty(apiType + ".games.url");
         String resetMoves = AppConfig.getProperty(apiType + ".moves.url");

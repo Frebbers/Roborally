@@ -19,6 +19,26 @@ public class LobbyBrowserViewTest extends ApplicationTest {
     private AppController appController;
     private Stage testStage;
     ApiServices apiServices;
+    RoboRally roboRally;
+
+    public LobbyBrowserViewTest(AppController appController, RoboRally roboRally) {
+        this.appController = appController;
+        this.roboRally = roboRally;
+        Stage stage = new Stage();
+        start(stage);
+
+    }
+    /**
+     * Test if the connection to the server is displayed on the screen as successful or not
+     * @return true if the view shows "Connected successfully to Local", false otherwise
+     * @author s224804
+     */
+    public boolean isConnectedStatus() {
+        return this.lobbyBrowserView.getConnectToServerFeedback().getText().equals("Connected successfully to Local");
+    }
+    public boolean isJoinLobbyButtonDisabled() {
+        return this.lobbyBrowserView.getJoinLobbyButton().isDisabled();
+    }
 
     @Override
     public void start(Stage stage) {

@@ -42,6 +42,14 @@ public class LobbyBrowserView extends BaseView {
         this.lobbyBrowserController = new LobbyBrowserController(appController);
     }
 
+    public Text getConnectToServerFeedback() {
+        return connectToServerFeedback;
+    }
+
+    public Button getJoinLobbyButton() {
+        return joinLobbyButton;
+    }
+
     @Override
     public void initialize() {
         BorderPane mainLayout = new BorderPane();

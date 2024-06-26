@@ -6,10 +6,8 @@ Feature: Lobby browser
 
   Scenario: opening then closing the lobby browser while the server is offline
     Given the server is "" offline
-    And the player opens the "main menu"
-    When the player opens the "lobby browser"
-    Then the lobby browser should show a message that the server is offline
-    When the player opens the "main menu"
+    And the lobby browser is opened
+    Then the lobby browser should show a message that the server is offline and the join lobby button should be disabled
 
 
   Scenario: joining a lobby from the lobby browser while the server is online

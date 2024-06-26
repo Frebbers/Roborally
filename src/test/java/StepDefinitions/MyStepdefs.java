@@ -6,6 +6,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.view.LobbyBrowserViewTest;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -28,6 +29,7 @@ public class MyStepdefs {
     private RoboRally testRoborally;
     private PlayerDTO otherPlayerDTO;
     private PlayerDTO localPlayer;
+    private LobbyBrowserViewTest lobbyBrowserViewTest;
     @Given("the robot is facing {string}")
 
     /**
@@ -335,15 +337,16 @@ public class MyStepdefs {
     }
 
 
-    @And("the player opens the {string}")
-    public void thePlayerOpensThe(String arg0) {
-
+    @And("the lobby browser is opened")
+    public void theLobbyBrowserIsOpened() {
+        lobbyBrowserViewTest = new LobbyBrowserViewTest(gameController.getAppController(), testRoborally);
     }
 
 
-    @Then("the lobby browser should show a message that the server is offline")
+    @Then("the lobby browser should show a message that the server is offline and the join lobby button should be disabled")
     public void theLobbyBrowserShouldShowAMessageThatTheServerIsOffline() {
-
+            assert !lobbyBrowserViewTest.isConnectedStatus();
+            assert lobbyBrowserViewTest.isJoinLobbyButtonDisabled();
     }
 
 
@@ -375,5 +378,6 @@ public class MyStepdefs {
     @And("the other player should be in the lobby")
     public void theOtherPlayerShouldBeInTheLobby() {
     }
+
 
 }

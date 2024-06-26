@@ -24,9 +24,15 @@ public class LobbyController {
     private ScheduledExecutorService scheduler;
     private AppController appController;
     private ApiServices apiServices;
+    List<PlayerDTO> playerList;
+
+    public List<PlayerDTO> getPlayerList() {
+        return playerList;
+    }
 
     public LobbyController(AppController appController) {
         this.appController = appController;
+        appController.setLobbyController(this);
         this.apiServices = appController.getApiServices();
     }
 
@@ -83,7 +89,7 @@ public class LobbyController {
 
         // Get the Game and a player list from the API Services
         Game game = apiServices.getGameById(gameId);
-        List<PlayerDTO> playerList = apiServices.getPlayersInGame(game.id);
+        playerList = apiServices.getPlayersInGame(game.id);
         ObservableList<String> items = FXCollections.observableArrayList();
 
         // Update the players in game

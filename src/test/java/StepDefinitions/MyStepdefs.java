@@ -6,6 +6,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
+import dk.dtu.compute.se.pisd.roborally.view.LobbyBrowserViewTest;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -28,6 +29,7 @@ public class MyStepdefs {
     private RoboRally testRoborally;
     private PlayerDTO otherPlayerDTO;
     private PlayerDTO localPlayer;
+    private LobbyBrowserViewTest lobbyBrowserViewTest;
     @Given("the robot is facing {string}")
 
     /**
@@ -58,9 +60,13 @@ public class MyStepdefs {
      */
     @Given("the game is initialized")
     public void theGameIsInitialized() {
-        testRoborally = new RoboRally(true);
+        //testRoborally = new RoboRally(true);
         GameControllerTest gameControllerTest = new GameControllerTest();
         gameControllerTest.setUp();
+        testRoborally = gameControllerTest.getRoboRally();
+        AppConfig.setProperty("player.name", "TestPlayer");
+        gameController = gameControllerTest.getGameController();
+        //gameController.getAppController().onLobbyJoin();
         this.gameController = gameControllerTest.getGameController();
     }
     /**
@@ -258,12 +264,12 @@ public class MyStepdefs {
 
     }
 
-    @Given("a lobby has to be initialized")
+    /*@Given("a lobby has to be initialized")
     public void aLobbyHasToBeInitialized() {
         AppController testappController = new AppController(testRoborally);
         testappController.createLobby("TestLobby", 1, 2);
     }
-
+*/
     @And("there are \\({int}) players in the game")
     public void thereArePlayersInTheGame(int count) {
         for (int i = 0; i < count; i++) {
@@ -334,15 +340,16 @@ public class MyStepdefs {
     }
 
 
-    @And("the player opens the {string}")
-    public void thePlayerOpensThe(String arg0) {
-
+  /*  @And("the lobby browser is opened")
+    public void theLobbyBrowserIsOpened() {
+        lobbyBrowserViewTest = new LobbyBrowserViewTest(gameController.getAppController(), testRoborally);
     }
+   */
 
-
-    @Then("the lobby browser should show a message that the server is offline")
+    @Then("the lobby browser should show a message that the server is offline and the join lobby button should be disabled")
     public void theLobbyBrowserShouldShowAMessageThatTheServerIsOffline() {
-
+            assert !lobbyBrowserViewTest.isConnectedStatus();
+            assert lobbyBrowserViewTest.isJoinLobbyButtonDisabled();
     }
 
 
@@ -373,6 +380,37 @@ public class MyStepdefs {
 
     @And("the other player should be in the lobby")
     public void theOtherPlayerShouldBeInTheLobby() {
+        assert gameController.getAppController().getLobbyController().getPlayerList().size() == 2;
     }
 
+
+    @When("the game is started")
+    public void theGameIsStarted() {
+        localPlayer.setState(PlayerState.READY);
+        otherPlayerDTO.setState(PlayerState.READY);
+        gameController.getAppController().getApiServices().updatePlayerState(localPlayer.getId());
+        gameController.getAppController().getApiServices().updatePlayerState(otherPlayerDTO.getId());
+    }
+
+    @And("the game should exist on the server")
+    public void theGameShouldExistOnTheServer() {
+        assert gameController.getAppController().getApiServices().getGameById(gameController.board.getGameId()) != null;
+    }
+
+    @Then("the lobby should not be created")
+    public void theLobbyShouldNotBeCreated() {
+        assert localPlayer.getState() == PlayerState.NOT_IN_LOBBY;
+        assert gameController.getAppController().getLobbyController().getPlayerList().isEmpty();
+    }
+
+    @When("the player leaves the game")
+    public void thePlayerLeavesTheGame() {
+        gameController.getAppController().leave(true);
+    }
+
+    @Then("the player should be in the main menu")
+    public void thePlayerShouldBeInTheMainMenu() {
+        assert (gameController == null);
+        assert (testRoborally!=null);
+    }
 }

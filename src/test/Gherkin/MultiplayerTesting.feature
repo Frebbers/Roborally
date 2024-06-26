@@ -12,10 +12,7 @@
         Then All clients should display the moves in correct order
         And the turn counter should be at (0)
 
-        Scenario: Start a game from lobby
-          Given a lobby has to be initialized
-          #And A player needs to join the lobby
-          Then All players should be in the the Phase "INITIALISATION"
+
 
        Scenario: Test if checkpoints are registered
          And There is a checkpoint in coordinate (0, 1, 1)

@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.config.AppConfig;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
@@ -353,10 +354,10 @@ public class AppController implements Observer {
         catch (NumberFormatException e) {
             //we don't need to do anything here
         }
-
         try {
             localPlayer.setRobotType(Utilities.toEnum(RobotType.class, Integer.parseInt(getProperty("local.player.robotType"))));
         } catch (NumberFormatException e) {
+            AppConfig.setProperty("local.player.robotType", "0");
             localPlayer.setRobotType(RobotType.Circuito);
         }
 

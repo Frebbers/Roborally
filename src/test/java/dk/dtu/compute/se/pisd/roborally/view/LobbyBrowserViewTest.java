@@ -21,13 +21,7 @@ public class LobbyBrowserViewTest extends ApplicationTest {
     ApiServices apiServices;
     RoboRally roboRally;
 
-    public LobbyBrowserViewTest(AppController appController, RoboRally roboRally) {
-        this.appController = appController;
-        this.roboRally = roboRally;
-        Stage stage = new Stage();
-        start(stage);
 
-    }
     /**
      * Test if the connection to the server is displayed on the screen as successful or not
      * @return true if the view shows "Connected successfully to Local", false otherwise

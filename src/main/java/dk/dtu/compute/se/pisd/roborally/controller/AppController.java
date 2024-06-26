@@ -227,15 +227,15 @@ public class AppController implements Observer {
      * close the game using Platform.exit().
      */
     public void exit() {
-        //if the user is in a game, ask if they want to leave the game before exiting
-            if ((gameController != null) && !roboRally.getActiveView().showExitConfirmationAlert()) {return;}
-                // If the user did not cancel, or is not in a game, exit any lobbies and close the application
-                if (gameController == null || leave(false)) {
-                    Platform.exit();
-                    System.exit(0);
+    //if the user is in a game, ask if they want to leave the game before exiting
+    if ((gameController != null) && !roboRally.getActiveView().showExitConfirmationAlert()) {return;}
+        // If the user did not cancel, or is not in a game, exit any lobbies and close the application
+        if (gameController == null || leave(false)) {
+            Platform.exit();
+            System.exit(0);
 
-                }
-            }
+        }
+    }
 
 
 
@@ -250,33 +250,6 @@ public class AppController implements Observer {
             return false;
         }
         return (!(localPlayer.getState().equals(PlayerState.NOT_IN_LOBBY)));
-    }
-
-    /**
-     * Set the name of the player and create a new player object if none exists.
-     * This method is currently only used as a fallback if the player does not exist on the server or locally.
-     * @author s224804
-     */
-    public void createCharacter() {
-        if (apiServices.isReachable()) {
-            String name = getProperty("local.player.name");
-
-            //Attempt to create player
-            localPlayer = apiServices.createPlayer(name);
-            updatePlayerID();
-            if (apiServices.createPlayer(name) == null) {
-                System.out.println("Error creating player");
-                roboRally.getActiveView().showAlert(Alert.AlertType.ERROR,
-                        "Error creating player. Check your connection to the server.", "Error creating player.");
-            } else {
-                System.out.println("Player created");
-                setProperty("local.player.name", name);
-            }
-        } else {
-            roboRally.getActiveView().showAlert(Alert.AlertType.WARNING, "Failed to create character!",
-                    "Error creating character. Check your connection to the server.");
-
-        }
     }
 
     /**

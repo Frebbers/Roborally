@@ -102,7 +102,7 @@ public class SettingsView extends BaseView {
 
         // Highlight the selected robot from the configuration
         String selectedRobotType = AppConfig.getProperty("local.player.robotType");
-        if (selectedRobotType != null) {
+        if (selectedRobotType != null && !selectedRobotType.isEmpty()) {
             int selectedRobotId = Integer.parseInt(selectedRobotType);
             highlightSelected(selectedRobotId);
         }

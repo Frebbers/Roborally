@@ -316,6 +316,11 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Check if the API is reachable.
+     * @return true if server is reachable, false otherwise
+     * @author s224804
+     */
     public boolean isReachable(){
         try {
             getAllGames();

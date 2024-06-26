@@ -61,7 +61,7 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices(this);
 
-        if(getProperty("local.player.name").equals("")){
+        if(getProperty("local.player.name").isEmpty()){
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Create Robot");
             dialog.setHeaderText("Enter a name for your robot");
@@ -87,6 +87,7 @@ public class AppController implements Observer {
         if (apiServices.isReachable()) {
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
+            System.out.println(localPlayer.getId() +  localPlayer.getName());
             if (localPlayer != null) {
                 loadPlayerProperties();
             }

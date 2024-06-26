@@ -103,7 +103,6 @@ public class RoboRally extends Application {
             dialog.setHeaderText("Enter a name for your robot");
             dialog.setContentText("Name:");
             dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
-            dialog.setOnCloseRequest(exit -> System.exit(0));
             // Modify the OK button behavior to validate input
             final ButtonType okButton = ButtonType.OK;
             DialogPane dialogPane = dialog.getDialogPane();
@@ -113,13 +112,8 @@ public class RoboRally extends Application {
                     event.consume();
                 }
             });
-
             // Show the dialog and wait for the result
             dialog.showAndWait().ifPresent(result -> {
-                if (result.isEmpty()) {
-                    System.exit(0);
-                }
-                dialog.setOnCloseRequest(null);
                 setProperty("local.player.name", result);
             });
         }

@@ -126,6 +126,10 @@ public class LobbyBrowserView extends BaseView {
         Button backButton = new Button("Back");
         backButton.setId("backButton");
         backButton.setOnAction(event -> appController.getRoboRally().createStartView(appController));
+        backButton.setOnAction(event -> {
+            lobbyBrowserController.stopLobbyPolling();
+            appController.getRoboRally().createStartView(appController);
+        });
 
         // Spacer to push buttons to each side
         Region spacer = new Region();

@@ -60,7 +60,7 @@ public class MyStepdefs {
      */
     @Given("the game is initialized")
     public void theGameIsInitialized() {
-        testRoborally = new RoboRally();
+        testRoborally = new RoboRally(true);
         GameControllerTest gameControllerTest = new GameControllerTest();
         gameControllerTest.setUp();
         AppConfig.setProperty("player.name", "TestPlayer");
@@ -305,7 +305,6 @@ public class MyStepdefs {
 
     @Then("All players should be in the the Phase {string}")
     public void allPlayersAreInTheThePhase(String phase) {
-
         assertEquals(gameController.board.getPhase(), Phase.fromString(phase));
     }
 

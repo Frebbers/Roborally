@@ -43,7 +43,6 @@ public class LobbyBrowserController {
      * @param lobbyListView the ListView to display the lobbies
      */
     public void startLobbyPolling(ListView<String> lobbyListView) {
-        System.out.println("Start lobby polling called");
         if (apiServices.isReachable()) {
             scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
 
@@ -93,6 +92,9 @@ public class LobbyBrowserController {
             }
 
             lobbyListView.setItems(items);
+        }
+        else{
+            lobbyListView.setPlaceholder(new Text("You are not connected to a server."));
         }
         if ((games == null) || games.isEmpty()) {
             lobbyListView.setPlaceholder(new Text("No games available to join."));

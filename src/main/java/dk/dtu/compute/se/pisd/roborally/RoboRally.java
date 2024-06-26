@@ -52,6 +52,10 @@ public class RoboRally extends Application {
     private BorderPane boardRoot;
     private final boolean test;
 
+    /**
+     * use this constructor for testing
+     * @param test true if you're testing and don't want to start javaFX
+     */
     public RoboRally(boolean test) {this.test = test;}
 
     public RoboRally() {this.test = false;}

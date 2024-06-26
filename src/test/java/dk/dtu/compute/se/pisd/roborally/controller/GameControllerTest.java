@@ -119,5 +119,20 @@ public class GameControllerTest {
             return new GameController(board);
         }
 */
+
+        @Test
+        public void testExecuteFieldActions(){
+            Space Startspace = gameController.board.getCurrentPlayer().getSpace();
+
+            ConveyorBelt conveyorBelt = new ConveyorBelt(0,1,"SOUTH");
+
+            gameController.board.getSpace(1,0).setConveyorBelt(conveyorBelt);
+
+            gameController.boardController.handleMovement(Startspace,gameController.board.getSpace(1,0), Heading.valueOf("EAST"));
+
+            gameController.executeFieldActions(gameController.board.getSpace(1,0));
+
+            assertEquals (gameController.board.getSpace(1,1),(gameController.board.getCurrentPlayer().getSpace()));
+        }
         public GameController getGameController() {return gameController;}
 }

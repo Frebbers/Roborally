@@ -109,8 +109,9 @@ public class PlayerView extends Tab implements ViewObserver {
             finishButton.setOnAction(e -> {
                 gameController.finishProgrammingPhase();
                 readyPlayersLabel.setVisible(true);
-                setupScheduler();
                 finishButton.setDisable(true);
+                setupScheduler();
+                disableCards(true);
             });
 
             leaveButton = new Button("Leave Game");
@@ -244,6 +245,7 @@ public class PlayerView extends Tab implements ViewObserver {
             }
             switch (player.board.getPhase()) {
                 case PROGRAMMING:
+                    disableCards(false);
                     finishButton.setDisable(false);
                     leaveButton.setDisable(false);
                     break;
@@ -264,6 +266,19 @@ public class PlayerView extends Tab implements ViewObserver {
                     optionButton.setDisable(false);
                     playerInteractionPanel.getChildren().add(optionButton);
                 }
+            }
+        }
+    }
+
+    private void disableCards(boolean disabled){
+        for (CardFieldView cardView : programCardViews) {
+            if (cardView != null) {
+                cardView.setDisable(disabled);
+            }
+        }
+        for (CardFieldView cardView : cardViews) {
+            if (cardView != null) {
+                cardView.setDisable(disabled);
             }
         }
     }

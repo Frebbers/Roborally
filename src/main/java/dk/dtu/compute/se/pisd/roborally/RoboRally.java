@@ -116,6 +116,10 @@ public class RoboRally extends Application {
 
             // Show the dialog and wait for the result
             dialog.showAndWait().ifPresent(result -> {
+                if (result.isEmpty()) {
+                    System.exit(0);
+                }
+                dialog.setOnCloseRequest(null);
                 setProperty("local.player.name", result);
             });
         }

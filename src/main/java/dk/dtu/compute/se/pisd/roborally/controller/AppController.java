@@ -321,7 +321,7 @@ public class AppController implements Observer {
             // localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
             updatePlayerID();
-
+            loadPlayerProperties();
         }
         //This should not happen. The player name should be set before this point
         assert localPlayer != null;

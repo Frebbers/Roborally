@@ -10,7 +10,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
+import javafx.stage.Stage;
+import org.testfx.framework.junit5.ApplicationTest;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
@@ -22,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MyStepdefs {
     private GameController gameController;
     private RoboRally testRoborally;
-
+    private PlayerDTO otherPlayerDTO;
+    private PlayerDTO localPlayer;
     @Given("the robot is facing {string}")
 
     /**
@@ -53,6 +58,7 @@ public class MyStepdefs {
      */
     @Given("the game is initialized")
     public void theGameIsInitialized() {
+        testRoborally = new RoboRally();
         GameControllerTest gameControllerTest = new GameControllerTest();
         gameControllerTest.setUp();
         this.gameController = gameControllerTest.getGameController();
@@ -202,21 +208,23 @@ public class MyStepdefs {
         Wall wall = new Wall(x, y, heading, "north");
     }
 
+
     @Given("A game has been initialized online")
     public void aGameHasBeenInitializedOnline() {
         testRoborally = new RoboRally();
         theGameIsInitialized();
         ApiServices apiServices = new ApiServices(gameController.getAppController());
 
-        Game game = apiServices.createGame("Game1", 1L, 2);
-        PlayerDTO player = apiServices.createPlayer("Player1");
+        Game game = apiServices.createGame("OtherTestPlayer", 1L, 2);
+        otherPlayerDTO = apiServices.createPlayer("OtherTestPlayer");
 
-        Game joinGame = apiServices.joinGame(game.id,player.getId());
+        Game joinGame = apiServices.joinGame(game.id,otherPlayerDTO.getId());
         Game getGame = apiServices.getGameById(game.id);
 
         // Direct comparison of objects does not work as each method creates a new Game
         // object but with the same properties. This does, however, still confirm that
         // the games are the same.
+        localPlayer = apiServices.createPlayer("LocalTestPlayer");
         assertEquals(joinGame.id, getGame.id);
     }
 
@@ -281,7 +289,7 @@ public class MyStepdefs {
     @And("A player needs to join the lobby")
     public void aPlayerNeedsToJoinTheLobby() {
         Player player = gameController.board.getCurrentPlayer();
-        aLobbyHasToBeInitialized();
+        //aLobbyHasToBeInitialized();
         gameController.getAppController().joinLobby(1L);
         assertTrue(gameController.getAppController().isInLobby());
     }
@@ -332,10 +340,6 @@ public class MyStepdefs {
 
     }
 
-    @Then("the {string} should be shown")
-    public void theShouldBeShown(String arg0) {
-
-    }
 
     @Then("the lobby browser should show a message that the server is offline")
     public void theLobbyBrowserShouldShowAMessageThatTheServerIsOffline() {
@@ -358,20 +362,18 @@ public class MyStepdefs {
 
     @When("a lobby has been created on the server")
     public void aLobbyHasBeenCreatedOnTheServer() {
-
+        gameController.getAppController().createLobby("TestLobby", 1, 2);
     }
 
     @And("another player is in the lobby")
     public void anotherPlayerIsInTheLobby() {
-
+        gameController.getAppController().joinLobby(1L);
     }
 
-    @And("the player joins the lobby")
-    public void thePlayerJoinsTheLobby() {
 
-    }
 
     @And("the other player should be in the lobby")
     public void theOtherPlayerShouldBeInTheLobby() {
     }
+
 }

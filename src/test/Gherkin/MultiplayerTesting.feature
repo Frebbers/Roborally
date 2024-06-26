@@ -14,8 +14,7 @@
 
         Scenario: Start a game from lobby
           Given a lobby has to be initialized
-          And A player needs to join the lobby
-          #When All players are ready
+          #And A player needs to join the lobby
           Then All players should be in the the Phase "INITIALISATION"
 
        Scenario: Test if checkpoints are registered

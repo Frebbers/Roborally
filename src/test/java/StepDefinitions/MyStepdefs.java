@@ -63,6 +63,8 @@ public class MyStepdefs {
         testRoborally = new RoboRally();
         GameControllerTest gameControllerTest = new GameControllerTest();
         gameControllerTest.setUp();
+        AppConfig.setProperty("player.name", "TestPlayer");
+        gameController.getAppController().onLobbyJoin();
         this.gameController = gameControllerTest.getGameController();
     }
     /**

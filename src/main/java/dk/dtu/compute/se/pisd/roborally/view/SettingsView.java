@@ -108,9 +108,6 @@ public class SettingsView extends BaseView {
         }
     }
 
-    /**
-     * Loads the robot images and sets up the selection buttons.
-     */
     private void loadRobotImages() {
         try {
             URL resourceUrl = getClass().getClassLoader().getResource("images/robots/");

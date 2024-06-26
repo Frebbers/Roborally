@@ -264,17 +264,14 @@ public class Player extends Subject {
             checkpoints.add(checkpoint);
 
             // Remove the CheckpointView on the Board if we are the local player
-            if(Objects.equals(this.id, localPlayer.getId())){{
-                CheckpointView view = checkpoint.getCheckpointView();
-
-                if(view != null){
+            if (checkpoint.getCheckpointView() != null && Objects.equals(this.id, localPlayer.getId())) {
+                {
                     checkpoint.getCheckpointView().setCheckpointAsReached();
                     notifyChange();
                 }
-            }}
+            }
         }
     }
-
     /**
      * Returns all checkpoints associated with the player.
      *

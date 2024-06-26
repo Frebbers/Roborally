@@ -168,26 +168,6 @@ public class AppController implements Observer {
     }
 
     /**
-     * NOT IMPLEMENTED
-     * Save the current game state to be loaded later.
-     */
-    public void saveGame() {
-        // XXX needs to be implemented eventually
-    }
-
-    /**
-     * NOT IMPLEMENTED
-     * Load a previously saved game state.
-     */
-    public void loadGame() {
-        // XXX needs to be implemented eventually
-        // for now, we just create a new game
-        if (gameController == null) {
-            //createLobby();
-        }
-    }
-
-    /**
      * Stop playing the current game, giving the user the option to save
      * the game or to cancel stopping the game. The method returns true
      * if the game was successfully stopped (with or without saving the
@@ -235,7 +215,7 @@ public class AppController implements Observer {
     /**
      * Check whether this object's lobbyController is not null.
      *
-     * @return true if localPlayer is not null, false otherwise.
+     * @return true if the player exists and is in a lobby, false otherwise
      */
     public boolean isInLobby() {
         if (localPlayer == null) {
@@ -245,14 +225,10 @@ public class AppController implements Observer {
     }
 
     /**
-     * Check whether this object's gameController is not null.
-     *
-     * @return true if gameController is not null, false otherwise.
+     * Set the name of the player and create a new player object if none exists.
+     * This method is currently only used as a fallback if the player does not exist on the server or locally.
+     * @author s224804
      */
-    public boolean isGameRunning() {
-        return gameController != null;
-    }
-
     public void createCharacter() {
         if (apiServices.isReachable()) {
             TextInputDialog dialog = new TextInputDialog();
@@ -309,9 +285,9 @@ public class AppController implements Observer {
     }
 
     /**
-     * Handles the process when a player joins the lobby.
-     * This method ensures the local player exists on the server.
-     * If the player does not exist, it creates the player
+     * Checks if the player exists on the server and creates a new player if they do not.
+     * Must be called before entering a lobby to verify the player exists on the server before joining
+     * @author s224804
      */
     public void onLobbyJoin() {
         localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));

@@ -416,9 +416,9 @@ public class ApiServices {
     }
 
     /**
-     * Checks if the server is reachable.
-     *
-     * @return true if the server is reachable, otherwise false.
+     * Check if the API is reachable.
+     * @return true if server is reachable, false otherwise
+     * @author s224804
      */
     public boolean isReachable(){
         try {

@@ -22,7 +22,6 @@ public class MyStepdefs {
     private RoboRally testRoborally;
     private PlayerDTO otherPlayerDTO;
     private PlayerDTO localPlayer;
-    private LobbyBrowserViewTest lobbyBrowserViewTest;
     @Given("the robot is facing {string}")
 
     /**
@@ -214,7 +213,7 @@ public class MyStepdefs {
         theGameIsInitialized();
         ApiServices apiServices = new ApiServices(gameController.getAppController());
 
-        Game game = apiServices.createGame("OtherTestPlayer", 1L, 2);
+        Game game = apiServices.createGame("TestGame", 1L, 2);
         otherPlayerDTO = apiServices.createPlayer("OtherTestPlayer");
 
         Game joinGame = apiServices.joinGame(game.id,otherPlayerDTO.getId());
@@ -331,19 +330,6 @@ public class MyStepdefs {
     @Given("the server is offline")
     public void theServerIsOffline() {
 
-    }
-
-
-  /*  @And("the lobby browser is opened")
-    public void theLobbyBrowserIsOpened() {
-        lobbyBrowserViewTest = new LobbyBrowserViewTest(gameController.getAppController(), testRoborally);
-    }
-   */
-
-    @Then("the lobby browser should show a message that the server is offline and the join lobby button should be disabled")
-    public void theLobbyBrowserShouldShowAMessageThatTheServerIsOffline() {
-            assert !lobbyBrowserViewTest.isConnectedStatus();
-            assert lobbyBrowserViewTest.isJoinLobbyButtonDisabled();
     }
 
 

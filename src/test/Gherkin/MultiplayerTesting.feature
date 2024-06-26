@@ -8,7 +8,6 @@
         And there should be a robot at position (1, 1)
         And the robot has programmed a "Forward" card
         And the turn counter should be at (0)
-        # When All players have finished their programming phase
         Then All clients should display the moves in correct order
         And the turn counter should be at (0)
 

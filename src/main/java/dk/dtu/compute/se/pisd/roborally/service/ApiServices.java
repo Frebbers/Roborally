@@ -105,9 +105,12 @@ public class ApiServices {
         game.maxPlayers = maxPlayers;
 
         ResponseEntity<Game> response = restTemplate.postForEntity(GAMES_URL, game, Game.class);
-        return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
+        if ((response.getStatusCode() == HttpStatus.OK) || (response.getStatusCode() == HttpStatus.CREATED)) {
+            return response.getBody();
+        } else {
+            return null;
+        }
     }
-
     /**
      * Adds a player to a game.
      *

@@ -120,16 +120,13 @@ public class ApiServices {
         Game game = getGameById(gameId);
         if (game != null) {
             game.playerIds.add(playerId);
-
             String gameUrl = GAMES_URL + "/" + gameId;
             try {
                 restTemplate.put(gameUrl, game);
             } catch (Exception e) {
                 throw new RuntimeException("Error updating game: " + e.getMessage());
             }
-
             PlayerDTO player = getPlayerById(playerId);
-
             if (player != null) {
                 player.setGameId(gameId);
                 player.setState(PlayerState.NOT_READY);

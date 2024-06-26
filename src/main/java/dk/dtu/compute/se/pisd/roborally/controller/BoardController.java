@@ -29,17 +29,14 @@ public class BoardController {
         if (destination == null) {
             return false;
         }
-
         // Check if any wall on the origin is blocking the movement in the current heading
         if (isBlockedByWall(origin, heading)) {
             return false;
         }
-
         // Check if any wall on the destination is blocking the movement in the opposite heading
         if (isBlockedByWall(destination, heading.opposite())) {
             return false;
         }
-
         // Check if the destination has a player
         Player target = destination.getPlayer();
         Player pusher = origin.getPlayer();
@@ -72,5 +69,4 @@ public class BoardController {
         }
         return false; // No blockage
     }
-
 }

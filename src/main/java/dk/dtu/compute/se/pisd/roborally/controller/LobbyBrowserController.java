@@ -45,8 +45,6 @@ public class LobbyBrowserController {
     public void startLobbyPolling(ListView<String> lobbyListView) {
         if (apiServices.isReachable()) {
             scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
-
-                System.out.println("Polling for lobbies");
                 updateLobbies(lobbyListView, true);
 
             }), 0, 2000, TimeUnit.MILLISECONDS);

@@ -87,7 +87,6 @@ public class AppController implements Observer {
         if (apiServices.isReachable()) {
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
-            System.out.println(localPlayer.getId() +  localPlayer.getName());
             if (localPlayer != null) {
                 loadPlayerProperties();
             }

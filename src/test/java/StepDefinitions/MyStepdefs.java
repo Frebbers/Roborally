@@ -6,18 +6,11 @@ import dk.dtu.compute.se.pisd.roborally.controller.*;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.DTO.PlayerDTO;
 import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
-import dk.dtu.compute.se.pisd.roborally.view.LobbyBrowserViewTest;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
-import javafx.stage.Stage;
-import org.testfx.framework.junit5.ApplicationTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.Objects;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Command.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;

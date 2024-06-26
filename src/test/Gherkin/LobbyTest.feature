@@ -25,7 +25,7 @@ Feature: Lobby browser
 
 
   Scenario: leaving a lobby, then going to main menu while the server is online
-    given the server is "not" offline
+    Given the server is "not" offline
     And A game has been initialized online
     When a lobby has been created on the server
     Then the other player should be in the lobby

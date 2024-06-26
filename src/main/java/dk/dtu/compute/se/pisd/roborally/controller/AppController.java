@@ -93,7 +93,7 @@ public class AppController implements Observer {
             // Display the Lobby Window
             roboRally.createLobbyView(this, game.id);
         } else {
-            notConnectedAlert.showAndWait();
+            if (notConnectedAlert != null) {notConnectedAlert.showAndWait();}
         }
     }
 

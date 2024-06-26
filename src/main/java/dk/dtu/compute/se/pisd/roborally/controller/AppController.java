@@ -61,12 +61,28 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices(this);
 
+        if(getProperty("local.player.name").equals("")){
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Create Robot");
+            dialog.setHeaderText("Enter a name for your robot");
+            dialog.setContentText("Name:");
+            // Show the dialog and wait for a response
+            Optional<String> result = dialog.showAndWait();
+
+            // Check if result is present and set property accordingly
+            if (result.isPresent()) {
+                // Use result.get() to retrieve the actual string value
+                String playerName = result.get();
+                setProperty("local.player.name", playerName);
+            } else {
+            }
+        }
+
         if (apiServices.isReachable()) {
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
             if (localPlayer != null) {
                 loadPlayerProperties();
-                onLobbyJoin();
             }
         }
     }
@@ -232,25 +248,19 @@ public class AppController implements Observer {
      */
     public void createCharacter() {
         if (apiServices.isReachable()) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Create Character");
-            dialog.setHeaderText("Enter your name");
-            dialog.setContentText("Name:");
-            Optional<String> result = dialog.showAndWait();
+            String name = getProperty("local.player.name");
 
-            result.ifPresent(name -> {
-                //Attempt to create player
-                localPlayer = apiServices.createPlayer(name);
-                updatePlayerID();
-                if (apiServices.createPlayer(name) == null) {
-                    System.out.println("Error creating player");
-                    roboRally.getActiveView().showAlert(Alert.AlertType.ERROR,
-                            "Error creating player. Check your connection to the server.", "Error creating player.");
-                } else {
-                    System.out.println("Player created");
-                    setProperty("local.player.name", name);
-                }
-            });
+            //Attempt to create player
+            localPlayer = apiServices.createPlayer(name);
+            updatePlayerID();
+            if (apiServices.createPlayer(name) == null) {
+                System.out.println("Error creating player");
+                roboRally.getActiveView().showAlert(Alert.AlertType.ERROR,
+                        "Error creating player. Check your connection to the server.", "Error creating player.");
+            } else {
+                System.out.println("Player created");
+                setProperty("local.player.name", name);
+            }
         } else {
             roboRally.getActiveView().showAlert(Alert.AlertType.WARNING, "Failed to create character!",
                     "Error creating character. Check your connection to the server.");
@@ -302,9 +312,6 @@ public class AppController implements Observer {
             localPlayer = apiServices.createPlayer(getProperty("local.player.name"));
             updatePlayerID();
 
-        } else {
-            //No character exists and no name is stored in the config file
-            createCharacter();
         }
     }
 

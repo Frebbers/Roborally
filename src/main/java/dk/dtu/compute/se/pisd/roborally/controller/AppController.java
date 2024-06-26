@@ -61,33 +61,10 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
         this.apiServices = new ApiServices(this);
 
-        if(getProperty("local.player.name").isEmpty()){
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Create Robot");
-            dialog.setHeaderText("Enter a name for your robot");
-            dialog.setContentText("Name:");
-            dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
-
-            // Modify the OK button behavior to validate input
-            final ButtonType okButton = ButtonType.OK;
-            DialogPane dialogPane = dialog.getDialogPane();
-            dialogPane.lookupButton(okButton).addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                String input = dialog.getEditor().getText();
-                if (input.trim().isEmpty()) {
-                    event.consume();
-                }
-            });
-
-            // Show the dialog and wait for the result
-            dialog.showAndWait().ifPresent(result -> {
-                setProperty("local.player.name", result);
-            });
-        }
-
         if (apiServices.isReachable()) {
             //LocalPlayer will be null if the player does not exist on the server
             localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
-            System.out.println(localPlayer.getId() +  localPlayer.getName());
+            //System.out.println(localPlayer.getId() +  localPlayer.getName());
             if (localPlayer != null) {
                 loadPlayerProperties();
             }

@@ -26,9 +26,15 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.view.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
 
 
 /**
@@ -61,7 +67,7 @@ public class RoboRally extends Application {
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
-
+        if (getProperty("local.player.name").isEmpty()){ showPlayerNameDialog();}
         AppController appController = new AppController(this);
 
         // create the primary scene with the menu bar and a pane for
@@ -88,6 +94,30 @@ public class RoboRally extends Application {
         stage.show();
     }
 
+    private void showPlayerNameDialog(){
+        if(getProperty("local.player.name").isEmpty()){
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Create Robot");
+            dialog.setHeaderText("Enter a name for your robot");
+            dialog.setContentText("Name:");
+            dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
+
+            // Modify the OK button behavior to validate input
+            final ButtonType okButton = ButtonType.OK;
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.lookupButton(okButton).addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                String input = dialog.getEditor().getText();
+                if (input.trim().isEmpty()) {
+                    event.consume();
+                }
+            });
+
+            // Show the dialog and wait for the result
+            dialog.showAndWait().ifPresent(result -> {
+                setProperty("local.player.name", result);
+            });
+        }
+    }
     /**
      * Method to call when starting a view. Clears any existing views and makes sure the boardRoot is not null
      */

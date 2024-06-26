@@ -26,9 +26,15 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.view.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.getProperty;
+import static dk.dtu.compute.se.pisd.roborally.config.AppConfig.setProperty;
 
 
 /**
@@ -44,14 +50,16 @@ public class RoboRally extends Application {
 
     private Stage stage;
     private BorderPane boardRoot;
+    private final boolean test;
 
     /**
-     * Call init() of the Application class
+     * use this constructor for testing
+     * @param test true if you're testing and don't want to start javaFX
      */
-    @Override
-    public void init() throws Exception {
-        super.init();
-    }
+    public RoboRally(boolean test) {this.test = test;}
+
+    public RoboRally() {this.test = false;}
+
 
     /**
      * Initialize javafx stages and scenes
@@ -61,7 +69,7 @@ public class RoboRally extends Application {
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
-
+        if (getProperty("local.player.name").isEmpty()){ showPlayerNameDialog();}
         AppController appController = new AppController(this);
 
         // create the primary scene with the menu bar and a pane for
@@ -88,6 +96,30 @@ public class RoboRally extends Application {
         stage.show();
     }
 
+    private void showPlayerNameDialog(){
+        if(getProperty("local.player.name").isEmpty()){
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Create Robot");
+            dialog.setHeaderText("Enter a name for your robot");
+            dialog.setContentText("Name:");
+            dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
+
+            // Modify the OK button behavior to validate input
+            final ButtonType okButton = ButtonType.OK;
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.lookupButton(okButton).addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                String input = dialog.getEditor().getText();
+                if (input.trim().isEmpty()) {
+                    event.consume();
+                }
+            });
+
+            // Show the dialog and wait for the result
+            dialog.showAndWait().ifPresent(result -> {
+                setProperty("local.player.name", result);
+            });
+        }
+    }
     /**
      * Method to call when starting a view. Clears any existing views and makes sure the boardRoot is not null
      */
@@ -105,6 +137,7 @@ public class RoboRally extends Application {
 
     public void createStartView(AppController appController) {
         // if present, remove old view
+        if (test) return;
         onCreateView();
 
         if (appController != null) {
@@ -123,6 +156,7 @@ public class RoboRally extends Application {
      * @param appController
      */
     public void createRobotSettingsView(AppController appController) {
+        if (test) return;
         // if present, remove old view
         onCreateView();
 
@@ -142,7 +176,7 @@ public class RoboRally extends Application {
      * @param gameController
      */
     public void createBoardView(GameController gameController) {
-
+        if (test) return;
         onCreateView();
 
         if (gameController != null) {
@@ -161,6 +195,7 @@ public class RoboRally extends Application {
      * @param appController
      */
     public void createNewLobbyView(AppController appController) {
+        if (test) return;
         onCreateView();
 
         if (appController != null) {
@@ -179,8 +214,7 @@ public class RoboRally extends Application {
      *
      */
     public void createLobbyView(AppController controller, Long gameId) {
-       // if (boardRoot == null) return; this line was added to enable certain functions in stepdefs to work.
-        // Those need to work with the below instead
+       if (test) return;
         onCreateView();
 
         if(controller != null){
@@ -231,6 +265,7 @@ public class RoboRally extends Application {
      * @author s224804
      */
     public BaseView getActiveView(){
+        if (test) return null;
         return (BaseView) boardRoot.getCenter();
     }
 

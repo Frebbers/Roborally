@@ -219,10 +219,15 @@ public class ApiServices {
      * @return null if the player does not exist, otherwise a new PlayerDTO object
      */
     public PlayerDTO playerExists(String name, String playerID){
+
         List<PlayerDTO> players = getAllPlayers();
         for (PlayerDTO player : players) {
             if (player.getName().equals(name)) {
-                return new PlayerDTO(Long.parseLong(playerID));
+                try {
+                    return new PlayerDTO(Long.parseLong(playerID));
+                } catch (NumberFormatException e) {
+                    return null;
+                }
             }
         }
         return null;

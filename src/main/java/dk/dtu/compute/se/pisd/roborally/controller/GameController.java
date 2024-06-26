@@ -670,7 +670,7 @@ public class GameController {
 
         currentPlayers.forEach(player -> {
             PlayerDTO playerDTO = appController.getApiServices().getPlayerById(player.getId());
-            if (playerDTO == null || playerDTO.getState() == PlayerState.NOT_IN_LOBBY) {
+            if (playerDTO == null || playerDTO.getState() == PlayerState.NOT_IN_LOBBY || !Objects.equals(playerDTO.getGameId(), board.getGameId())) {
                 board.removePlayer(player.getId());
             }
         });

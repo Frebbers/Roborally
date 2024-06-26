@@ -44,7 +44,6 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  */
 public class Board extends Subject {
     private final BoardData data;
-    private BoardView boardView;
     public final String boardName;
 
     public final int width;
@@ -428,9 +427,5 @@ public class Board extends Subject {
 
     public Player getLocalPlayer(PlayerDTO playerDTO){
         return players.stream().filter(p -> Objects.equals(p.getId(), playerDTO.getId())).findFirst().orElse(null);
-    }
-
-    public void setBoardView(BoardView boardView){
-        this.boardView = boardView;
     }
 }

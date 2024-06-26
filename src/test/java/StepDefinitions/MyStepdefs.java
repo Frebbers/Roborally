@@ -232,6 +232,7 @@ public class MyStepdefs {
         // the games are the same.
         localPlayer = apiServices.createPlayer("LocalTestPlayer");
         assertEquals(joinGame.id, getGame.id);
+
     }
 
     @Then("another game can be initialized online")

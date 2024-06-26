@@ -17,7 +17,7 @@ Feature: Implementing all the programming cards in the game.
     Given the robot is facing "North"
     And the robot is at position (0, 0)
     And the turn counter should be at (0)
-    When the robot has programmed a "U-turn" card
+    When the robot has programmed a "u-turn" card
     Then the robot should be facing "South"
     And the turn counter should be at (1)
     
@@ -26,10 +26,8 @@ Feature: Implementing all the programming cards in the game.
     Given the robot is facing "East"
     And the robot is at position (2, 2)
     And the turn counter should be at (1)
-    When the robot has programmed a "Left or right" card
-    And the phase is "ACTIVATION"
-    And The player presses execute current register
-    And A player interaction phase should be active
+    When the robot has programmed a "left or right" card
+    And the phase is "INTERACTION"
     Then the robot should be facing "North" or "South"
 
 

@@ -202,14 +202,18 @@ public class ApiServices {
             player.setName(name);
             player.setState(PlayerState.NOT_IN_LOBBY);
             player.setGameId(0L);
-            if (!AppConfig.getProperty("local.player.robotType").isEmpty()) {
-                player.setRobotType(RobotType.Circuito);
+            String robotType = AppConfig.getProperty("local.player.robotType");
+            if (!robotType.isEmpty()) {
+                try {
+                    player.setRobotType(Utilities.toEnum(RobotType.class, robotType));
+                } catch (IllegalArgumentException e) {
+                    player.setRobotType(RobotType.Circuito);
+                }
             } else {
                 AppConfig.setProperty("local.player.robotType", "1");
                 player.setRobotType(RobotType.Circuito);
             }
         }
-
 
         // Upload the player to the server
         ResponseEntity<PlayerDTO> response;

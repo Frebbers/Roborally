@@ -44,7 +44,6 @@ public class BoardView extends BaseView implements ViewObserver {
     @Override
     public void initialize() {
         board = gameController.board;
-        board.setBoardView(this);
 
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController);

@@ -64,7 +64,6 @@ public class LobbyBrowserViewTest extends ApplicationTest {
         verifyThat("#joinLobbyButton", isVisible());
         verifyThat("#backButton", isVisible());
 
-        //verify board images?
     }
 /*
     @Test

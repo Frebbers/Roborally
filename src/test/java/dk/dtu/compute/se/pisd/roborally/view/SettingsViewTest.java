@@ -20,7 +20,7 @@ public class SettingsViewTest extends ApplicationTest {
     private Stage testStage;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage)  {
         testStage = stage;
 
         RoboRally roboRally = new RoboRally();

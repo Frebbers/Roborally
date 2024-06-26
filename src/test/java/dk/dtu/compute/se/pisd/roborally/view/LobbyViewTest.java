@@ -2,7 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
-import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.service.ApiServices;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -17,9 +17,9 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 public class LobbyViewTest extends ApplicationTest {
 
-    private SettingsView settingsView;
     private LobbyView lobbyView;
     private AppController appController;
+    private ApiServices apiServices;
     private Stage testStage;
 
     @Override
@@ -28,10 +28,13 @@ public class LobbyViewTest extends ApplicationTest {
 
         RoboRally roboRally = new RoboRally();
         appController = new AppController(roboRally);
+        apiServices = appController.getApiServices();
+
+        apiServices.createGame("testGame", 1L, 1);
+        apiServices.joinGame(1L, 0L);
 
         roboRally.start(stage);
-        Long gameId = createGameId();
-        lobbyView = new LobbyView(appController, gameId);
+        lobbyView = new LobbyView(appController, 1L);
         lobbyView.initialize();
 
         // Set up scene
@@ -50,20 +53,8 @@ public class LobbyViewTest extends ApplicationTest {
 
     @Test
     @DisplayName("Verify UI Initialization")
-    void isUIVisible(){
+    void isUIVisible() {
         verifyThat("#leaveButton", isVisible());
         verifyThat("#readyButton", isVisible());
-    }
-
-
-    @Test
-    void testInitialize() {
-        // Add assertions to verify initialization
-    }
-
-    private Long createGameId() {
-        Game game = new Game();
-        Long gameId = game.id;
-        return gameId;
     }
 }

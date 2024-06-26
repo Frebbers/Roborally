@@ -64,26 +64,8 @@ public class StartViewTest extends ApplicationTest {
         assertEquals("Character name: TestPlayer", nameLabel.getText());
     }
 
-    /*
-    @Test
-    @DisplayName("Interaction with Start Lobby Button")
-    void testStartLobbyButton() {
-        // Click on the Start Lobby button
-        clickOn("#startLobbyButton");
-
-        // Ensure the UI updates are complete by running assertions on the JavaFX Application Thread
-        Platform.runLater(() -> {
-            // Verify that the LobbyView or its identifier is visible
-            verifyThat("#lobbyView", isVisible());
-        });
-    }
-*/
-
     @AfterEach
     void tearDown() {
-    }
-
-    @AfterAll
-    static void tearDownAll() {
+        appController.exit();
     }
 }

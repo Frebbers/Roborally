@@ -320,7 +320,6 @@ public class CardFieldView extends GridPane implements ViewObserver {
         }
 
     }
-
 }
 
 

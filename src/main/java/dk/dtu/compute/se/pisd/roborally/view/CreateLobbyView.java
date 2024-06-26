@@ -42,6 +42,9 @@ public class CreateLobbyView extends BaseView {
         this.apiServices = appController.getApiServices();
     }
 
+    /**
+     * Initializes the CreateLobbyView by setting up the UI components and their event handlers.
+     */
     @Override
     public void initialize() {
         Text title = new Text("Create a new lobby");
@@ -130,6 +133,9 @@ public class CreateLobbyView extends BaseView {
 
     }
 
+    /**
+     * Loads the pictures of the available game boards and sets up the selection buttons.
+     */
     private void loadBoardPictures() {
         try {
             URL resourceUrl = getClass().getClassLoader().getResource("images/boards/");
@@ -155,6 +161,11 @@ public class CreateLobbyView extends BaseView {
         }
     }
 
+    /**
+     * Initializes the connection based on the selected connection type.
+     *
+     * @param connectionType the type of connection ("Local" or "Server").
+     */
     private void initializeConnection(String connectionType) {
         boolean isConnected;
         if ("Server".equals(connectionType)) {
@@ -168,6 +179,12 @@ public class CreateLobbyView extends BaseView {
         updateConnectionFeedback(isConnected, connectionType);
     }
 
+    /**
+     * Updates the feedback text for the connection status.
+     *
+     * @param isConnected    whether the connection was successful.
+     * @param connectionType the type of connection ("Local" or "Server").
+     */
     private void updateConnectionFeedback(boolean isConnected, String connectionType) {
         if (isConnected) {
             connectToServerFeedback.setFill(Color.GREEN);
@@ -180,10 +197,20 @@ public class CreateLobbyView extends BaseView {
         }
     }
 
+    /**
+     * Sets the selected board ID.
+     *
+     * @param id the ID of the selected board.
+     */
     private void selectBoard(int id) {
         boardId = id;
     }
 
+    /**
+     * Highlights the selected board button.
+     *
+     * @param id the ID of the selected board.
+     */
     private void highlightSelected(int id) {
         for (Node child : boardSelection.getChildren()) {
             if (child instanceof Button) {

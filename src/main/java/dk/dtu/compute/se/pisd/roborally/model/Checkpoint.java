@@ -18,23 +18,11 @@ public class Checkpoint extends Subject {
     private final int checkpointId;
     private CheckpointView checkpointView;
 
-    /**
-     * Constructs a new checkpoint on the specified space with an identifier.
-     *
-     * @param checkpointId the unique identifier for the checkpoint
-     * @param x the initial x-coordinate for the checkpoint
-     */
     public Checkpoint(int x, int y, int checkpointId) {
         this.x = x;
         this.y = y;
         this.checkpointId = checkpointId;
     }
-
-    /**
-     * Returns the checkpoint identifier.
-     *
-     * @return checkpoint identifier
-     */
     public int getCheckpointId() {
         return checkpointId;
     }

@@ -540,6 +540,16 @@ public class GameController {
         scheduledTasks.add(future);
     }
 
+    /**
+     * Starts polling for interaction for a specified player in a game.
+     * This method periodically checks if the player is ready and retrieves their moves if they are.
+     * When valid moves are retrieved, the polling stops and the callback is executed.
+     *
+     * @param gameId the ID of the game
+     * @param turnIndex the index of the current turn
+     * @param currentPlayer the current player
+     * @param callback the callback function to execute when valid moves are retrieved
+     */
     public void startPollingForInteraction(Long gameId, Integer turnIndex, Player currentPlayer, Consumer<MoveDTO> callback) {
         ApiServices apiServices = appController.getApiServices();
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
@@ -669,12 +679,6 @@ public class GameController {
     public Command getNextCommand() {
         return nextCommand;
     }
-
-    /**
-     * Returns the AppController used by this class
-     *
-     * @return the AppController
-     */
     public AppController getAppController() {
         return appController;
     }

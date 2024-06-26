@@ -57,40 +57,46 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Fetches a list of all games from the API.
+     *
+     * @return a list of Game objects.
+     */
     public List<Game> getAllGames() {
         ResponseEntity<Game[]> response = restTemplate.getForEntity(GAMES_URL, Game[].class);
         return Arrays.asList(response.getBody());
     }
 
+    /**
+     * Fetches a list of all players from the API.
+     *
+     * @return a list of PlayerDTO objects.
+     */
     public List<PlayerDTO> getAllPlayers() {
         ResponseEntity<PlayerDTO[]> response = restTemplate.getForEntity(PLAYERS_URL, PlayerDTO[].class);
         return Arrays.asList(response.getBody());
     }
 
-    public List<Long> getAllPlayerIds() {
-        List<PlayerDTO> playerList = getAllPlayers();
-        List<Long> playerIds = new ArrayList<>();
-        for (PlayerDTO player : playerList) {
-            playerIds.add(player.getId());
-        }
-        return playerIds;
-    }
-
-    public List<Long> getAllGameIds() {
-        List<Game> gameList = getAllGames();
-        List<Long> gameIds = new ArrayList<>();
-        for (Game game : gameList) {
-            gameIds.add(game.id);
-        }
-        return gameIds;
-    }
-
+    /**
+     * Fetches a game by its ID from the API.
+     *
+     * @param gameId the ID of the game to fetch.
+     * @return the Game object if found, otherwise null.
+     */
     public Game getGameById(Long gameId) {
         String url = GAMES_URL + "/" + gameId;
         ResponseEntity<Game> response = restTemplate.getForEntity(url, Game.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Creates a new game on the server.
+     *
+     * @param name       the name of the game.
+     * @param boardId    the ID of the board to use.
+     * @param maxPlayers the maximum number of players.
+     * @return the created Game object if successful, otherwise null.
+     */
     public Game createGame(String name, Long boardId, int maxPlayers) {
         Game game = new Game();
         game.name = name;
@@ -102,6 +108,14 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Adds a player to a game.
+     *
+     * @param gameId   the ID of the game to join.
+     * @param playerId the ID of the player joining the game.
+     * @return the updated Game object if successful.
+     * @throws RuntimeException if the game or player is not found or an error occurs.
+     */
     public Game joinGame(Long gameId, Long playerId) {
         Game game = getGameById(gameId);
         if (game != null) {
@@ -135,6 +149,13 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Updates the state of a game.
+     *
+     * @param gameId   the ID of the game to update.
+     * @param newState the new state to set.
+     * @return true if the game state was successfully updated, otherwise false.
+     */
     public boolean updateGameState(Long gameId, GameState newState) {
         String url = GAMES_URL + "/" + gameId;
         Game game = getGameById(gameId);
@@ -155,13 +176,24 @@ public class ApiServices {
         }
     }
 
-
+    /**
+     * Fetches a list of players in a specific game.
+     *
+     * @param gameId the ID of the game.
+     * @return a list of PlayerDTO objects.
+     */
     public List<PlayerDTO> getPlayersInGame(Long gameId){
         String lobbyUrl = GAMES_URL + "/" + gameId + "/players";
         ResponseEntity<PlayerDTO[]> response = restTemplate.getForEntity(lobbyUrl, PlayerDTO[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
 
+    /**
+     * Creates a new player on the server.
+     *
+     * @param name the name of the player.
+     * @return the created PlayerDTO object if successful, otherwise null.
+     */
     public PlayerDTO createPlayer(String name){
         // Create a new player on the client and set the name
         PlayerDTO player = appcontroller.loadPlayerProperties();
@@ -183,9 +215,6 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody(): null;
     }
 
-    //public boolean createPlayerOnServer(PlayerDTO playerDTO){
-     //   return ((restTemplate.postForEntity(PLAYERS_URL, playerDTO, PlayerDTO.class)).getStatusCode() == HttpStatus.OK);
-    //}
     /**
      * Check if a player with the given name and ID already exists and return a new PlayerDTO object if it does
      * @param name     name of the player
@@ -202,6 +231,11 @@ public class ApiServices {
         return null;
     }
 
+    /**
+     * Updates the interaction state of a player to INTERACTING.
+     *
+     * @param id the ID of the player to update.
+     */
     public void updatePlayerInteractionState(Long id) {
         PlayerDTO player = getPlayerById(id);
         if (player != null) {
@@ -215,6 +249,11 @@ public class ApiServices {
             }
         }
 
+    /**
+     * Toggles the state of a player between READY and NOT_READY.
+     *
+     * @param id the ID of the player to update.
+     */
     public void updatePlayerState(Long id) {
         PlayerDTO player = getPlayerById(id);
         if (player != null) {
@@ -240,12 +279,23 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Fetches a player by their ID from the API.
+     *
+     * @param playerId the ID of the player to fetch.
+     * @return the PlayerDTO object if found, otherwise null.
+     */
     public PlayerDTO getPlayerById(Long playerId) {
         String url = PLAYERS_URL + "/" + playerId;
         ResponseEntity<PlayerDTO> response = restTemplate.getForEntity(url, PlayerDTO.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Handles the player leaving a game.
+     *
+     * @param playerId the ID of the player leaving the game.
+     */
     public void onPlayerLeave(Long playerId) {
         ResponseEntity<Void> response = null;
         String url = PLAYERS_URL + "/" + playerId + "/leave";
@@ -260,12 +310,28 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Fetches the count of players ready for a specific turn in a game.
+     *
+     * @param gameId    the ID of the game.
+     * @param turnIndex the turn index.
+     * @return the count of ready players if successful, otherwise null.
+     */
     public Integer getPlayerReadyCount(Long gameId, Integer turnIndex){
         String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex + "/player-count";
         ResponseEntity<Integer> response = restTemplate.getForEntity(url, Integer.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Creates a new move for a player in a game.
+     *
+     * @param gameId    the ID of the game.
+     * @param playerId  the ID of the player.
+     * @param turnIndex the turn index.
+     * @param moveTypes the list of move types.
+     * @return the created MoveDTO object if successful, otherwise null.
+     */
     public MoveDTO createMove(Long gameId, Long playerId, Integer turnIndex, List<String> moveTypes){
         // Create a new move on the client and fill the information (Do not create a constructor for this)
         MoveDTO move = new MoveDTO();
@@ -279,18 +345,42 @@ public class ApiServices {
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Fetches all moves for a specific turn in a game.
+     *
+     * @param gameId    the ID of the game.
+     * @param turnIndex the turn index.
+     * @return a list of MoveDTO objects.
+     */
     public List<MoveDTO> getAllMoves(Long gameId, Integer turnIndex){
         String url = MOVES_URL + "/game/" + gameId + "/turn/" + turnIndex;
         ResponseEntity<MoveDTO[]> response = restTemplate.getForEntity(url, MoveDTO[].class);
         return response.getStatusCode() == HttpStatus.OK ? Arrays.asList(Objects.requireNonNull(response.getBody())) : null;
     }
 
+    /**
+     * Fetches the moves of a specific player for a specific turn in a game.
+     *
+     * @param gameId    the ID of the game.
+     * @param playerId  the ID of the player.
+     * @param turnIndex the turn index.
+     * @return the MoveDTO object if found, otherwise null.
+     */
     public MoveDTO getPlayerMoves(Long gameId, Long playerId, int turnIndex){
         String url = MOVES_URL + "/game/" + gameId + "/player/" + playerId + "/turn/ " + turnIndex;
         ResponseEntity<MoveDTO> response = restTemplate.getForEntity(url, MoveDTO.class);
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    /**
+     * Updates the moves of a player for a specific turn in a game.
+     *
+     * @param gameId    the ID of the game.
+     * @param playerId  the ID of the player.
+     * @param turnIndex the turn index.
+     * @param moveTypes the new list of move types.
+     * @throws RuntimeException if the moves could not be found.
+     */
     public void updateMoves(Long gameId, Long playerId, int turnIndex, List<String> moveTypes) {
         String url = MOVES_URL + "/update";
         MoveDTO oldMove = getPlayerMoves(gameId, playerId, turnIndex);
@@ -301,11 +391,20 @@ public class ApiServices {
         restTemplate.put(url, oldMove);
     }
 
-
+    /**
+     * Sets the API type in the application configuration.
+     *
+     * @param apiType the API type to set.
+     */
     public void setApiType(ApiType apiType){
         AppConfig.setProperty("api.type", apiType.toString());
     }
 
+    /**
+     * Retrieves the server IP address from the application configuration.
+     *
+     * @return the server IP address as a String.
+     */
     public String getServerIP(){
         String s = AppConfig.getProperty("server.base.url");
         try {
@@ -316,6 +415,11 @@ public class ApiServices {
         }
     }
 
+    /**
+     * Checks if the server is reachable.
+     *
+     * @return true if the server is reachable, otherwise false.
+     */
     public boolean isReachable(){
         try {
             getAllGames();

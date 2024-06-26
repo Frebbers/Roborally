@@ -25,12 +25,22 @@ public class JsonReader {
         this.boardNumber = boardNumber;
     }
 
+    /**
+     * Gets the path to the JSON file for the specified board.
+     *
+     * @return the path to the JSON file as a String.
+     */
     private String getBoardPath() {
         final String boardDirectory = "src/main/resources/boards/board";
         String jsonBoardPath = boardDirectory + boardNumber + ".json";
         return jsonBoardPath;
     }
 
+    /**
+     * Reads the board data from the JSON file and returns a BoardData object.
+     *
+     * @return a BoardData object containing the board's details, or null if an error occurs.
+     */
     public BoardData readBoardJson() {
         String currentBoard = getBoardPath();
         try {

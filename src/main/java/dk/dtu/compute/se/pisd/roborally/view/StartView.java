@@ -23,6 +23,9 @@ public class StartView extends BaseView {
         this.appController = appController;
     }
 
+    /**
+     * Initializes the StartView by setting up the UI components and their event handlers.
+     */
     @Override
     public void initialize() {
         nameLabel = new Text();
@@ -71,6 +74,9 @@ public class StartView extends BaseView {
         getChildren().add(mainLayout);
     }
 
+    /**
+     * Updates the displayed player name based on the application configuration.
+     */
     public void updatePlayerName() {
         String name = AppConfig.getProperty("local.player.name");
         if (name != null) {

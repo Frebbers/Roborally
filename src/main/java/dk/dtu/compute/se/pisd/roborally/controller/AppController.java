@@ -92,6 +92,11 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Joins a lobby for the specified game.
+     *
+     * @param gameId the ID of the game to join
+     */
     public void joinLobby(Long gameId) {
         if (apiServices.isReachable()) {
             onLobbyJoin();
@@ -104,6 +109,12 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Loads the game scene for the specified game and board number.
+     *
+     * @param gameId the ID of the game to load
+     * @param boardNumber the number of the board to load
+     */
     public void loadGameScene(Long gameId, Long boardNumber) {
         if (gameController != null && !leave(true)) {
             return;
@@ -145,6 +156,12 @@ public class AppController implements Observer {
         roboRally.createBoardView(gameController);
     }
 
+    /**
+     * Loads the board data from a JSON file based on the board number.
+     *
+     * @param boardNumber the number of the board to load
+     * @return the board data loaded from the JSON file
+     */
     private BoardData loadJsonBoardFromNumber(int boardNumber) {
         JsonReader jsonReader = new JsonReader(boardNumber);
         return jsonReader.readBoardJson();
@@ -242,7 +259,6 @@ public class AppController implements Observer {
             dialog.setTitle("Create Character");
             dialog.setHeaderText("Enter your name");
             dialog.setContentText("Name:");
-            //TODO maybe also store the player id in the config file
             Optional<String> result = dialog.showAndWait();
 
             result.ifPresent(name -> {
@@ -292,8 +308,12 @@ public class AppController implements Observer {
         setProperty("local.player.id", localPlayer.getId().toString());
     }
 
+    /**
+     * Handles the process when a player joins the lobby.
+     * This method ensures the local player exists on the server.
+     * If the player does not exist, it creates the player
+     */
     public void onLobbyJoin() {
-        //TODO test this thoroughly: scenario where player does not exist on the server
         localPlayer = apiServices.playerExists(getProperty("local.player.name"), getProperty("local.player.id"));
         if (localPlayer != null && apiServices.playerExists
                 (localPlayer.getName(), localPlayer.getId().toString()) == localPlayer) {
@@ -311,6 +331,10 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * Toggles the ready state of the local player by updating the player's state
+     * using the API services.
+     */
     public void toggleReady() {
         apiServices.updatePlayerState(localPlayer.getId());
     }

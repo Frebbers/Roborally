@@ -37,6 +37,11 @@ public class LobbyBrowserController {
         this.lobbyMap = new HashMap<>();
     }
 
+    /**
+     * Starts polling for lobbies at a fixed interval.
+     *
+     * @param lobbyListView the ListView to display the lobbies
+     */
     public void startLobbyPolling(ListView<String> lobbyListView) {
         System.out.println("Start lobby polling called");
         if (apiServices.isReachable()) {
@@ -49,12 +54,21 @@ public class LobbyBrowserController {
         }
     }
 
+    /**
+     * Stops the lobby polling.
+     */
     public void stopLobbyPolling() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
     }
 
+    /**
+     * Updates the lobbies displayed in the ListView.
+     *
+     * @param lobbyListView the ListView to update
+     * @param serverIsReachable whether the server is reachable
+     */
     public void updateLobbies(ListView<String> lobbyListView, boolean serverIsReachable) {
         List<Game> games = null;
         if (serverIsReachable) {
@@ -85,6 +99,12 @@ public class LobbyBrowserController {
         }
     }
 
+    /**
+     * Retrieves a game by its name.
+     *
+     * @param gameName the name of the game
+     * @return the game with the specified name
+     */
     public Game getGameByName(String gameName){
         // Get the gameID from the map
         Long gameId = lobbyMap.get(gameName);
@@ -92,6 +112,12 @@ public class LobbyBrowserController {
         return apiServices.getGameById(gameId);
     }
 
+    /**
+     * Checks if a lobby is full.
+     *
+     * @param gameName the name of the game
+     * @return true if the lobby is full, false otherwise
+     */
     public boolean isLobbyFull(String gameName){
         // Get the gameID from the map
         Long gameId = lobbyMap.get(gameName);
@@ -108,6 +134,11 @@ public class LobbyBrowserController {
         return false;
     }
 
+    /**
+     * Joins the selected lobby.
+     *
+     * @param gameName the name of the game to join
+     */
     public void joinSelectedLobby(String gameName) {
         appController.onLobbyJoin();
         Long gameId = lobbyMap.get(gameName);

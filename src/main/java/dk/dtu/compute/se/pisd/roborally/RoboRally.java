@@ -103,7 +103,7 @@ public class RoboRally extends Application {
             dialog.setHeaderText("Enter a name for your robot");
             dialog.setContentText("Name:");
             dialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
-
+            dialog.setOnCloseRequest(exit -> System.exit(0));
             // Modify the OK button behavior to validate input
             final ButtonType okButton = ButtonType.OK;
             DialogPane dialogPane = dialog.getDialogPane();
@@ -247,12 +247,12 @@ public class RoboRally extends Application {
      */
     @Override
     public void stop() throws Exception {
-        super.stop();
-
-        // XXX just in case we need to do something here eventually;
-        //     but right now the only way for the user to exit the app
-        //     is delegated to the exit() method in the AppController,
-        //     so that the AppController can take care of that.
+        try {
+            super.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 
     public Scene getActiveScene(){

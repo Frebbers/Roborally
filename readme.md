@@ -5,9 +5,11 @@ Clone the two repositories:
 
 ```git clone https://github.com/Frebbers/roboAPI.git```
 
-Run the main method in the RoboApiApplication class in roboAPI in IntelliJ
+Run the main method in the RoboApiApplication class in roboAPI in IntelliJ, OR use mvn run inside the repository directory to launch with maven.
 
-and afterwards run the main method in the StartRoboRally class in Roborally project.
+and afterwards run the main method in the StartRoboRally class in Roborally project. 
+
+IMPORTANT: If you wish to run more than one instance of Roborally on a single machine, you must create one copy of the repository for each instance you wish to run as the client information is stored inside the properties file during runtime.
 
 #  Project description
 This software project is a part of the Advanced Programming course at DTU and is being developed by group 7. 

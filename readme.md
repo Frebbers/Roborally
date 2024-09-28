@@ -12,7 +12,7 @@ and afterwards run the main method in the StartRoboRally class in Roborally proj
 IMPORTANT: If you wish to run more than one instance of Roborally on a single machine, you must create one copy of the repository for each instance you wish to run as the client information is stored inside the properties file during runtime.
 
 #  Project description
-This software project is a part of the Advanced Programming course at DTU and is being developed by group 7. 
+This software project is a part of the Advanced Programming course at DTU and has been developed by group 7. 
 It is an attempt to create a version of Roborally in Java which can be run on a PC. 
 The game can be played on a variety of maps with a variety of cards that affect gameplay.
 Roborally is a game about planning and traversing a map full of obstacles. 
